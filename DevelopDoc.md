@@ -88,6 +88,10 @@ HDR截屏
 
 [The Remote Framebuffer Protocol](https://datatracker.ietf.org/doc/html/rfc6143)
 
+[FLTK优缺点简介（备用）](https://blog.csdn.net/rxm1989/article/details/39549611?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-39549611-blog-106623821.pc_relevant_blogantidownloadv1&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-39549611-blog-106623821.pc_relevant_blogantidownloadv1&utm_relevant_index=2)
+
+[win10平台搭建FTLK开发环境](https://blog.csdn.net/sanqima/article/details/108184789)
+
 ***
 
 ### VNC vs RDP
