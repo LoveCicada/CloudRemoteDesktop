@@ -92,6 +92,8 @@ HDR截屏
 
 [win10平台搭建FTLK开发环境](https://blog.csdn.net/sanqima/article/details/108184789)
 
+[Compiling TigerVNC for Windows](https://github.com/TigerVNC/tigervnc/wiki/Compiling-TigerVNC-for-Windows)
+
 ***
 
 ### VNC vs RDP
