@@ -66,6 +66,8 @@ HDR截屏
 需要有一定强度的吸附效果，移动时的映射关系需考虑缩放时使用的算法，同时在当前窗口
 是焦点时使用键盘操作，远端也能同样的响应
 
+
+***
 ### 资料
 
 [RDP](https://github.com/FreeRDP/FreeRDP)
@@ -75,3 +77,96 @@ HDR截屏
 [FreeRDP-Manuals](https://github.com/awakecoding/FreeRDP-Manuals/blob/master/User/FreeRDP-User-Manual.markdown)
 
 [Windows编译FreeRDP](https://blog.csdn.net/defaultbyzt/article/details/108099252)
+
+[通过安装VNC服务器x11vnc(或vnc4server)和配置x11vnc.service实现远程通过VNC-Viewer访问VNC服务器](https://blog.csdn.net/Arron475/article/details/122349945)
+
+[详解远程桌面协议， Linux 和 Windows 间的远程桌面互相访问（RDP、VNC协议）](https://blog.csdn.net/qq_27825451/article/details/101213110?utm_source=app&app_version=5.5.0&code=app_1562916241&uLinkId=usr1mkqgl919blen)
+
+[UltraVNC VS TigerVNC](https://www.saashub.com/compare-ultravnc-vs-tigervnc)
+
+[The RFB Protocol](https://github.com/rfbproto/rfbproto/blob/master/rfbproto.rst)
+
+[The Remote Framebuffer Protocol](https://datatracker.ietf.org/doc/html/rfc6143)
+
+***
+
+### VNC vs RDP
+1. VNC(Virtual Network Computing)
+【定义】：VNC，为一种使用RFB（ Remote Frame Buffer 远程帧缓冲）协议的显示屏画面分享及远程操作软件。
+【特性】：VNC与操作系统无关，因此可跨平台使用，例如可用Windows连线到某Linux的计算机，反之亦同。甚至在没有安装客户端程序的计算机中，只要有支持JAVA的浏览器，也可使用。
+【使用RFB协议从mac连接远程mac】：Finder->Go->Connect to server->输入远程IP
+
+2. 远程桌面（Remote desktop）
+【定义】：远程桌面使用远程桌面协议。大部分Windows都默认支持此协议，可以远程接入操作桌面。
+
+3. RDP vs. RFP
+RFB是在服务器端将窗口在显存中画好之后将图像传给客户端，客户端只充当一个图像解码显示的角色； RDP则将画图的工作交给了客户端，服务器需要了解客户端显示能力的具体情况，以便作出相应调整。
+
+RFB主要传图像，RDP主要传指令。就一般应用而言，RFB数据量太大，RDP对客户端要求较高，因此RFB适用于瘦客户端，RDP适用于低速网络。
+
+### 远程协议VNC/SPICE/RDP
+|   | SPICE  | VNC  | RDP|
+|---|---|---|---|
+|  BIOS屏幕显示 |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+
+
+### VNC开源项目
+```
+LibVNC
+UltraVNC
+TightVNC 1.x
+TightVNC 1.x
+```
+
+### UltraVNC编译问题
+- windows
+
+1. 下载源码
+```bash
+git clone git@github.com:ultravnc/UltraVNC.git
+```
+
+2. 下载nasm
+```
+https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/
+
+win64
+https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/win64/
+```
+
+3. 配置nasm
+```
+安装nasm后，将bin目录添加到系统环境变量中
+```
+
+4. vs2019启动工程
+```
+客户端
+进入\UltraVNC\vncviewer\目录，用vs2019打开vncviewer_vs2017.sln工程
+注意使用vs2019，ultraVNC最近有改动，已改为vs2019编译
+```
+
+5. 修改编译报错
+将\UltraVNC\vncviewer\KeyMap.h改为utf-8编码格式，将编译报错代码改为如下
+```C++
+static const vncDeadKeyMapping_t deadKeyMap[] = {
+    {XK_dead_grave          , L'`'    },  // +U0060
+    {XK_dead_acute          , L'?'   },  // +U00B4
+    {XK_dead_acute          , L'\''   },  // +U0027
+    {XK_dead_circumflex     , L'^'    },  // +U005E
+    {XK_dead_tilde          , L'~'    },  // +U007E
+    {XK_dead_diaeresis      , L'?'    },  // +U00A8
+    {XK_dead_diaeresis      , L'"'    },  // +U0022
+    {XK_dead_abovering      , L'?'    },  // +U00B0
+    {XK_dead_cedilla        , L'?'    },  // +U00B8
+};
+```
