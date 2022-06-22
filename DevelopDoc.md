@@ -94,6 +94,10 @@ HDR截屏
 
 [Compiling TigerVNC for Windows](https://github.com/TigerVNC/tigervnc/wiki/Compiling-TigerVNC-for-Windows)
 
+[开源远程控制RealVNC源代码中的通讯协议RFB（远程帧缓冲）](https://blog.csdn.net/witch_soya/article/details/27214405)
+
+[VNC源码研究（一）](https://blog.csdn.net/qq_37375427/article/details/86567056?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-86567056-blog-90239535.pc_relevant_aa&spm=1001.2101.3001.4242.1&utm_relevant_index=3)
+
 ***
 
 ### VNC vs RDP
@@ -176,3 +180,6 @@ static const vncDeadKeyMapping_t deadKeyMap[] = {
     {XK_dead_cedilla        , L'?'    },  // +U00B8
 };
 ```
+### UltraVNC
+- \UltraVNC\rfb
+协议
