@@ -94,6 +94,8 @@ HDR截屏
 
 [Compiling TigerVNC for Windows](https://github.com/TigerVNC/tigervnc/wiki/Compiling-TigerVNC-for-Windows)
 
+[详解远程桌面协议， Linux 和 Windows 间的远程桌面互相访问（RDP、VNC协议）](https://zhuanlan.zhihu.com/p/84798943)
+
 ***
 
 ### VNC vs RDP
