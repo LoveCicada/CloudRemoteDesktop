@@ -189,3 +189,22 @@ static const vncDeadKeyMapping_t deadKeyMap[] = {
 ### UltraVNC
 - \UltraVNC\rfb
 协议
+
+
+- Xlib
+```C++
+Picture
+XRenderCreatePicture()
+XRenderComposite()
+XRenderFreePicture()
+```
+
+- FLTK
+```C++
+
+
+fl_clip_box()
+fl_push_clip()
+fl_pop_clip()
+
+```
