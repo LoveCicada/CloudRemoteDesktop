@@ -94,9 +94,13 @@ HDR截屏
 
 [Compiling TigerVNC for Windows](https://github.com/TigerVNC/tigervnc/wiki/Compiling-TigerVNC-for-Windows)
 
+<<<<<<< HEAD
 [开源远程控制RealVNC源代码中的通讯协议RFB（远程帧缓冲）](https://blog.csdn.net/witch_soya/article/details/27214405)
 
 [VNC源码研究（一）](https://blog.csdn.net/qq_37375427/article/details/86567056?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-86567056-blog-90239535.pc_relevant_aa&spm=1001.2101.3001.4242.1&utm_relevant_index=3)
+=======
+[详解远程桌面协议， Linux 和 Windows 间的远程桌面互相访问（RDP、VNC协议）](https://zhuanlan.zhihu.com/p/84798943)
+>>>>>>> 7e42e6684dd79ae461b87e78b2b00812b01a9bd9
 
 ***
 
