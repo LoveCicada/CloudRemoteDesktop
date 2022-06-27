@@ -104,6 +104,22 @@ HDR截屏
 
 [linux图形系统框架](https://blog.csdn.net/kjfureone/article/details/52848550)
 
+[RFB协议概述](https://www.cnblogs.com/szBeginner/p/7795307.html)
+
+[RFB协议具体通信说明](https://www.cnblogs.com/szBeginner/p/7887686.html)
+
+[初级X编程1](https://blog.csdn.net/kaku_you/article/details/15437)
+
+[The Xlib Manual](https://blog.csdn.net/Rong_Toa/article/details/84896131)
+
+[xkbsetdetectableautorepeat(3) - Linux 手册页](https://linux.die.net/man/3/xkbsetdetectableautorepeat)
+
+[FLTK新手入门](http://www.cppblog.com/cyantree/archive/2012/05/13/174761.html)
+
+[FLTK Video Tutorials](http://seriss.com/people/erco/fltk-videos/)
+
+[Writing Your First FLTK Program](https://www.fltk.org/doc-1.1/basics.html#basics)
+
 ***
 
 ### VNC vs RDP
@@ -189,3 +205,32 @@ static const vncDeadKeyMapping_t deadKeyMap[] = {
 ### UltraVNC
 - \UltraVNC\rfb
 协议
+
+
+- Xlib
+```C++
+Picture
+XRenderCreatePicture()
+XRenderComposite()
+XRenderFreePicture()
+```
+
+- FLTK
+```C++
+
+
+fl_clip_box()
+fl_push_clip()
+fl_pop_clip()
+Fl::add_fd()
+Fl::add_timeout()
+fl_open_display()
+XkbSetDetectableAutoRepeat()
+Fl_Window::default_xclass()
+Fl_Window::default_icons()
+fl_message_hotspot()
+fl_message_title_default()
+XQueryExtension()
+Fl::add_system_handler()
+
+```
