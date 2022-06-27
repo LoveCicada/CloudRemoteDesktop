@@ -108,6 +108,8 @@ HDR截屏
 
 [RFB协议具体通信说明](https://www.cnblogs.com/szBeginner/p/7887686.html)
 
+[VNC协议分析](https://blog.csdn.net/forever_feng/article/details/4703088)
+
 [初级X编程1](https://blog.csdn.net/kaku_you/article/details/15437)
 
 [The Xlib Manual](https://blog.csdn.net/Rong_Toa/article/details/84896131)
@@ -234,3 +236,6 @@ XQueryExtension()
 Fl::add_system_handler()
 
 ```
+
+### RFB
+远程帧缓冲协议，即RFB（Remote Frame Buffer）协议是 VNC（Virtual Network Computing）软件所使用的通讯协议，用于客户端向服务器传送控制命令以及服务器向客户端发送其操作画面，借此，远程桌面共享软件（不涉及Windows自带的桌面共享）得以实现。
