@@ -110,6 +110,8 @@ HDR截屏
 
 [VNC协议分析](https://blog.csdn.net/forever_feng/article/details/4703088)
 
+[TightVNC分析文档](https://www.cnblogs.com/piccolo/articles/251356.html)
+
 [初级X编程1](https://blog.csdn.net/kaku_you/article/details/15437)
 
 [The Xlib Manual](https://blog.csdn.net/Rong_Toa/article/details/84896131)
@@ -208,6 +210,20 @@ static const vncDeadKeyMapping_t deadKeyMap[] = {
 - \UltraVNC\rfb
 协议
 
+### tigerVNC
+- linux 基础开发环境配置
+```bash
+#! /bin/bash
+sudo apt-get update
+sudo apt-get install -y libgnutls28-dev libfltk1.3-dev fluid gettext appstream
+sudo apt-get install -y libxtst-dev libxdamage-dev libxfixes-dev libxrandr-dev libpam-dev
+sudo apt-get install -y libavcodec-dev libavutil-dev libswscale-dev
+sudo apt-get install -y libjpeg-dev
+sudo apt-get install -y libpixman-1-dev
+sudo apt-get install -y libselinux1-dev
+sudo apt-get install --reinstall pkg-config cmake-data
+```
+
 
 - Xlib
 ```C++
@@ -236,6 +252,8 @@ XQueryExtension()
 Fl::add_system_handler()
 
 ```
+
+![RFB客户端/服务端通信流程](./img/rfbCommunicate.jpg)
 
 ### RFB
 远程帧缓冲协议，即RFB（Remote Frame Buffer）协议是 VNC（Virtual Network Computing）软件所使用的通讯协议，用于客户端向服务器传送控制命令以及服务器向客户端发送其操作画面，借此，远程桌面共享软件（不涉及Windows自带的桌面共享）得以实现。
