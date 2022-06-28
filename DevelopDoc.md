@@ -67,6 +67,25 @@ HDR截屏
 是焦点时使用键盘操作，远端也能同样的响应
 
 
+### 设计概要
+1. vnc服务负责指令发送及响应控制（客户端发送指令，服务端接收指令响应指令）
+2. 图像画面数据传输，其他进程单独传输，vnc客户端接收图像数据后渲染显示到界面
+
+
+### vnc客户端/服务端设计
+1. 优先以FLTK 跨平台GUI C++开发
+2. 鼠标/键盘消息映射
+3. 服务端响应指令
+
+- note
+优先参考Ultra VNC鼠标/键盘消息映射
+
+- 设计要点
+1. 登录控制
+2. KeyEvent（键盘事件简单）
+3. PointerEvent（鼠标位置信息如何映射？）
+4. 暂不处理编解码工作
+
 ***
 ### 资料
 
@@ -210,6 +229,43 @@ static const vncDeadKeyMapping_t deadKeyMap[] = {
 - \UltraVNC\rfb
 协议
 
+```C++
+OpenInputDesktop()
+GetProcessWindowStation()
+SetThreadDesktop()
+GetProcessWindowStation()
+mouse_event()
+VkKeyScan()
+GetKeyState()
+GetAsyncKeyState()
+doKeyboardEvent()
+keybd_event()
+
+VER_PLATFORM_WIN32_WINDOWS
+
+vncKeymap::keyEvent()
+
+CreateWindow()
+GetDeviceCaps()
+DialogBoxParam()
+MonitorFromWindow()
+AdjustWindowRectExForDpi()
+SetWindowPos()
+SetForegroundWindow()
+
+
+
+
+// 消息
+#define rfbKeyEvent 4
+#define rfbPointerEvent 5
+#define rfbClientCutText 6
+#define rfbSetDesktopSize 251
+
+
+
+```
+
 ### tigerVNC
 - linux 基础开发环境配置
 ```bash
@@ -224,6 +280,23 @@ sudo apt-get install -y libselinux1-dev
 sudo apt-get install --reinstall pkg-config cmake-data
 ```
 
+- tigerVNC
+```C++
+win32::SPointer::pointerEvent(const Point& pos, int buttonmask)
+
+客户端预览窗口大小小于服务端窗口时，鼠标位置？
+::mouse_event()
+
+\tigervnc\win\rfb_win32\SInput.cxx
+inline void doKeyboardEvent(BYTE vkCode, DWORD flags)
+class KeyStateModifier;
+
+StartServiceCtrlDispatcher()
+RegisterServiceCtrlHandler()
+
+
+
+```
 
 - Xlib
 ```C++
