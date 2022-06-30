@@ -149,6 +149,10 @@ HDR截屏
 
 [Writing Your First FLTK Program](https://www.fltk.org/doc-1.1/basics.html#basics)
 
+[Qt网络编程（1）：QTcpSocket和QTcpServer的基本使用](https://blog.csdn.net/gongjianbo1992/article/details/107743780)
+
+[qt程序使用——keybd_event函数的用法和问题 & SetCursorPos & GetCursorPos函数和mouse_event的一些问题](https://blog.51cto.com/u_15067246/3731018)
+
 ***
 
 ### VNC vs RDP
