@@ -11,7 +11,7 @@
 SImgWriter::SImgWriter(QTcpSocket* imgSocket, ServerParmas sp, QObject *parent) :
     QThread(parent)
 {
-    imgSocket = imgSocket;
+    m_imgSocket = imgSocket;
     m_serverParmas = sp;
 
     sent_img_buf  = 0;
@@ -41,7 +41,7 @@ void SImgWriter::readDataFromClient()
 {
     while(true)
     {
-        int r = imgSocket->read((char*)(cmd_buf + cmd_buf_fill), 4 - cmd_buf_fill);
+        int r = m_imgSocket->read((char*)(cmd_buf + cmd_buf_fill), 4 - cmd_buf_fill);
         if(r <= 0)
             return;
         cmd_buf_fill += r;
@@ -129,7 +129,7 @@ void SImgWriter::sendFrame()
     send_width = width;
     send_height = height;
 
-    int bytes = imgSocket->bytesToWrite();
+    int bytes = m_imgSocket->bytesToWrite();
     //qDebug()<<"bytes to write"<<bytes;
     if(bytes > ((send_width * send_height * 3 + 4) * 2))
     {
@@ -214,7 +214,7 @@ void SImgWriter::sendFrame()
     send_data_buf[fill+7] = 0;
     fill += 8;
 
-    writeAndBlock(imgSocket, send_data_buf, fill);
+    writeAndBlock(m_imgSocket, send_data_buf, fill);
     qDebug()<<"fill:"<<fill;
 
     uchar* tp;
@@ -247,7 +247,7 @@ void SImgWriter::sendServerParams()
     uc[2] = usW % 0x100;
     uc[3] = usH / 0x100;
     uc[4] = usH % 0x100;
-    writeAndBlock(imgSocket, uc, 8);
+    writeAndBlock(m_imgSocket, uc, 8);
 }
 
 bool SImgWriter::checkConnect()
@@ -255,17 +255,17 @@ bool SImgWriter::checkConnect()
     bool bRet = false;
     if (!started)
         return bRet;
-    if (imgSocket == 0)
+    if (m_imgSocket == 0)
     {
         qDebug() << "null socket" << endl;
         return bRet;
     }
-    else if (imgSocket->isOpen() == false)
+    else if (m_imgSocket->isOpen() == false)
     {
         qDebug() << "socket not open" << endl;
         return bRet;
     }
-    else if (imgSocket->isWritable() == false)
+    else if (m_imgSocket->isWritable() == false)
     {
         qDebug() << "socket not writable" << endl;
         return bRet;
@@ -293,14 +293,14 @@ SImgWriter::~SImgWriter()
         delete timer;
         timer = 0;
     }
-    if(imgSocket)
+    if(m_imgSocket)
     {
-        if(imgSocket->isOpen())
+        if(m_imgSocket->isOpen())
         {
-            imgSocket->close();
+            m_imgSocket->close();
         }
-        delete imgSocket;
-        imgSocket = 0;
+        delete m_imgSocket;
+        m_imgSocket = 0;
     }
     if(sent_img_buf != 0)
         delete[] sent_img_buf;

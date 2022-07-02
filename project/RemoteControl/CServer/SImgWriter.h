@@ -41,10 +41,8 @@ private:
     int         interval;         //帧间时间间隔
 
     //! send server desk img to client
-    QTcpSocket* imgSocket;
+    QTcpSocket* m_imgSocket;
     
-    //! send server msg to client, like server parmas.
-    QTcpSocket* msgSocket;
     QTimer* timer;
 
 public:
