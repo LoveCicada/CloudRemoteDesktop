@@ -1,6 +1,6 @@
 #include "RWSocket.h"
 
-void writeAndBlock(QTcpSocket* socket, uchar* buf, int len)
+void BlockWriteSocketData(QTcpSocket* socket, uchar* buf, int len)
 {
     int fill = 0;
     int w;
@@ -16,7 +16,7 @@ void writeAndBlock(QTcpSocket* socket, uchar* buf, int len)
     }
 }
 
-void readAndBlock(QTcpSocket* socket, uchar* buf, int len)
+void BlockReadSocketData(QTcpSocket* socket, uchar* buf, int len)
 {
     int fill = 0;
     int r;

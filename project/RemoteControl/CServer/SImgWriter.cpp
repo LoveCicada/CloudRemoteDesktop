@@ -214,7 +214,7 @@ void SImgWriter::sendFrame()
     send_data_buf[fill+7] = 0;
     fill += 8;
 
-    writeAndBlock(m_imgSocket, send_data_buf, fill);
+    BlockWriteSocketData(m_imgSocket, send_data_buf, fill);
     qDebug()<<"fill:"<<fill;
 
     uchar* tp;
@@ -247,7 +247,7 @@ void SImgWriter::sendServerParams()
     uc[2] = usW % 0x100;
     uc[3] = usH / 0x100;
     uc[4] = usH % 0x100;
-    writeAndBlock(m_imgSocket, uc, 8);
+    BlockWriteSocketData(m_imgSocket, uc, 8);
 }
 
 bool SImgWriter::checkConnect()

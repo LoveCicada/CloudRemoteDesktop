@@ -120,7 +120,7 @@ void CMsgWriter::cmdMouseMoveTo(int x, int y)
 
 #endif // 0
 
-    writeAndBlock(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdMouseDoubleClick(int x, int y)
@@ -145,7 +145,7 @@ void CMsgWriter::cmdMouseDoubleClick(int x, int y)
 
 #endif // 0
 
-    writeAndBlock(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdMouseLeftDown(int x, int y)
@@ -170,7 +170,7 @@ void CMsgWriter::cmdMouseLeftDown(int x, int y)
 
 #endif // 0
 
-    writeAndBlock(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdMouseLeftUp(int x, int y)
@@ -195,7 +195,7 @@ void CMsgWriter::cmdMouseLeftUp(int x, int y)
 
 #endif // 0
 
-    writeAndBlock(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdMouseRightDown(int x, int y)
@@ -220,7 +220,7 @@ void CMsgWriter::cmdMouseRightDown(int x, int y)
 
 #endif // 0
 
-    writeAndBlock(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdMouseRightUp(int x, int y)
@@ -245,7 +245,7 @@ void CMsgWriter::cmdMouseRightUp(int x, int y)
 
 #endif // 0
 
-    writeAndBlock(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdMouseWheel(int delta, int x, int y)
@@ -272,7 +272,7 @@ void CMsgWriter::cmdMouseWheel(int delta, int x, int y)
 
 #endif // 0
 
-    writeAndBlock(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdScreenSize()
@@ -291,7 +291,7 @@ void CMsgWriter::cmdScreenSize()
 
 #endif // 0
 
-    writeAndBlock(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdKeyPress(uchar key)
@@ -309,7 +309,7 @@ void CMsgWriter::cmdKeyPress(uchar key)
     tmpClientCMDData.GetData(uc);
 
 #endif // 0
-    writeAndBlock(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdKeyRelease(uchar key)
@@ -328,5 +328,5 @@ void CMsgWriter::cmdKeyRelease(uchar key)
 
 #endif // 0
 
-    writeAndBlock(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }

@@ -59,7 +59,7 @@ void CMsgReader::sendRequestSize(int width, int height)
     uc[1] = width % 0x100;
     uc[2] = height / 0x100;
     uc[3] = height % 0x100;
-    writeAndBlock(m_msgSocket.get(), uc, 4);
+    BlockWriteSocketData(m_msgSocket.get(), uc, 4);
 }
 
 void CMsgReader::readDataFromServer()

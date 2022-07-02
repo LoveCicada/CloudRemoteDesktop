@@ -200,5 +200,5 @@ void SMsgReader::cmdScreenSize()
     uc[2] = screen_width % 0x100;
     uc[3] = screen_height / 0x100;
     uc[4] = screen_height % 0x100;
-    writeAndBlock(m_pCmdSocket, uc, 8);
+    BlockWriteSocketData(m_pCmdSocket, uc, 8);
 }
