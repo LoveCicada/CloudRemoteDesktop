@@ -1,10 +1,6 @@
 #ifndef CONTROLPANEL_H
 #define CONTROLPANEL_H
 
-/*
-@brief client control wnd
-*/
-
 #include <QWidget>
 #include <QMainWindow>
 #include <QRect>

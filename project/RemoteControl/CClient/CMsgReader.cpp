@@ -1,6 +1,7 @@
 #include "CMsgReader.h"
 #include "RWSocket.h"
 #include "consts.h"
+#include "Command.h"
 
 CMsgReader::CMsgReader(QString add, int p, int w, int h, QObject *parent) :
     QThread(parent)
@@ -13,7 +14,7 @@ CMsgReader::CMsgReader(QString add, int p, int w, int h, QObject *parent) :
     request_width  = w;
     request_height = h;
     connect(mapSocket, SIGNAL(connected()), this, SLOT(hostConnected()));
-    connect(mapSocket, SIGNAL(readyRead()), this, SLOT(newData()));
+    connect(mapSocket, SIGNAL(readyRead()), this, SLOT(readDataFromServer()));
 
     recv_buf  = new uchar[BLOCK_WIDTH * BLOCK_HEIGHT * 3];
     frame_buf = new uchar[20000000];
@@ -61,7 +62,7 @@ void CMsgReader::sendRequestSize(int width, int height)
     writeAndBlock(mapSocket, uc, 4);
 }
 
-void CMsgReader::newData()
+void CMsgReader::readDataFromServer()
 {
     //qDebug()<<"new data";
     if(cmd_got == false)
@@ -157,7 +158,7 @@ void CMsgReader::getSubWindow()
             return;
         }
     }
-    newData();
+    //readDataFromServer();
 }
 
 void CMsgReader::updateFrame()

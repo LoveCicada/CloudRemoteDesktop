@@ -19,9 +19,9 @@
 
 #endif // 0
 
-const int BLOCK_WIDTH   = 50;
-const int BLOCK_HEIGHT  = 50;
-const int DIFF_PIX      = 5;
-const int DIFF_THN      = 10;
+//const int BLOCK_WIDTH   = 50;
+//const int BLOCK_HEIGHT  = 50;
+//const int DIFF_PIX      = 5;
+//const int DIFF_THN      = 10;
 
 #endif // CONSTS_H

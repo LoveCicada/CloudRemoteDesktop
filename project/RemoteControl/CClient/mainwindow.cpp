@@ -59,10 +59,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->setCentralWidget(mw);
 
     connect(bt, SIGNAL(clicked()), this, SLOT(tryconnect()));
-
-    /*controlPanel = new ControlPanel(QRect(0, 0, screen_width / 3 * 2, screen_height / 3 * 2), this);
-    connect(this, SIGNAL(keyPressed(QKeyEvent*)), controlPanel, SLOT(keyPressSlot(QKeyEvent*)));
-    connect(this, SIGNAL(keyReleased(QKeyEvent*)), controlPanel, SLOT(keyReleaseSlot(QKeyEvent*)));*/
 }
 
 MainWindow::~MainWindow()

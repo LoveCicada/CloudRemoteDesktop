@@ -4,6 +4,7 @@
 /*
 @brief CMsgWriter - class for send client command messages on the client side
         (i.e. writer messages from client to server).
+        client params
         command msg: mouse, keyboard
 */
 

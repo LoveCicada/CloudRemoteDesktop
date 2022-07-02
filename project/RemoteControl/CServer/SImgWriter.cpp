@@ -1,19 +1,17 @@
-#include "SMsgWriter.h"
+#include "SImgWriter.h"
 #include "SMsgHandler.h"
 #include "RWSocket.h"
 #include "Command.h"
 #include <stdlib.h>
 
 /**
-  *图像传输线程
-  *建立一个双通道的tcp socket
-  *启动一个定时器
+  * send server desktop img to client
+  * start a timer
   */
-SMsgWriter::SMsgWriter(QTcpSocket* socket, /*QTcpSocket* msgSocket,*/ ServerParmas sp, QObject *parent) :
+SImgWriter::SImgWriter(QTcpSocket* imgSocket, ServerParmas sp, QObject *parent) :
     QThread(parent)
 {
-    mapSocket = socket;
-    /*msgSocket = msgSocket;*/
+    imgSocket = imgSocket;
     m_serverParmas = sp;
 
     sent_img_buf  = 0;
@@ -24,16 +22,14 @@ SMsgWriter::SMsgWriter(QTcpSocket* socket, /*QTcpSocket* msgSocket,*/ ServerParm
     started = false;
     memset(cmd_buf, 0, 4);
 
-
-
-    connect(mapSocket, SIGNAL(readyRead()), this, SLOT(readDataFromClient()));
+    connect(imgSocket, SIGNAL(readyRead()), this, SLOT(readDataFromClient()));
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(sendFrame()));
     timer->start(interval);
 }
 
 
-void SMsgWriter::run()
+void SImgWriter::run()
 {
     QThread::run();
 }
@@ -41,11 +37,11 @@ void SMsgWriter::run()
 /*
 * when tcp socket have receive new data, read socket data
 */
-void SMsgWriter::readDataFromClient()
+void SImgWriter::readDataFromClient()
 {
     while(true)
     {
-        int r = mapSocket->read((char*)(cmd_buf + cmd_buf_fill), 4 - cmd_buf_fill);
+        int r = imgSocket->read((char*)(cmd_buf + cmd_buf_fill), 4 - cmd_buf_fill);
         if(r <= 0)
             return;
         cmd_buf_fill += r;
@@ -62,7 +58,7 @@ void SMsgWriter::readDataFromClient()
   *从socket里提取出一条命令时启动
   *目前的命令只有设置目的设备期望图像大小
   */
-void SMsgWriter::readCommand()
+void SImgWriter::readCommand()
 {
     uchar* uc = (uchar*)cmd_buf;
     uint width = uc[0];
@@ -111,7 +107,7 @@ void SMsgWriter::readCommand()
   *前四字节为所发送图像的尺寸，从低字节到高字节依次为width_high, width_low, height_high, height_low
   *后面为图像数据，每个像素3个字节，依次为RGB通道
   */
-void SMsgWriter::sendFrame()
+void SImgWriter::sendFrame()
 {
     bool bConnect = checkConnect();
     if (!bConnect) {
@@ -133,7 +129,7 @@ void SMsgWriter::sendFrame()
     send_width = width;
     send_height = height;
 
-    int bytes = mapSocket->bytesToWrite();
+    int bytes = imgSocket->bytesToWrite();
     //qDebug()<<"bytes to write"<<bytes;
     if(bytes > ((send_width * send_height * 3 + 4) * 2))
     {
@@ -218,7 +214,7 @@ void SMsgWriter::sendFrame()
     send_data_buf[fill+7] = 0;
     fill += 8;
 
-    writeAndBlock(mapSocket, send_data_buf, fill);
+    writeAndBlock(imgSocket, send_data_buf, fill);
     qDebug()<<"fill:"<<fill;
 
     uchar* tp;
@@ -228,12 +224,12 @@ void SMsgWriter::sendFrame()
 }
 
 
-void SMsgWriter::setSendInterval(int i)
+void SImgWriter::setSendInterval(int i)
 {
     timer->setInterval(i);
 }
 
-void SMsgWriter::sendServerParams()
+void SImgWriter::sendServerParams()
 {
     bool bConnect = checkConnect();
     if (!bConnect) {
@@ -251,25 +247,25 @@ void SMsgWriter::sendServerParams()
     uc[2] = usW % 0x100;
     uc[3] = usH / 0x100;
     uc[4] = usH % 0x100;
-    writeAndBlock(mapSocket, uc, 8);
+    writeAndBlock(imgSocket, uc, 8);
 }
 
-bool SMsgWriter::checkConnect()
+bool SImgWriter::checkConnect()
 {
     bool bRet = false;
     if (!started)
         return bRet;
-    if (mapSocket == 0)
+    if (imgSocket == 0)
     {
         qDebug() << "null socket" << endl;
         return bRet;
     }
-    else if (mapSocket->isOpen() == false)
+    else if (imgSocket->isOpen() == false)
     {
         qDebug() << "socket not open" << endl;
         return bRet;
     }
-    else if (mapSocket->isWritable() == false)
+    else if (imgSocket->isWritable() == false)
     {
         qDebug() << "socket not writable" << endl;
         return bRet;
@@ -279,14 +275,14 @@ bool SMsgWriter::checkConnect()
     return bRet;
 }
 
-void SMsgWriter::quit()
+void SImgWriter::quit()
 {
     if(timer)
         timer->stop();
     QThread::quit();
 }
 
-SMsgWriter::~SMsgWriter()
+SImgWriter::~SImgWriter()
 {
     if(timer)
     {
@@ -297,14 +293,14 @@ SMsgWriter::~SMsgWriter()
         delete timer;
         timer = 0;
     }
-    if(mapSocket)
+    if(imgSocket)
     {
-        if(mapSocket->isOpen())
+        if(imgSocket->isOpen())
         {
-            mapSocket->close();
+            imgSocket->close();
         }
-        delete mapSocket;
-        mapSocket = 0;
+        delete imgSocket;
+        imgSocket = 0;
     }
     if(sent_img_buf != 0)
         delete[] sent_img_buf;

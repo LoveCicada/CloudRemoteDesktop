@@ -1,18 +1,13 @@
 #include "SControler.h"
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QHostInfo>
+#include <QRect>
 
 SControler::SControler(QObject *parent) :
     QObject(parent)
 {
-    m_pMapServer = make_shared<QTcpServer>(new QTcpServer);
-    m_pMapServer->listen(QHostAddress::Any, MAP_SERVER_PORT);
-    qDebug()<<"map server listening"<<endl;
-    connect(m_pMapServer.get(), SIGNAL(newConnection()), this, SLOT(newMapClient()));
-
-    m_pCmdServer = make_shared<QTcpServer>(new QTcpServer);
-    m_pCmdServer->listen(QHostAddress::Any, CMD_SERVER_PORT);
-    qDebug()<<"cmd server listening"<<endl;
-    connect(m_pCmdServer.get(), SIGNAL(newConnection()), this, SLOT(newCmdClient()));
-
+    Init();
 }
 
 SControler::~SControler()
@@ -20,47 +15,91 @@ SControler::~SControler()
     qDebug() << __func__;
 }
 
+void SControler::Init()
+{
+    GetServerMachineInfo();
+    CretateTcpServer();
+}
+
+void SControler::CretateTcpServer()
+{
+    m_pWriteServerMsgTcpServer = make_shared<QTcpServer>(new QTcpServer);
+    m_pWriteServerMsgTcpServer->listen(QHostAddress::Any, MAP_SERVER_MSG_PORT);
+    qDebug() << "server msg begin listening" << endl;
+    connect(m_pWriteServerMsgTcpServer.get(), SIGNAL(newConnection()), this, SLOT(writeServerMsg()));
+
+    m_pWriteServerImgTcpServer = make_shared<QTcpServer>(new QTcpServer);
+    m_pWriteServerImgTcpServer->listen(QHostAddress::Any, MAP_SERVER_IMG_PORT);
+    qDebug() << "server img begin listening" << endl;
+    connect(m_pWriteServerImgTcpServer.get(), SIGNAL(newConnection()), this, SLOT(writeServerImg()));
+
+    m_pReadClientMsgTcpServer = make_shared<QTcpServer>(new QTcpServer);
+    m_pReadClientMsgTcpServer->listen(QHostAddress::Any, CMD_SERVER_PORT);
+    qDebug() << "client msg begin listening" << endl;
+    connect(m_pReadClientMsgTcpServer.get(), SIGNAL(newConnection()), this, SLOT(readClientMsg()));
+}
+
+void SControler::writeServerMsg()
+{
+    QTcpSocket* pClientMsgSocket = m_pWriteServerMsgTcpServer->nextPendingConnection();
+    qDebug() << "new map connection:" << pClientMsgSocket->peerAddress().toString() << endl;
+
+    {
+        string str = "new msg connection: " +
+            pClientMsgSocket->peerAddress().toString().toStdString();
+        WriteCbLog(str);
+    }
+
+    SMsgWriter* pMsgThread = new SMsgWriter(pClientMsgSocket, m_serverParmas);
+    connect(pClientMsgSocket, SIGNAL(disconnected()), this, SLOT(someSocketDisconnected()));
+
+    SocketAndThreadPtr pSt(new SocketAndThread(pClientMsgSocket, pMsgThread));
+    m_STPtrVec.emplace_back(pSt);
+
+    pMsgThread->start();
+}
+
   /*
   * when have a new connect, start a new thread process
   */
-void SControler::newMapClient()
+void SControler::writeServerImg()
 {
-    QTcpSocket* pClientMapSocket = m_pMapServer->nextPendingConnection();
-    qDebug()<<"new map connection:"<<pClientMapSocket->peerAddress().toString()<<endl;
+    QTcpSocket* pClientImgSocket = m_pWriteServerImgTcpServer->nextPendingConnection();
+    qDebug()<<"new map connection:"<< pClientImgSocket->peerAddress().toString()<<endl;
 
     {
         string str = "new map connection: " +
-            pClientMapSocket->peerAddress().toString().toStdString();
+            pClientImgSocket->peerAddress().toString().toStdString();
         WriteCbLog(str);
     }
 
-    SMsgWriter* pMapThread = new SMsgWriter(pClientMapSocket);
-    connect(pClientMapSocket, SIGNAL(disconnected()), this, SLOT(someSocketDisconnected()));
+    SImgWriter* pImgThread = new SImgWriter(pClientImgSocket, m_serverParmas);
+    connect(pClientImgSocket, SIGNAL(disconnected()), this, SLOT(someSocketDisconnected()));
 
-    SocketAndThreadPtr pSt(new SocketAndThread(pClientMapSocket, pMapThread));
+    SocketAndThreadPtr pSt(new SocketAndThread(pClientImgSocket, pImgThread));
     m_STPtrVec.emplace_back(pSt);
 
-    pMapThread->start();
+    pImgThread->start();
 }
 
-void SControler::newCmdClient()
+void SControler::readClientMsg()
 {
-    QTcpSocket* pClientCmdSocket = m_pCmdServer->nextPendingConnection();
-    qDebug()<<"new cmd connection:"<< pClientCmdSocket->peerAddress().toString()<<endl;
+    QTcpSocket* pReadClientCmdSocket = m_pReadClientMsgTcpServer->nextPendingConnection();
+    qDebug()<<"new cmd connection:"<< pReadClientCmdSocket->peerAddress().toString()<<endl;
 
     {
         string str = "new cmd connection: " +
-            pClientCmdSocket->peerAddress().toString().toStdString();
+            pReadClientCmdSocket->peerAddress().toString().toStdString();
         WriteCbLog(str);
     }
 
-    SMsgReader* pCmdThread = new SMsgReader(pClientCmdSocket);
-    connect(pClientCmdSocket, SIGNAL(disconnected()), this, SLOT(someSocketDisconnected()));
+    SMsgReader* pSMsgReader = new SMsgReader(pReadClientCmdSocket);
+    connect(pReadClientCmdSocket, SIGNAL(disconnected()), this, SLOT(someSocketDisconnected()));
 
-    SocketAndThreadPtr pSt(new SocketAndThread(pClientCmdSocket, pCmdThread));
+    SocketAndThreadPtr pSt(new SocketAndThread(pReadClientCmdSocket, pSMsgReader));
     m_STPtrVec.emplace_back(pSt);
 
-    pCmdThread->start();
+    pSMsgReader->start();
 }
 
 void SControler::someSocketDisconnected()
@@ -74,6 +113,11 @@ void SControler::someSocketDisconnected()
         {
             if (pSocket->isOpen())
             {
+                QHostAddress qAd = pSocket->peerAddress();
+                QString strAd = qAd.toString();
+                QString strName = pSocket->peerName();
+                qDebug() << "client: " << strAd << " " << strName << " disconnect";
+
                 pSocket->close();
             }
 
@@ -104,4 +148,28 @@ void SControler::WriteCbLog(const string& str)
     {
         m_pCallBackLog.logCb(m_pCallBackLog.pUser, str, 0);
     }
+}
+
+void SControler::GetServerMachineInfo()
+{
+    QDesktopWidget* pDeskWidget = qApp->desktop();
+    QRect screenRect = pDeskWidget->screenGeometry();
+    unsigned short usW = static_cast<unsigned short>(screenRect.width());
+    unsigned short usH = static_cast<unsigned short>(screenRect.height());
+    m_serverParmas.SetScreenWidth(usW);
+    m_serverParmas.SetScreenHeight(usH);
+
+    QString hostName = QHostInfo::localHostName();
+    string strHostName = hostName.toStdString();
+    m_serverParmas.SetServerName(strHostName);
+}
+
+void SControler::GetServerParams(ServerParmas& sp)
+{
+    sp = m_serverParmas;
+}
+
+void SControler::SetServerParams(const ServerParmas& sp)
+{
+    m_serverParmas = sp;
 }

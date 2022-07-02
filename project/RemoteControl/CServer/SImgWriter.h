@@ -1,8 +1,7 @@
-#ifndef MAPTHREAD_H
-#define MAPTHREAD_H
+#pragma once
 
 /*
-@brief SMsgWriter - class for server send messages on the server side.
+@brief SImgWriter - class for server send messages on the server side.
         (i.e. messages send client from server).
         server --> client
         command msg: mouse, keyboard
@@ -17,7 +16,7 @@
 
 #include "ServerParams.h"
 
-class SMsgWriter : public QThread
+class SImgWriter : public QThread
 {
     Q_OBJECT
 
@@ -42,15 +41,15 @@ private:
     int         interval;         //帧间时间间隔
 
     //! send server desk img to client
-    QTcpSocket* mapSocket;
+    QTcpSocket* imgSocket;
     
     //! send server msg to client, like server parmas.
     QTcpSocket* msgSocket;
     QTimer* timer;
 
 public:
-    SMsgWriter(QTcpSocket* socket, /*QTcpSocket* msgSocket,*/ ServerParmas sp, QObject *parent = 0);
-    ~SMsgWriter();
+    SImgWriter(QTcpSocket* imgSocket, ServerParmas sp, QObject *parent = 0);
+    ~SImgWriter();
 
     const static int SCALE_BY_WIDTH  = 1;
     const static int SCALE_BY_HEIGHT = 2;
@@ -73,4 +72,3 @@ protected:
     
 };
 
-#endif // MAPTHREAD_H

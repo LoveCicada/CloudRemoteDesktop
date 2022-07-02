@@ -9,7 +9,9 @@
 
 #include "SMsgHandler.h"
 #include "SMsgWriter.h"
+#include "SImgWriter.h"
 #include "SMsgReader.h"
+#include "ServerParams.h"
 
 #include <QTcpServer>
 #include <QTcpSocket>
@@ -64,9 +66,21 @@ private:
     typedef shared_ptr<QTcpServer> QTcpServerPtr;
 
 private:
-    QTcpServerPtr m_pCmdServer;
-    QTcpServerPtr m_pMapServer;
+
+    //! send server msg to client, like serverparams.
+    QTcpServerPtr m_pWriteServerMsgTcpServer;
+
+    //! send server img to client.
+    QTcpServerPtr m_pWriteServerImgTcpServer;
+
+    //! read client msg from server
+    QTcpServerPtr m_pReadClientMsgTcpServer;
+
+    //QTcpServerPtr m_pWriteServerMsgTcpServer;
     SocketAndThreadPtrVec m_STPtrVec;
+
+    //! server params
+    ServerParmas m_serverParmas;
 
     //! callback log
     CallBackLog m_pCallBackLog;
@@ -76,19 +90,27 @@ public:
     const static int DATA_HEADER_CMD = 2;    //命令数据
     const static int DATA_HEARER_RES = 3;    //命令结果数据
 
-    const static int MAP_SERVER_PORT = 5648;
+    const static int MAP_SERVER_MSG_PORT = 5647;
+    const static int MAP_SERVER_IMG_PORT = 5648;
     const static int CMD_SERVER_PORT = 5649;
 
     explicit SControler(QObject *parent = 0);
     ~SControler();
 
+    void Init();
+    void CretateTcpServer();
 public:
     //! log callback
     void SetLogCb(pfnLog logCb, void* pUser, int logLevel);
     void WriteCbLog(const string& str);
+    void GetServerMachineInfo();
+    void GetServerParams(ServerParmas& sp);
+    void SetServerParams(const ServerParmas& sp);
+
 public slots:
-    void newMapClient();
-    void newCmdClient();
+    void writeServerMsg();
+    void writeServerImg();
+    void readClientMsg();
     void someSocketDisconnected();
 };
 

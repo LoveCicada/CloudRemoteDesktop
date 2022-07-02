@@ -4,7 +4,7 @@
 #include <string.h>
 
 /*
-@brief client operation cmd define
+@brief client/server operation cmd define
 */
 enum CMDTYPE
 {
@@ -20,10 +20,16 @@ enum CMDTYPE
 	CMD_KEY_RELEASE			= 9,
 	CMD_GET_SCREEN_SIZE		= 11,
 	CMD_GET_SCREEN_SIZE_RES = 12,
+	CMD_SEND_SERVER_SCREEN_SIZE = 13,
 };
 
+const int BLOCK_WIDTH = 50;
+const int BLOCK_HEIGHT = 50;
+const int DIFF_PIX = 5;
+const int DIFF_THN = 10;
+
 /*
-@brief client command data define
+@brief client/server command data define
 */
 class ClientCMDData
 {

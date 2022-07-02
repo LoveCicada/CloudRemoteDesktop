@@ -1,6 +1,13 @@
 #ifndef MAPTHREAD_H
 #define MAPTHREAD_H
 
+/*
+@brief CMsgReader - class for client read messages on the client side.
+        (i.e. read messages from server to client).
+        server params, and other.
+*/
+
+
 #include <QThread>
 #include <QTcpSocket>
 #include <QDebug>
@@ -53,7 +60,7 @@ signals:
     void frameSizeChanged(int, int);
     
 public slots:
-    void newData();
+    void readDataFromServer();
     void hostConnected();
 
 protected:
