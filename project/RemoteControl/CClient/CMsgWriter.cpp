@@ -2,8 +2,8 @@
 
 CMsgWriter::CMsgWriter(QString add, int p, QObject* parent) : QObject(parent)
 {
-    address = add;
-    port = p;
+    m_address = add;
+    m_port = p;
     socketConnected = false;
     cmd_buf_fill = 0;
 }
@@ -11,14 +11,14 @@ CMsgWriter::CMsgWriter(QString add, int p, QObject* parent) : QObject(parent)
 void CMsgWriter::run()
 {
     qRegisterMetaType<QAbstractSocket::SocketError>("SocketError");
-    cmdSocket = new QTcpSocket;
+    m_msgSocket = make_shared<QTcpSocket>(new QTcpSocket);
 
-    connect(cmdSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(connectError(QAbstractSocket::SocketError)));
-    connect(cmdSocket, SIGNAL(connected()), this, SLOT(connectSucceed()));
-    connect(cmdSocket, SIGNAL(readyRead()), this, SLOT(readDataFromServer()));
+    connect(m_msgSocket.get(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(connectError(QAbstractSocket::SocketError)));
+    connect(m_msgSocket.get(), SIGNAL(connected()), this, SLOT(connectSucceed()));
+    connect(m_msgSocket.get(), SIGNAL(readyRead()), this, SLOT(readDataFromServer()));
 
     connectToServer();
-    cmdSocket->waitForConnected();
+    m_msgSocket->waitForConnected();
     cmdScreenSize();
 }
 
@@ -26,7 +26,7 @@ void CMsgWriter::readDataFromServer()
 {
     while(true)
     {
-        int r = cmdSocket->read((char*)(cmd_buf + cmd_buf_fill), 8 - cmd_buf_fill);
+        int r = m_msgSocket->read((char*)(cmd_buf + cmd_buf_fill), 8 - cmd_buf_fill);
         if(r <= 0)
             return;
         cmd_buf_fill += r;
@@ -75,15 +75,15 @@ void CMsgWriter::readServerMsg()
 void CMsgWriter::connectToServer()
 {
     qDebug()<<"try to connect";
-    cmdSocket->connectToHost(address, port);
+    m_msgSocket->connectToHost(m_address, m_port);
 }
 
 void CMsgWriter::connectError(QAbstractSocket::SocketError)
 {
     qDebug()<<"connect error, reconnect";
     //QThread::msleep(200);
-    cmdSocket->abort();
-    cmdSocket->close();
+    m_msgSocket->abort();
+    m_msgSocket->close();
     connectToServer();
 }
 
@@ -120,7 +120,7 @@ void CMsgWriter::cmdMouseMoveTo(int x, int y)
 
 #endif // 0
 
-    writeAndBlock(cmdSocket, uc, 8);
+    writeAndBlock(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdMouseDoubleClick(int x, int y)
@@ -145,7 +145,7 @@ void CMsgWriter::cmdMouseDoubleClick(int x, int y)
 
 #endif // 0
 
-    writeAndBlock(cmdSocket, uc, 8);
+    writeAndBlock(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdMouseLeftDown(int x, int y)
@@ -170,7 +170,7 @@ void CMsgWriter::cmdMouseLeftDown(int x, int y)
 
 #endif // 0
 
-    writeAndBlock(cmdSocket, uc, 8);
+    writeAndBlock(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdMouseLeftUp(int x, int y)
@@ -195,7 +195,7 @@ void CMsgWriter::cmdMouseLeftUp(int x, int y)
 
 #endif // 0
 
-    writeAndBlock(cmdSocket, uc, 8);
+    writeAndBlock(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdMouseRightDown(int x, int y)
@@ -220,7 +220,7 @@ void CMsgWriter::cmdMouseRightDown(int x, int y)
 
 #endif // 0
 
-    writeAndBlock(cmdSocket, uc, 8);
+    writeAndBlock(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdMouseRightUp(int x, int y)
@@ -245,7 +245,7 @@ void CMsgWriter::cmdMouseRightUp(int x, int y)
 
 #endif // 0
 
-    writeAndBlock(cmdSocket, uc, 8);
+    writeAndBlock(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdMouseWheel(int delta, int x, int y)
@@ -272,7 +272,7 @@ void CMsgWriter::cmdMouseWheel(int delta, int x, int y)
 
 #endif // 0
 
-    writeAndBlock(cmdSocket, uc, 8);
+    writeAndBlock(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdScreenSize()
@@ -291,7 +291,7 @@ void CMsgWriter::cmdScreenSize()
 
 #endif // 0
 
-    writeAndBlock(cmdSocket, uc, 8);
+    writeAndBlock(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdKeyPress(uchar key)
@@ -309,7 +309,7 @@ void CMsgWriter::cmdKeyPress(uchar key)
     tmpClientCMDData.GetData(uc);
 
 #endif // 0
-    writeAndBlock(cmdSocket, uc, 8);
+    writeAndBlock(m_msgSocket.get(), uc, 8);
 }
 
 void CMsgWriter::cmdKeyRelease(uchar key)
@@ -328,5 +328,5 @@ void CMsgWriter::cmdKeyRelease(uchar key)
 
 #endif // 0
 
-    writeAndBlock(cmdSocket, uc, 8);
+    writeAndBlock(m_msgSocket.get(), uc, 8);
 }

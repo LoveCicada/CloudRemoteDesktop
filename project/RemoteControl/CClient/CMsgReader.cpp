@@ -6,15 +6,15 @@
 CMsgReader::CMsgReader(QString add, int p, int w, int h, QObject *parent) :
     QThread(parent)
 {
-    mapSocket = new QTcpSocket;
-    address   = add;
-    port      = p;
+    m_msgSocket = make_shared<QTcpSocket>(new QTcpSocket);
+    m_address   = add;
+    m_port      = p;
     socketConnected = false;
 
     request_width  = w;
     request_height = h;
-    connect(mapSocket, SIGNAL(connected()), this, SLOT(hostConnected()));
-    connect(mapSocket, SIGNAL(readyRead()), this, SLOT(readDataFromServer()));
+    connect(m_msgSocket.get(), SIGNAL(connected()), this, SLOT(hostConnected()));
+    connect(m_msgSocket.get(), SIGNAL(readyRead()), this, SLOT(readDataFromServer()));
 
     recv_buf  = new uchar[BLOCK_WIDTH * BLOCK_HEIGHT * 3];
     frame_buf = new uchar[20000000];
@@ -35,7 +35,7 @@ CMsgReader::CMsgReader(QString add, int p, int w, int h, QObject *parent) :
     subSize   = 0;
     subFill   = 0;
 
-    mapSocket->connectToHost(address, port);
+    m_msgSocket->connectToHost(m_address, m_port);
 }
 
 void CMsgReader::run()
@@ -59,7 +59,7 @@ void CMsgReader::sendRequestSize(int width, int height)
     uc[1] = width % 0x100;
     uc[2] = height / 0x100;
     uc[3] = height % 0x100;
-    writeAndBlock(mapSocket, uc, 4);
+    writeAndBlock(m_msgSocket.get(), uc, 4);
 }
 
 void CMsgReader::readDataFromServer()
@@ -69,7 +69,7 @@ void CMsgReader::readDataFromServer()
     {
         while(true)
         {
-            int r = mapSocket->read((char*)(cmd_buf + cmd_buf_fill), 8 - cmd_buf_fill);
+            int r = m_msgSocket->read((char*)(cmd_buf + cmd_buf_fill), 8 - cmd_buf_fill);
             if(r <= 0)
                 return;
 
@@ -138,7 +138,7 @@ void CMsgReader::getSubWindow()
 {
     while(true)
     {
-        int r = mapSocket->read((char*)(recv_buf + subFill),subSize - subFill);
+        int r = m_msgSocket->read((char*)(recv_buf + subFill),subSize - subFill);
         if(r <= 0)
         {
             return;

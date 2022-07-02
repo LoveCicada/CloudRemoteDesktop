@@ -7,20 +7,25 @@
         server params, and other.
 */
 
-
 #include <QThread>
 #include <QTcpSocket>
 #include <QDebug>
 #include <QImage>
+#include <memory>
+
+using std::shared_ptr;
+using std::make_shared;
 
 class CMsgReader : public QThread
 {
     Q_OBJECT
 
 private:
-    QTcpSocket* mapSocket;
-    QString     address;
-    int         port;
+    typedef shared_ptr<QTcpSocket> QTcpSocketPtr;
+private:
+    QTcpSocketPtr m_msgSocket;
+    QString     m_address;
+    int         m_port;
     bool socketConnected;
 
     int request_width;

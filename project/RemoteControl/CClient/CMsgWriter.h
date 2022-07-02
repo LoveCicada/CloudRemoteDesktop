@@ -11,18 +11,24 @@
 #include <QThread>
 #include <QTcpSocket>
 #include <QMetaType>
-
+#include <memory>
 #include "consts.h"
 #include "RWSocket.h"
 #include "command.h"
 
+using std::shared_ptr;
+using std::make_shared;
+
 class CMsgWriter : public QObject
 {
     Q_OBJECT
+
 private:
-    QTcpSocket* cmdSocket;
-    QString     address;
-    int         port;
+    typedef shared_ptr<QTcpSocket> QTcpSocketPtr;
+private:
+    QTcpSocketPtr m_msgSocket;
+    QString     m_address;
+    int         m_port;
     bool socketConnected;
 
     uchar cmd_buf[8];
