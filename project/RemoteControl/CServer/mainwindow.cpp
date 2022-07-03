@@ -15,8 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->setGeometry(QRect(screen_width / 3, screen_height / 3, screen_width / 5, screen_height / 5));
     m_pLabelInfo = new QLabel(this);
     m_pLabelInfo->setText("server run...");
-    //Interface::mouse(100, 100);
-    //new Controler;
+
     m_pControler = std::make_shared<SControler>(new SControler);
     m_pControler->SetLogCb(Log, this, 0);
 }

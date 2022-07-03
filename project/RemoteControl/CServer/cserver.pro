@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     SMsgReader.cpp \
     SMsgWriter.cpp \
     SImgWriter.cpp \
-    RWSocket.cpp
+    RWSocket.cpp   \
+    ServerHelper.cpp
 
 HEADERS  += mainwindow.h \
     ClientParams.h \
@@ -32,7 +33,8 @@ HEADERS  += mainwindow.h \
     SMsgReader.h \
     SMsgWriter.h \
     SImgWriter.h \
-    RWSocket.h
+    RWSocket.h   \
+    ServerHelper.h
 
 
 
