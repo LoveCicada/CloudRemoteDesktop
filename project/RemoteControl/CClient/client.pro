@@ -21,6 +21,7 @@ SOURCES += main.cpp\
 	Command.cpp \
     CMsgWriter.cpp \
     CMsgReader.cpp \
+    CImgReader.cpp \
     CControlWnd.cpp
 
 HEADERS  += mainwindow.h \
@@ -33,4 +34,5 @@ HEADERS  += mainwindow.h \
 	consts.h \
     CMsgWriter.h \
     CMsgReader.h \
+    CImgReader.h \
     CControlWnd.h
