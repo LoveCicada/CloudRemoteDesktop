@@ -7,7 +7,7 @@
 QT       += core gui widgets
 QT       += network
 
-TARGET = client
+TARGET = cclient
 TEMPLATE = app
 
 
