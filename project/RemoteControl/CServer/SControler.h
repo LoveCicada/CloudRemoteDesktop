@@ -12,6 +12,7 @@
 #include "SImgWriter.h"
 #include "SMsgReader.h"
 #include "ServerParams.h"
+#include "Command.h"
 
 #include <QTcpServer>
 #include <QTcpSocket>
@@ -86,14 +87,6 @@ private:
     CallBackLog m_pCallBackLog;
 
 public:
-    const static int DATA_HEARER_MAP = 1;    //图像数据
-    const static int DATA_HEADER_CMD = 2;    //命令数据
-    const static int DATA_HEARER_RES = 3;    //命令结果数据
-
-    const static int MAP_SERVER_MSG_PORT = 5647;
-    const static int MAP_SERVER_IMG_PORT = 5648;
-    const static int CMD_SERVER_PORT = 5649;
-
     explicit SControler(QObject *parent = 0);
     ~SControler();
 

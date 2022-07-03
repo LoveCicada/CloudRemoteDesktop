@@ -1,6 +1,7 @@
 #include "CControlWnd.h"
 #include "mainwindow.h"
 #include "values.h"
+#include "Command.h"
 
 CControlWnd::CControlWnd(QRect rect, QWidget *parent)
     : QWidget(parent)
@@ -12,11 +13,11 @@ CControlWnd::CControlWnd(QRect rect, QWidget *parent)
     frame_width  = -1;
     frame_height = -1;
     setGeometry(rect);
-    m_pCMsgReader = new CMsgReader(addr, 5648, rect.width(), rect.height());
+    m_pCMsgReader = new CMsgReader(addr, MAP_SERVER_IMG_PORT, rect.width(), rect.height());
     connect(m_pCMsgReader, SIGNAL(frameGot(QImage*)), this, SLOT(frameChanged(QImage*)));
     connect(m_pCMsgReader, SIGNAL(frameSizeChanged(int,int)), this, SLOT(changeFrameSize(int,int)));
     m_pCMsgReader->start();
-    m_pCMsgWriter = new CMsgWriter(addr, 5649);
+    m_pCMsgWriter = new CMsgWriter(addr, CMD_SERVER_PORT);
     connect(m_pCMsgWriter, SIGNAL(setServerScreenSize(int,int)), this, SLOT(gotServerScreenSize(int,int)));
     m_pCMsgWriter->run();
 }
