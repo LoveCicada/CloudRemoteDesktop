@@ -198,6 +198,30 @@ public:
 		uCmd[4] = uYLB;
 	}
 
+	void SetX(unsigned short x)
+	{
+		//! 1680 = 0x0690
+		unsigned short us = x;
+		uXHB = (us & 0xFF00) >> 8;
+		uXLB = (us & 0x00FF);
+
+		ux = uXHB << 8 | uXLB;
+
+		uCmd[1] = uXHB;
+		uCmd[2] = uXLB;
+	}
+
+	void SetY(unsigned short y)
+	{
+		unsigned short us = y;
+		uYHB = (us & 0xFF00) >> 8;
+		uYLB = (us & 0x00FF);
+
+		uy = uYHB << 8 | uYLB;
+
+		uCmd[3] = uYHB;
+		uCmd[4] = uYLB;
+	}
 };
 
 

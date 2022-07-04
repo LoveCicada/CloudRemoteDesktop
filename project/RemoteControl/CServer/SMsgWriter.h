@@ -36,8 +36,6 @@ private:
     uchar* send_data_buf;
     uchar cmd_buf[4];
     int   cmd_buf_fill;
-
-    bool started;
     
     //! send server msg to client, like server parmas.
     QTcpSocket* m_msgSocket;
