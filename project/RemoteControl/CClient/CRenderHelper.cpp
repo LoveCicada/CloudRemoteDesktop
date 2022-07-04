@@ -8,7 +8,7 @@ CRenderHelper::CRenderHelper()
 
 CRenderHelper::CRenderHelper(const CRenderHelper& ch)
 {
-	m_windowHanlde = ch.m_windowHanlde;
+	m_pOpenGLWidget = ch.m_pOpenGLWidget;
 	m_wndWidth = ch.m_wndWidth;
 	m_wndHeight = ch.m_wndHeight;
 	m_pParam = ch.m_pParam;
@@ -21,7 +21,7 @@ CRenderHelper::~CRenderHelper()
 
 void CRenderHelper::Init()
 {
-	m_windowHanlde = nullptr;
+	m_pOpenGLWidget = nullptr;
 	m_pParam = nullptr;
 	m_wndWidth = 0;
 	m_wndHeight = 0;
@@ -29,26 +29,26 @@ void CRenderHelper::Init()
 
 void CRenderHelper::Release()
 {
-	m_windowHanlde = nullptr;
+	m_pOpenGLWidget = nullptr;
 	m_pParam = nullptr;
 	m_wndWidth = 0;
 	m_wndHeight = 0;
 }
 
-bool CRenderHelper::SetWindowHanlde(QWindow*& qw)
+bool CRenderHelper::SetWindowHanlde(QOpenGLWidget* qw)
 {
 	bool bRet = true;
 
-	m_windowHanlde = qw;
+	m_pOpenGLWidget = qw;
 
 	return bRet;
 }
 
-bool CRenderHelper::GetWindowsHanlde(QWindow*& qw)
+bool CRenderHelper::GetWindowsHanlde(QOpenGLWidget* qw)
 {
 	bool bRet = true;
 
-	qw = m_windowHanlde;
+	qw = m_pOpenGLWidget;
 
 	return bRet;
 }

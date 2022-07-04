@@ -5,7 +5,7 @@
 @brief interact with the render module
 */
 
-#include <QWindow>
+#include <QOpenGLWidget>
 
 class CRenderHelper
 {
@@ -17,8 +17,8 @@ public:
 	void Init();
 	void Release();
 
-	bool SetWindowHanlde(QWindow*& qw);
-	bool GetWindowsHanlde(QWindow*& qw);
+	bool SetWindowHanlde(QOpenGLWidget* qw);
+	bool GetWindowsHanlde(QOpenGLWidget* qw);
 	bool SetWndWidth(unsigned int uiW);
 	bool GetWndWidth(unsigned int& uiW);
 	bool SetWndHeight(unsigned int uiH);
@@ -29,7 +29,7 @@ public:
 	
 
 private:
-	QWindow* m_windowHanlde;
+	QOpenGLWidget* m_pOpenGLWidget;
 	unsigned int m_wndWidth;
 	unsigned int m_wndHeight;
 	void* m_pParam;

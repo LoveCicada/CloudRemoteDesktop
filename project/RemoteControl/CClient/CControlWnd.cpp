@@ -4,7 +4,7 @@
 #include "Command.h"
 
 CControlWnd::CControlWnd(QRect rect, QWidget *parent)
-    : m_rect(rect), QWidget(parent)
+    : m_rect(rect), QOpenGLWidget(parent)
 {
     setGeometry(m_rect);
     setMouseTracking(true);
@@ -31,12 +31,7 @@ void CControlWnd::InitData()
     frame_height = -1;
 
     m_CRenderHelper = make_shared<CRenderHelper>();
-    QWindow* pQW = this->windowHandle();
-
-    //QWindow* pQW2 = this->nativeParentWidget()->windowHandle();
-    //WId wid = this->winId();
-
-    m_CRenderHelper->SetWindowHanlde(pQW);
+    m_CRenderHelper->SetWindowHanlde(this);
 
     m_pCMsgReader = nullptr;
     m_pCMsgReader = new CMsgReader(addr, MAP_SERVER_MSG_PORT, m_rect.width(), m_rect.height());

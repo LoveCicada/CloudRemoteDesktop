@@ -72,7 +72,6 @@ void MainWindow::tryconnect()
     rq_width = edWidth->text().toInt();
     rq_height = edHeight->text().toInt();
 
-    //controlPanel = new ControlPanel(QRect(0, 0, screen_width / 3 * 2, screen_height / 3 * 2), this);
     m_pCControlWnd = new CControlWnd(QRect(0, 0, rq_width, rq_height), this);
     this->setCentralWidget(m_pCControlWnd);
     connect(this, SIGNAL(keyPressed(QKeyEvent*)), m_pCControlWnd, SLOT(keyPressSlot(QKeyEvent*)));

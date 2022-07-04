@@ -12,6 +12,7 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <memory>
+#include <QOpenGLWidget>
 
 #include "CMsgReader.h"
 #include "CMsgWriter.h"
@@ -21,7 +22,7 @@
 using std::shared_ptr;
 using std::make_shared;
 
-class CControlWnd : public QWidget
+class CControlWnd : public QOpenGLWidget
 {
     Q_OBJECT
 
