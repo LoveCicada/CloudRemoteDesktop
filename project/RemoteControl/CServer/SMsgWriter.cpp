@@ -4,19 +4,34 @@
 #include "Command.h"
 #include <stdlib.h>
 
-/**
-  *图像传输线程
-  *建立一个双通道的tcp socket
-  *启动一个定时器
-  */
-SMsgWriter::SMsgWriter(QTcpSocket* socket, ServerParmas sp, QObject *parent) :
-    QThread(parent)
-{
-    m_msgSocket = socket;
-    m_serverParmas = sp;
 
-    sent_img_buf  = 0;
-    curt_img_buf  = 0;
+SMsgWriter::SMsgWriter(QTcpSocket* socket, ServerParmas sp, QObject *parent) :
+    m_msgSocket(socket), m_serverParmas(sp), QThread(parent)
+{
+    Init();
+}
+
+SMsgWriter::~SMsgWriter()
+{
+    if (sent_img_buf != 0)
+        delete[] sent_img_buf;
+    if (curt_img_buf != 0)
+        delete[] curt_img_buf;
+    if (send_data_buf != 0)
+        delete[] send_data_buf;
+    qDebug() << __func__;
+}
+
+void SMsgWriter::Init()
+{
+    InitData();
+    sendServerParams();
+}
+
+void SMsgWriter::InitData()
+{
+    sent_img_buf = 0;
+    curt_img_buf = 0;
     send_data_buf = 0;
     cmd_buf_fill = 0;
     started = false;
@@ -90,13 +105,4 @@ void SMsgWriter::quit()
     QThread::quit();
 }
 
-SMsgWriter::~SMsgWriter()
-{
-    if(sent_img_buf != 0)
-        delete[] sent_img_buf;
-    if(curt_img_buf != 0)
-        delete[] curt_img_buf;
-    if(send_data_buf != 0)
-        delete[] send_data_buf;
-    qDebug() << __func__;
-}
+

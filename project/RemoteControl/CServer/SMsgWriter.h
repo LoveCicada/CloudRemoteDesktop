@@ -45,7 +45,8 @@ private:
 public:
     SMsgWriter(QTcpSocket* socket, /*QTcpSocket* msgSocket,*/ ServerParmas sp, QObject *parent = 0);
     ~SMsgWriter();
-    
+    void Init();
+    void InitData();
 public:
     bool checkConnect();
     void sendServerParams();
