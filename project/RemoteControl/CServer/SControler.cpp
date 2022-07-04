@@ -60,7 +60,9 @@ void SControler::writeServerMsg()
 }
 
   /*
-  * when have a new connect, start a new thread process
+  @brief Now, when have a new connect, start a new thread send server img to client.
+  *      In the future, we can distribute img to all client at single thread.
+  *      server --> client
   */
 void SControler::writeServerImg()
 {
@@ -82,6 +84,10 @@ void SControler::writeServerImg()
     pImgThread->start();
 }
 
+/*
+@brief Start a new thread, in order to receive client msg from client.
+       client --> server
+*/
 void SControler::readClientMsg()
 {
     QTcpSocket* pReadClientCmdSocket = m_pReadClientMsgTcpServer->nextPendingConnection();

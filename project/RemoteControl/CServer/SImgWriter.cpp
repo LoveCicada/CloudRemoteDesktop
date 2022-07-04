@@ -308,4 +308,6 @@ SImgWriter::~SImgWriter()
         delete[] curt_img_buf;
     if(send_data_buf != 0)
         delete[] send_data_buf;
+
+    qDebug() << __func__;
 }
