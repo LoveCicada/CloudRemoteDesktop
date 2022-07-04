@@ -16,6 +16,13 @@ public:
 
 	void Init();
 
+	void SetScreenWidth(unsigned short usW);
+	void SetScreenHeight(unsigned short usH);
+	void SetServerName(string serverName);
+
+	void GetScreenWidth(unsigned short& usW);
+	void GetScreenHeight(unsigned short& usH);
+	void GetServerName(string& serverName);
 
 private:
 

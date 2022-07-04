@@ -12,6 +12,8 @@
 #include <QDebug>
 #include <QImage>
 #include <memory>
+#include "Command.h"
+#include "ServerParams.h"
 
 using std::shared_ptr;
 using std::make_shared;
@@ -31,17 +33,14 @@ private:
     int request_width;
     int request_height;
 
-    uchar* recv_buf;
-    uchar* frame_buf;
     int    frame_buf_fill;
     int    frame_bytes;
-    uchar  cmd_buf[8];
-    int    cmd_buf_fill;
+    unsigned char  cmd_buf[8];
+    qint64 cmdReadLength;
+    qint64 cmdLength;
 
-    bool cmd_got;
     bool frame_size_setted;
 
-    bool cmd_parsed;
     int subX;
     int subY;
     int subWidth;
@@ -52,20 +51,24 @@ private:
 public:
     int received_frame_width;
     int received_frame_height;
-    QImage*  image;
+    QImage* image;
+    ServerParmas m_serverParmas;
+public:
 
     CMsgReader(QString add, int p, int w, int h, QObject *parent = 0);
-    void sendRequestSize(int width, int height);
-    void getSubWindow();
-    void parseCommand();
-    void updateFrame();
+    ~CMsgReader();
+
+    void Init();
+    void InitData();
+    void processMsg();
+    void readServerParamsMsg(ClientCMDData& cmdData);
     
 signals:
     void frameGot(QImage*);
     void frameSizeChanged(int, int);
     
 public slots:
-    void readDataFromServer();
+    void readMsgFromServer();
     void hostConnected();
 
 protected:

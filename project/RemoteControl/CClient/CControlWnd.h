@@ -14,14 +14,17 @@
 
 #include "CMsgReader.h"
 #include "CMsgWriter.h"
+#include "CImgReader.h"
 
 class CControlWnd : public QWidget
 {
     Q_OBJECT
 
 private:
+    QRect m_rect;
     QImage* image;
     CMsgReader* m_pCMsgReader;
+    CImgReader* m_pCImgReader;
     CMsgWriter* m_pCMsgWriter;
     int frame_width;
     int frame_height;
@@ -33,7 +36,8 @@ private:
 public:
     CControlWnd(QRect rect, QWidget *parent = 0);
     ~CControlWnd();
-
+    void Init();
+    void InitData();
 signals:
     void mouseMoveTo(int, int);
 

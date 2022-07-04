@@ -143,3 +143,13 @@ create socket->connect->send->send/recv
 select
 
 ### 客户端client
+
+
+
+### 客户端/服务端 类结构
+```
+CMsgReader <---> SMsgWriter
+CMsgWriter <---> SMsgReader
+CImgReader <---> SImgWriter
+```
+
