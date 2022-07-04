@@ -23,17 +23,17 @@ void SControler::Init()
 
 void SControler::CretateTcpServer()
 {
-    m_pWriteServerMsgTcpServer = make_shared<QTcpServer>(new QTcpServer);
+    m_pWriteServerMsgTcpServer = make_shared<QTcpServer>();
     m_pWriteServerMsgTcpServer->listen(QHostAddress::Any, MAP_SERVER_MSG_PORT);
     qDebug() << "server msg begin listening" << endl;
     connect(m_pWriteServerMsgTcpServer.get(), SIGNAL(newConnection()), this, SLOT(writeServerMsg()));
 
-    m_pWriteServerImgTcpServer = make_shared<QTcpServer>(new QTcpServer);
+    m_pWriteServerImgTcpServer = make_shared<QTcpServer>();
     m_pWriteServerImgTcpServer->listen(QHostAddress::Any, MAP_SERVER_IMG_PORT);
     qDebug() << "server img begin listening" << endl;
     connect(m_pWriteServerImgTcpServer.get(), SIGNAL(newConnection()), this, SLOT(writeServerImg()));
 
-    m_pReadClientMsgTcpServer = make_shared<QTcpServer>(new QTcpServer);
+    m_pReadClientMsgTcpServer = make_shared<QTcpServer>();
     m_pReadClientMsgTcpServer->listen(QHostAddress::Any, CMD_SERVER_PORT);
     qDebug() << "client msg begin listening" << endl;
     connect(m_pReadClientMsgTcpServer.get(), SIGNAL(newConnection()), this, SLOT(readClientMsg()));

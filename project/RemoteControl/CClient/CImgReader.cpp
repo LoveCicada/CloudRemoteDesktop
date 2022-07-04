@@ -6,7 +6,7 @@
 CImgReader::CImgReader(QString add, int p, int w, int h, QObject *parent) :
     QThread(parent)
 {
-    m_msgSocket = make_shared<QTcpSocket>(new QTcpSocket);
+    m_msgSocket = make_shared<QTcpSocket>();
     m_address   = add;
     m_port      = p;
     socketConnected = false;

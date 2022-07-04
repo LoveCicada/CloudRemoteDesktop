@@ -38,7 +38,7 @@ void CMsgReader::InitData()
     subSize = 0;
     subFill = 0;
 
-    m_msgSocket = make_shared<QTcpSocket>(new QTcpSocket);
+    m_msgSocket = make_shared<QTcpSocket>();
     connect(m_msgSocket.get(), SIGNAL(connected()), this, SLOT(hostConnected()));
     connect(m_msgSocket.get(), SIGNAL(readyRead()), this, SLOT(readMsgFromServer()));
     m_msgSocket->connectToHost(m_address, m_port);

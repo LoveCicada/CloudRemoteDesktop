@@ -11,7 +11,7 @@ CMsgWriter::CMsgWriter(QString add, int p, QObject* parent) : QObject(parent)
 void CMsgWriter::run()
 {
     qRegisterMetaType<QAbstractSocket::SocketError>("SocketError");
-    m_msgSocket = make_shared<QTcpSocket>(new QTcpSocket);
+    m_msgSocket = make_shared<QTcpSocket>();
 
     connect(m_msgSocket.get(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(connectError(QAbstractSocket::SocketError)));
     connect(m_msgSocket.get(), SIGNAL(connected()), this, SLOT(connectSucceed()));

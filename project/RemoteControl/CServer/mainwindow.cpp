@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_pLabelInfo = new QLabel(this);
     m_pLabelInfo->setText("server run...");
 
-    m_pControler = std::make_shared<SControler>(new SControler);
+    m_pControler = std::make_shared<SControler>();
     m_pControler->SetLogCb(Log, this, 0);
 }
 
