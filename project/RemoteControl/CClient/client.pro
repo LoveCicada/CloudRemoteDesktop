@@ -22,6 +22,7 @@ SOURCES += main.cpp\
     CMsgWriter.cpp \
     CMsgReader.cpp \
     CImgReader.cpp \
+    CRenderHelper.cpp \
     CControlWnd.cpp
 
 HEADERS  += mainwindow.h \
@@ -35,4 +36,5 @@ HEADERS  += mainwindow.h \
     CMsgWriter.h \
     CMsgReader.h \
     CImgReader.h \
+    CRenderHelper.h \
     CControlWnd.h

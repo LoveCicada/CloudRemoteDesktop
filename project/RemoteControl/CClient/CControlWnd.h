@@ -11,14 +11,22 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QWheelEvent>
+#include <memory>
 
 #include "CMsgReader.h"
 #include "CMsgWriter.h"
 #include "CImgReader.h"
+#include "CRenderHelper.h"
+
+using std::shared_ptr;
+using std::make_shared;
 
 class CControlWnd : public QWidget
 {
     Q_OBJECT
+
+private:
+    typedef shared_ptr<CRenderHelper> CRenderHelperPtr;
 
 private:
     QRect m_rect;
@@ -30,9 +38,8 @@ private:
     int frame_height;
     int server_screen_width;
     int server_screen_height;
-
-    uchar translateKey(int key);
-
+    CRenderHelperPtr m_CRenderHelper;
+    
 public:
     CControlWnd(QRect rect, QWidget *parent = 0);
     ~CControlWnd();
@@ -58,6 +65,7 @@ protected:
     void wheelEvent(QWheelEvent *);
     void keyPressEvent(QKeyEvent *);
     void keyReleaseEvent(QKeyEvent *);
+    uchar translateKey(int key);
 };
 
 #endif // CONTROLPANEL_H

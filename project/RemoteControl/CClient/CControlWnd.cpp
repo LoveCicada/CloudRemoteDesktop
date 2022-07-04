@@ -30,6 +30,14 @@ void CControlWnd::InitData()
     frame_width = -1;
     frame_height = -1;
 
+    m_CRenderHelper = make_shared<CRenderHelper>();
+    QWindow* pQW = this->windowHandle();
+
+    //QWindow* pQW2 = this->nativeParentWidget()->windowHandle();
+    //WId wid = this->winId();
+
+    m_CRenderHelper->SetWindowHanlde(pQW);
+
     m_pCMsgReader = nullptr;
     m_pCMsgReader = new CMsgReader(addr, MAP_SERVER_MSG_PORT, m_rect.width(), m_rect.height());
     m_pCMsgReader->start();
