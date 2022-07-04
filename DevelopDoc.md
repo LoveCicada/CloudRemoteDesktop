@@ -153,6 +153,8 @@ HDR截屏
 
 [qt程序使用——keybd_event函数的用法和问题 & SetCursorPos & GetCursorPos函数和mouse_event的一些问题](https://blog.51cto.com/u_15067246/3731018)
 
+[基于Qt的OpenGL(一)：OpenGL理论及QOpenGLWidget](https://blog.csdn.net/qq_42308217/article/details/120593392)
+
 ***
 
 ### VNC vs RDP
