@@ -20,6 +20,7 @@ class CControlWnd : public QWidget
     Q_OBJECT
 
 private:
+    QRect m_rect;
     QImage* image;
     CMsgReader* m_pCMsgReader;
     CMsgWriter* m_pCMsgWriter;
@@ -33,7 +34,8 @@ private:
 public:
     CControlWnd(QRect rect, QWidget *parent = 0);
     ~CControlWnd();
-
+    void Init();
+    void InitData();
 signals:
     void mouseMoveTo(int, int);
 

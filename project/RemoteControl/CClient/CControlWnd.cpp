@@ -4,27 +4,40 @@
 #include "Command.h"
 
 CControlWnd::CControlWnd(QRect rect, QWidget *parent)
-    : QWidget(parent)
+    : m_rect(rect), QWidget(parent)
 {
+    setGeometry(m_rect);
     setMouseTracking(true);
-    server_screen_width  = -1;
-    server_screen_height = -1;
-    image = 0;
-    frame_width  = -1;
-    frame_height = -1;
-    setGeometry(rect);
-    m_pCMsgReader = new CMsgReader(addr, MAP_SERVER_IMG_PORT, rect.width(), rect.height());
-    connect(m_pCMsgReader, SIGNAL(frameGot(QImage*)), this, SLOT(frameChanged(QImage*)));
-    connect(m_pCMsgReader, SIGNAL(frameSizeChanged(int,int)), this, SLOT(changeFrameSize(int,int)));
-    m_pCMsgReader->start();
-    m_pCMsgWriter = new CMsgWriter(addr, CMD_SERVER_PORT);
-    connect(m_pCMsgWriter, SIGNAL(setServerScreenSize(int,int)), this, SLOT(gotServerScreenSize(int,int)));
-    m_pCMsgWriter->run();
+
+    Init();
 }
 
 CControlWnd::~CControlWnd()
 {
+    qDebug() << __func__;
+}
 
+void CControlWnd::Init()
+{
+    InitData();
+}
+
+void CControlWnd::InitData()
+{
+    server_screen_width = -1;
+    server_screen_height = -1;
+    image = 0;
+    frame_width = -1;
+    frame_height = -1;
+
+    m_pCMsgReader = new CMsgReader(addr, MAP_SERVER_IMG_PORT, m_rect.width(), m_rect.height());
+    connect(m_pCMsgReader, SIGNAL(frameGot(QImage*)), this, SLOT(frameChanged(QImage*)));
+    connect(m_pCMsgReader, SIGNAL(frameSizeChanged(int, int)), this, SLOT(changeFrameSize(int, int)));
+    m_pCMsgReader->start();
+
+    m_pCMsgWriter = new CMsgWriter(addr, CMD_SERVER_PORT);
+    connect(m_pCMsgWriter, SIGNAL(setServerScreenSize(int, int)), this, SLOT(gotServerScreenSize(int, int)));
+    m_pCMsgWriter->run();
 }
 
 void CControlWnd::mouseMoveEvent(QMouseEvent *e)
