@@ -39,6 +39,11 @@ void SControler::CretateTcpServer()
     connect(m_pReadClientMsgTcpServer.get(), SIGNAL(newConnection()), this, SLOT(readClientMsg()));
 }
 
+/*
+@brief Start a new thread, in order to send msg to client.
+       In the future, we can distribute msg to all client at single thread.
+       server --> client
+*/
 void SControler::writeServerMsg()
 {
     QTcpSocket* pClientMsgSocket = m_pWriteServerMsgTcpServer->nextPendingConnection();

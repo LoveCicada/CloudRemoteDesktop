@@ -22,7 +22,7 @@ SImgWriter::SImgWriter(QTcpSocket* imgSocket, ServerParmas sp, QObject *parent) 
     started = false;
     memset(cmd_buf, 0, 4);
 
-    connect(imgSocket, SIGNAL(readyRead()), this, SLOT(readDataFromClient()));
+    connect(m_imgSocket, SIGNAL(readyRead()), this, SLOT(readDataFromClient()));
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(sendFrame()));
     timer->start(interval);

@@ -38,34 +38,23 @@ private:
     int   cmd_buf_fill;
 
     bool started;
-
-    int         interval;         //帧间时间间隔
-
-    //! send server desk img to client
-    QTcpSocket* mapSocket;
     
     //! send server msg to client, like server parmas.
-    QTcpSocket* msgSocket;
-    QTimer* timer;
+    QTcpSocket* m_msgSocket;
 
 public:
     SMsgWriter(QTcpSocket* socket, /*QTcpSocket* msgSocket,*/ ServerParmas sp, QObject *parent = 0);
     ~SMsgWriter();
-
-    const static int SCALE_BY_WIDTH  = 1;
-    const static int SCALE_BY_HEIGHT = 2;
-
-    void setSendInterval(int i);
     
 public:
-    void sendServerParams();
     bool checkConnect();
+    void sendServerParams();
+    void sendMsgToClient();
+    
 signals:
     
 public slots:
-    void sendFrame();
-    void readDataFromClient();
-    void readCommand();
+    void readMsgFromClient();
     void quit();
 
 protected:
