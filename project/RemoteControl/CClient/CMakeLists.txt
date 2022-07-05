@@ -39,7 +39,7 @@ macro(find_src SRC_FILES DIR)
     endforeach() 
 endmacro()
 
-find_src(SRC_FILES ${CMAKE_SOURCE_DIR}/src)
+find_src(SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src)
 foreach(FILE ${SRC_FILES})
     message("${FILE}")
 endforeach() 
