@@ -128,6 +128,8 @@ void CMsgReader::readServerParamsMsg(ClientCMDData& cmdData)
     m_serverParmas.SetScreenWidth(usW);
     m_serverParmas.SetScreenHeight(usH);
 
+    emit readServerParams(m_serverParmas);
+
     qDebug() << __func__ <<usW;
     qDebug() << __func__ << usH;
 }

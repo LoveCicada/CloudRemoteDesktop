@@ -64,6 +64,7 @@ public:
     void readServerParamsMsg(ClientCMDData& cmdData);
     
 signals:
+    void readServerParams(const ServerParmas& sp);
     void frameGot(QImage*);
     void frameSizeChanged(int, int);
     

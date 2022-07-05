@@ -18,6 +18,8 @@
 #include "CMsgWriter.h"
 #include "CImgReader.h"
 #include "CRenderHelper.h"
+#include "ClientParams.h"
+#include "ServerParams.h"
 
 using std::shared_ptr;
 using std::make_shared;
@@ -39,6 +41,14 @@ private:
     int frame_height;
     int server_screen_width;
     int server_screen_height;
+
+    //! client params
+    ClientParams m_clientParams;
+
+    //! server params
+    ServerParmas m_serverParams;
+
+private:
     CRenderHelperPtr m_CRenderHelper;
     
 public:
@@ -46,10 +56,17 @@ public:
     ~CControlWnd();
     void Init();
     void InitData();
+
+public:
+
+    void GetClientParams(ClientParams& cp);
+    void SetClientParams(const ClientParams& cp);
+    void UpdateControlWndRect();
 signals:
     void mouseMoveTo(int, int);
 
 public slots:
+    void receiveServerParams(const ServerParmas& sp);
     void frameChanged(QImage*);
     void changeFrameSize(int, int);
     void gotServerScreenSize(int, int);

@@ -35,6 +35,7 @@ void CControlWnd::InitData()
 
     m_pCMsgReader = nullptr;
     m_pCMsgReader = new CMsgReader(addr, MAP_SERVER_MSG_PORT, m_rect.width(), m_rect.height());
+    connect(m_pCMsgReader, SIGNAL(readServerParams(const ServerParmas&)), this, SLOT(receiveServerParams(const ServerParmas&)));
     m_pCMsgReader->start();
 
     m_pCImgReader = new CImgReader(addr, MAP_SERVER_IMG_PORT, m_rect.width(), m_rect.height());
@@ -45,6 +46,22 @@ void CControlWnd::InitData()
     m_pCMsgWriter = new CMsgWriter(addr, CMD_SERVER_PORT);
     connect(m_pCMsgWriter, SIGNAL(setServerScreenSize(int, int)), this, SLOT(gotServerScreenSize(int, int)));
     m_pCMsgWriter->run();
+}
+
+void CControlWnd::GetClientParams(ClientParams& cp)
+{
+    cp = m_clientParams;
+}
+
+void CControlWnd::SetClientParams(const ClientParams& cp)
+{
+    m_clientParams = cp;
+}
+
+void CControlWnd::UpdateControlWndRect()
+{
+    this->setGeometry(m_rect);
+    this->update();
 }
 
 void CControlWnd::mouseMoveEvent(QMouseEvent *e)
@@ -265,6 +282,23 @@ void CControlWnd::keyPressSlot(QKeyEvent *e)
 void CControlWnd::keyReleaseSlot(QKeyEvent *e)
 {
     keyReleaseEvent(e);
+}
+
+void CControlWnd::receiveServerParams(const ServerParmas& sp)
+{
+    m_serverParams = sp;
+    
+    unsigned short usW;
+    unsigned short usH;
+    m_serverParams.GetScreenWidth(usW);
+    m_serverParams.GetScreenHeight(usH);
+
+    if (usW != m_rect.width() || usH != m_rect.height())
+    {
+        QRect rt(0, 0, usW, usH);
+        m_rect = rt;
+        UpdateControlWndRect();
+    }
 }
 
 void CControlWnd::frameChanged(QImage* i)
