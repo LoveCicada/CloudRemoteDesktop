@@ -164,8 +164,8 @@ void SImgWriter::sendFrame()
     {
         for(int wi = 0; wi*BLOCK_WIDTH < width; wi ++)
         {
-            block_width = min(BLOCK_WIDTH, width - wi*BLOCK_WIDTH);
-            block_height = min(BLOCK_HEIGHT, height - hi * BLOCK_HEIGHT);
+            block_width = getMin(BLOCK_WIDTH, width - wi*BLOCK_WIDTH);
+            block_height = getMin(BLOCK_HEIGHT, height - hi * BLOCK_HEIGHT);
             //block_width = (BLOCK_WIDTH <= (width - wi*BLOCK_WIDTH)) ? BLOCK_WIDTH : (width - wi*BLOCK_WIDTH);
             //block_height = (BLOCK_HEIGHT <= (height - hi * BLOCK_HEIGHT)) ? BLOCK_HEIGHT : (height - hi * BLOCK_HEIGHT);
             int diff = 0;
