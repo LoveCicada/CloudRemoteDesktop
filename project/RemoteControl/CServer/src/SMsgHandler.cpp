@@ -1,9 +1,8 @@
 #include "SMsgHandler.h"
 #include <QScreen>
+#include <QDebug>
 
-int screen_width = 0;
-int screen_height = 0;
-//int i = 0;
+ServerParmas SMsgHandler::m_ServerParams;
 
 SMsgHandler::SMsgHandler()
 {
@@ -11,9 +10,28 @@ SMsgHandler::SMsgHandler()
 
 QPoint SMsgHandler::transformCoordinate(QPoint p)
 {
-    int x = (int)((double)p.x() / screen_width * 65535);
-    int y = (int)((double)p.y() / screen_height * 65535);
+    unsigned short usW = 0;
+    unsigned short usH = 0;
+    m_ServerParams.GetScreenWidth(usW);
+    m_ServerParams.GetScreenHeight(usH);
+
+    if (usW == 0 || usH == 0) {
+        qDebug() << __func__ << " error, screen Width or Height is zero *****";
+    }
+
+    int x = (int)((double)p.x() / usW * 65535);
+    int y = (int)((double)p.y() / usH * 65535);
     return QPoint(x, y);
+}
+
+void SMsgHandler::SetServerParmas(ServerParmas sp)
+{
+    m_ServerParams = sp;
+}
+
+void SMsgHandler::GetServerParmas(ServerParmas& sp)
+{
+    sp = m_ServerParams;
 }
 
 void SMsgHandler::mouseMoveTo(int x, int y)

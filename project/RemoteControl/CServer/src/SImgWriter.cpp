@@ -61,10 +61,10 @@ void SImgWriter::readDataFromClient()
 void SImgWriter::readCommand()
 {
     uchar* uc = (uchar*)cmd_buf;
-    uint width = uc[0];
+    unsigned short width = uc[0];
     width = width << 8;
     width += uc[1];
-    uint height = uc[2];
+    unsigned short height = uc[2];
     height = height << 8;
     height += uc[3];
 
@@ -92,8 +92,14 @@ void SImgWriter::readCommand()
     }
     send_data_buf = new uchar[dest_width * dest_height * 3 * 2];
 
-    double scale_x = (double)dest_width / screen_width;
-    double scale_y = (double)dest_height / screen_height;
+    unsigned short usW = 0;
+    unsigned short usH = 0;
+    m_serverParmas.GetScreenWidth(usW);
+    m_serverParmas.GetScreenHeight(usH);
+
+    double scale_x = (double)dest_width / usW;
+    double scale_y = (double)dest_height / usH;
+
     if(scale_x < scale_y)
         scaleby = SCALE_BY_WIDTH;
     else

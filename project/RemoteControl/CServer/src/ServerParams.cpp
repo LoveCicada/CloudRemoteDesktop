@@ -11,6 +11,24 @@ ServerParmas::~ServerParmas()
 
 }
 
+ServerParmas::ServerParmas(const ServerParmas& sp)
+{
+	m_screenWidth = sp.m_screenWidth;
+	m_screenHeight = sp.m_screenHeight;
+	m_serverName = sp.m_serverName;
+}
+
+ServerParmas& ServerParmas::operator=(const ServerParmas& sp)
+{
+	if (this != &sp) {
+		m_screenWidth = sp.m_screenWidth;
+		m_screenHeight = sp.m_screenHeight;
+		m_serverName = sp.m_serverName;
+	}
+
+	return *this;
+}
+
 void ServerParmas::Init()
 {
 	m_screenWidth	= 0;

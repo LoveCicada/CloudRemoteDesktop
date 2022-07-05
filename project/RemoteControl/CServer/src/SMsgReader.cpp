@@ -3,10 +3,9 @@
 #include "Command.h"
 #include "RWSocket.h"
 
-SMsgReader::SMsgReader(QTcpSocket* socket, QObject *parent) :
-    QThread(parent)
+SMsgReader::SMsgReader(QTcpSocket* socket, ServerParmas sp, QObject *parent) :
+    m_pCmdSocket(socket), m_ServerParmas(sp), QThread(parent)
 {
-    m_pCmdSocket = socket;
     cmdMsgOffset = 0;
     clientMsgLength = 8;
     memset(clientMsgData, 0, clientMsgLength);
@@ -194,11 +193,16 @@ void SMsgReader::cmdMouseWheel()
 
 void SMsgReader::cmdScreenSize()
 {
+    unsigned short usW = 0;
+    unsigned short usH = 0;
+    m_ServerParmas.GetScreenWidth(usW);
+    m_ServerParmas.GetScreenWidth(usH);
+
     uchar uc[8];
     uc[0] = CMD_GET_SCREEN_SIZE_RES;
-    uc[1] = screen_width / 0x100;
-    uc[2] = screen_width % 0x100;
-    uc[3] = screen_height / 0x100;
-    uc[4] = screen_height % 0x100;
+    uc[1] = usW / 0x100;
+    uc[2] = usW % 0x100;
+    uc[3] = usH / 0x100;
+    uc[4] = usH % 0x100;
     BlockWriteSocketData(m_pCmdSocket, uc, 8);
 }

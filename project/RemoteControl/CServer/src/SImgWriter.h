@@ -24,10 +24,10 @@ private:
 
     ServerParmas m_serverParmas;
 
-    int dest_width;           //客户端指定的宽度
-    int dest_height;          //客户端指定的高度
-    int send_width;           //发送图像的宽度
-    int send_height;          //发送图像的高度
+    unsigned short dest_width;           //客户端指定的宽度
+    unsigned short dest_height;          //客户端指定的高度
+    unsigned short send_width;           //发送图像的宽度
+    unsigned short send_height;          //发送图像的高度
     int scaleby;              //缩放是依据目的图像的高度还是宽度
 
     uchar* sent_img_buf;   //buffer of the image that have been sent

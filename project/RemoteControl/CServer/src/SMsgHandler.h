@@ -9,11 +9,9 @@
 #include <QDesktopWidget>
 #include <QCursor>
 #include <QPoint>
+#include "ServerParams.h"
 
 typedef void (*pfnLog)(void* pUser, const std::string& str, int level);
-
-extern int screen_width;
-extern int screen_height;
 
 class SMsgHandler
 {
@@ -34,6 +32,12 @@ public:
     static QPixmap grapScreen();
 
     static QPoint transformCoordinate(QPoint);
+
+    static void SetServerParmas(ServerParmas sp);
+    static void GetServerParmas(ServerParmas& sp);
+
+private:
+    static ServerParmas m_ServerParams;
 };
 
 #endif // INTERFACE_H

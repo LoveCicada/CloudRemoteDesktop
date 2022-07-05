@@ -1,5 +1,4 @@
 #include "SControler.h"
-#include <QApplication>
 #include <QDesktopWidget>
 #include <QHostInfo>
 #include <QRect>
@@ -104,7 +103,7 @@ void SControler::readClientMsg()
         WriteCbLog(str);
     }
 
-    SMsgReader* pSMsgReader = new SMsgReader(pReadClientCmdSocket);
+    SMsgReader* pSMsgReader = new SMsgReader(pReadClientCmdSocket, m_serverParmas);
     connect(pReadClientCmdSocket, SIGNAL(disconnected()), this, SLOT(someSocketDisconnected()));
 
     SocketAndThreadPtr pSt(new SocketAndThread(pReadClientCmdSocket, pSMsgReader));

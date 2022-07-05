@@ -9,6 +9,7 @@
 
 #include <QThread>
 #include <QTcpSocket>
+#include "ServerParams.h"
 
 class SMsgReader : public QThread
 {
@@ -20,9 +21,9 @@ private:
     qint64  cmdMsgOffset;
     qint64  clientMsgLength;
     uchar   clientMsgData[8];             //client command msg use 8 byte
-
+    ServerParmas m_ServerParmas;
 public:
-    explicit SMsgReader(QTcpSocket* socket, QObject *parent = 0);
+    explicit SMsgReader(QTcpSocket* socket, ServerParmas sp, QObject *parent = 0);
     ~SMsgReader();
 signals:
     

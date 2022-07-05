@@ -12,7 +12,12 @@ static void Log(void* pUser, const std::string& strLog, int level)
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    this->setGeometry(QRect(screen_width / 3, screen_height / 3, screen_width / 5, screen_height / 5));
+    QDesktopWidget* deskWidget = qApp->desktop();
+    QRect screenRect = deskWidget->screenGeometry();
+    int screenWidth = screenRect.width();
+    int screenHeight = screenRect.height();
+
+    this->setGeometry(QRect(screenWidth / 3, screenHeight / 3, screenWidth / 5, screenHeight / 5));
     m_pLabelInfo = new QLabel(this);
     m_pLabelInfo->setText("server run...");
 

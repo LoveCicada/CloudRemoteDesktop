@@ -1,22 +1,22 @@
 #include <QApplication>
-#include <QDesktopWidget>
-
-#include "mainwindow.h"
 #include "SMsgHandler.h"
 #include "SControler.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
-    QDesktopWidget* deskWidget = a.desktop();
-    QRect screenRect  = deskWidget->screenGeometry();
-    screen_width = screenRect.width();
-    screen_height = screenRect.height();
-
     
+#if 0   
+
     MainWindow w;
     w.show();
     
+#else 
+
+    std::shared_ptr<SControler> m_pControler;
+    m_pControler = std::make_shared<SControler>();
+
+#endif // 0
+
     return a.exec();
 }
