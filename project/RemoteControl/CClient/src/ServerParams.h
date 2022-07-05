@@ -14,6 +14,9 @@ public:
 	ServerParmas();
 	~ServerParmas();
 
+	ServerParmas(const ServerParmas& sp);
+	ServerParmas& operator=(const ServerParmas& sp);
+
 	void Init();
 
 	void SetScreenWidth(unsigned short usW);
