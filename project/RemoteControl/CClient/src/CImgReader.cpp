@@ -13,6 +13,8 @@ CImgReader::CImgReader(QString add, int p, int w, int h, QObject *parent) :
 
     request_width  = w;
     request_height = h;
+
+    connect(m_msgSocket.get(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(connectError(QAbstractSocket::SocketError)));
     connect(m_msgSocket.get(), SIGNAL(connected()), this, SLOT(hostConnected()));
     connect(m_msgSocket.get(), SIGNAL(readyRead()), this, SLOT(readDataFromServer()));
 
@@ -60,6 +62,13 @@ void CImgReader::sendRequestSize(int width, int height)
     uc[2] = height / 0x100;
     uc[3] = height % 0x100;
     BlockWriteSocketData(m_msgSocket.get(), uc, 4);
+}
+
+void CImgReader::connectError(QAbstractSocket::SocketError)
+{
+    qDebug() << __FILE__ << " " << __func__;
+    m_msgSocket->abort();
+    m_msgSocket->close();
 }
 
 void CImgReader::readDataFromServer()

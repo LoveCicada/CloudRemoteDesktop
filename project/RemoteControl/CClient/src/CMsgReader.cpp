@@ -39,6 +39,7 @@ void CMsgReader::InitData()
     subFill = 0;
 
     m_msgSocket = make_shared<QTcpSocket>();
+    connect(m_msgSocket.get(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(connectError(QAbstractSocket::SocketError)));
     connect(m_msgSocket.get(), SIGNAL(connected()), this, SLOT(hostConnected()));
     connect(m_msgSocket.get(), SIGNAL(readyRead()), this, SLOT(readMsgFromServer()));
     m_msgSocket->connectToHost(m_address, m_port);
@@ -47,6 +48,13 @@ void CMsgReader::InitData()
 void CMsgReader::run()
 {
     QThread::run();
+}
+
+void CMsgReader::connectError(QAbstractSocket::SocketError)
+{
+    qDebug() << __FILE__ << " " << __func__;
+    m_msgSocket->abort();
+    m_msgSocket->close();
 }
 
 void CMsgReader::hostConnected()

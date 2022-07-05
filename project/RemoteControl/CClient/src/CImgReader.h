@@ -64,6 +64,7 @@ signals:
     void frameSizeChanged(int, int);
     
 public slots:
+    void connectError(QAbstractSocket::SocketError);
     void readDataFromServer();
     void hostConnected();
 

@@ -18,7 +18,11 @@ void CMsgWriter::run()
     connect(m_msgSocket.get(), SIGNAL(readyRead()), this, SLOT(readDataFromServer()));
 
     connectToServer();
-    m_msgSocket->waitForConnected();
+    bool bConnected = m_msgSocket->waitForConnected();
+    if (!bConnected) {
+        qDebug() << "connect timed out";
+        return;
+    }
     cmdScreenSize();
 }
 
@@ -80,11 +84,9 @@ void CMsgWriter::connectToServer()
 
 void CMsgWriter::connectError(QAbstractSocket::SocketError)
 {
-    qDebug()<<"connect error, reconnect";
-    //QThread::msleep(200);
+    qDebug() << __FILE__ << " " << __func__;
     m_msgSocket->abort();
     m_msgSocket->close();
-    connectToServer();
 }
 
 void CMsgWriter::connectSucceed()
