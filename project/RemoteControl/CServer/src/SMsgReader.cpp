@@ -202,7 +202,7 @@ void SMsgReader::cmdScreenSize()
     unsigned short usW = 0;
     unsigned short usH = 0;
     m_ServerParmas.GetScreenWidth(usW);
-    m_ServerParmas.GetScreenWidth(usH);
+    m_ServerParmas.GetScreenHeight(usH);
 
     uchar uc[8];
     uc[0] = CMD_GET_SCREEN_SIZE_RES;
