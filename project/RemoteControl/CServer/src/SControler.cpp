@@ -1,7 +1,10 @@
-#include "SControler.h"
+
 #include <QDesktopWidget>
 #include <QHostInfo>
 #include <QRect>
+#include "SControler.h"
+#include "SMsgHandler.h"
+#include "Common.h"
 
 SControler::SControler(QObject *parent) :
     QObject(parent)
@@ -17,7 +20,13 @@ SControler::~SControler()
 void SControler::Init()
 {
     GetServerMachineInfo();
+    InitSMsgHandle();
     CretateTcpServer();
+}
+
+void SControler::InitSMsgHandle()
+{
+    SMsgHandler::SetServerParmas(m_serverParmas);
 }
 
 void SControler::CretateTcpServer()
@@ -36,6 +45,24 @@ void SControler::CretateTcpServer()
     m_pReadClientMsgTcpServer->listen(QHostAddress::Any, CMD_SERVER_PORT);
     qDebug() << "client msg begin listening" << endl;
     connect(m_pReadClientMsgTcpServer.get(), SIGNAL(newConnection()), this, SLOT(readClientMsg()));
+}
+
+void SControler::Notify()
+{
+    auto itor = m_STPtrVec.begin();
+    for (; itor != m_STPtrVec.end(); itor++)
+    {
+        auto pSocket = itor->get()->socket;
+        auto state = pSocket->state();
+        if (QAbstractSocket::ConnectedState == state)
+        {
+            auto pThread = itor->get()->thread;
+            if (pThread) {
+                RCThread* pRCTh = dynamic_cast<RCThread*>(pThread);
+                pRCTh->Extend();
+            }
+        }
+    }
 }
 
 /*

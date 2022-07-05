@@ -9,9 +9,10 @@
 
 #include <QThread>
 #include <QTcpSocket>
+#include "Common.h"
 #include "ServerParams.h"
 
-class SMsgReader : public QThread
+class SMsgReader : public RCThread
 {
     Q_OBJECT
 
@@ -25,6 +26,8 @@ private:
 public:
     explicit SMsgReader(QTcpSocket* socket, ServerParmas sp, QObject *parent = 0);
     ~SMsgReader();
+
+    void Extend(void* param = nullptr) override;
 signals:
     
 public slots:

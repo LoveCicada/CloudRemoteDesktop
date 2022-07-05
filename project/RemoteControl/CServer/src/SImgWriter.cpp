@@ -9,7 +9,7 @@
   * start a timer
   */
 SImgWriter::SImgWriter(QTcpSocket* imgSocket, ServerParmas sp, QObject *parent) :
-    QThread(parent)
+    RCThread(parent)
 {
     m_imgSocket = imgSocket;
     m_serverParmas = sp;
@@ -315,5 +315,11 @@ SImgWriter::~SImgWriter()
     if(send_data_buf != 0)
         delete[] send_data_buf;
 
+    qDebug() << __func__;
+}
+
+void SImgWriter::Extend(void* param)
+{
+    static_cast<void*>(param);
     qDebug() << __func__;
 }

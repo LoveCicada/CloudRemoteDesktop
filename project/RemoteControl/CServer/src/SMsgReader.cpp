@@ -4,7 +4,7 @@
 #include "RWSocket.h"
 
 SMsgReader::SMsgReader(QTcpSocket* socket, ServerParmas sp, QObject *parent) :
-    m_pCmdSocket(socket), m_ServerParmas(sp), QThread(parent)
+    m_pCmdSocket(socket), m_ServerParmas(sp), RCThread(parent)
 {
     cmdMsgOffset = 0;
     clientMsgLength = 8;
@@ -14,6 +14,12 @@ SMsgReader::SMsgReader(QTcpSocket* socket, ServerParmas sp, QObject *parent) :
 
 SMsgReader::~SMsgReader()
 {
+    qDebug() << __func__;
+}
+
+void SMsgReader::Extend(void* param)
+{
+    static_cast<void*>(param);
     qDebug() << __func__;
 }
 

@@ -15,9 +15,10 @@
 #include <QImage>
 #include <QPixmap>
 
+#include "Common.h"
 #include "ServerParams.h"
 
-class SMsgWriter : public QThread
+class SMsgWriter : public RCThread
 {
     Q_OBJECT
 
@@ -41,8 +42,10 @@ private:
     QTcpSocket* m_msgSocket;
 
 public:
-    SMsgWriter(QTcpSocket* socket, /*QTcpSocket* msgSocket,*/ ServerParmas sp, QObject *parent = 0);
+    SMsgWriter(QTcpSocket* socket, ServerParmas sp, QObject *parent = 0);
     ~SMsgWriter();
+    void Extend(void* param = nullptr) override;
+
     void Init();
     void InitData();
 public:

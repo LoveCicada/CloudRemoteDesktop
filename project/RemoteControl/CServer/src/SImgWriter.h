@@ -14,9 +14,10 @@
 #include <QImage>
 #include <QPixmap>
 
+#include "Common.h"
 #include "ServerParams.h"
 
-class SImgWriter : public QThread
+class SImgWriter : public RCThread
 {
     Q_OBJECT
 
@@ -48,6 +49,8 @@ private:
 public:
     SImgWriter(QTcpSocket* imgSocket, ServerParmas sp, QObject *parent = 0);
     ~SImgWriter();
+
+    void Extend(void* param = nullptr) override;
 
     const static int SCALE_BY_WIDTH  = 1;
     const static int SCALE_BY_HEIGHT = 2;

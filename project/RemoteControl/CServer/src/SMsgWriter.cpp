@@ -6,7 +6,7 @@
 
 
 SMsgWriter::SMsgWriter(QTcpSocket* socket, ServerParmas sp, QObject *parent) :
-    m_msgSocket(socket), m_serverParmas(sp), QThread(parent)
+    m_msgSocket(socket), m_serverParmas(sp), RCThread(parent)
 {
     Init();
 }
@@ -19,6 +19,12 @@ SMsgWriter::~SMsgWriter()
         delete[] curt_img_buf;
     if (send_data_buf != 0)
         delete[] send_data_buf;
+    qDebug() << __func__;
+}
+
+void SMsgWriter::Extend(void* param)
+{
+    static_cast<void*>(param);
     qDebug() << __func__;
 }
 

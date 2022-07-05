@@ -91,7 +91,11 @@ public:
     ~SControler();
 
     void Init();
+    void InitSMsgHandle();
     void CretateTcpServer();
+
+    //! notify each of client
+    void Notify();
 public:
     //! log callback
     void SetLogCb(pfnLog logCb, void* pUser, int logLevel);
