@@ -99,7 +99,8 @@ cmd[1] = xHB;   //x pos hight bit.
 cmd[2] = xLB;   //x pos low bit.
 cmd[3] = yHB;   //x pos hight bit.
 cmd[4] = yLB;   //x pos low bit.
-
+cmd[5] = deltaHB; //delta hight bit.
+cmd[6] = deltaHB; //delta low bit.
 
 
 //! 键盘消息
