@@ -1,6 +1,5 @@
 #include "CImgReader.h"
 #include "RWSocket.h"
-#include "consts.h"
 #include "Command.h"
 
 CImgReader::CImgReader(QString add, int p, int w, int h, QObject *parent) :

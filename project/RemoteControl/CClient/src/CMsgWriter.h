@@ -12,9 +12,8 @@
 #include <QTcpSocket>
 #include <QMetaType>
 #include <memory>
-#include "consts.h"
 #include "RWSocket.h"
-#include "command.h"
+#include "Command.h"
 
 using std::shared_ptr;
 using std::make_shared;
@@ -32,7 +31,7 @@ private:
     bool socketConnected;
 
     uchar cmd_buf[8];
-    ClientCMDData m_clientCMDData;
+    CMDData m_cmdData;
 
     int   cmd_buf_fill;
 public:

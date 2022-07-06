@@ -40,164 +40,351 @@ const static int CMD_SERVER_PORT = 5649;
 /*
 @brief client/server command data define
 */
-class ClientCMDData
+class CMDData
 {
 public:
 	
 	//! command, like mousemove, mouse left button press
 	unsigned char uCMD;
 
-	//! x ==> w
-	//! y ==> h
+	/*
+	@brief uXHB = p[1];	uXHB = p[2];
+		   uLHB = p[3];	uLHB = p[4];
+		   x <==> w
+		   y <==> h
 
-	//! x point hight bit, like int x = 1680,
-	//! uXHB = (x & 0XFF00) >> 8 = 0x06 = 6 
+		   x point hight bit, like int x = 1680,
+		   uXHB = (x & 0XFF00) >> 8 = 0x06 = 6
+
+		   x point low bit, like int x = 1680
+		   uXLB = (x & 0X00FF) = 0x90 = 144
+	*/
+
 	unsigned char uXHB;
-
-	//! x point low bit, like int x = 1680
-	//! uXLB = (x & 0X00FF) = 0x90 = 144 
 	unsigned char uXLB;
 	unsigned char uYHB;
 	unsigned char uYLB;
 
+	/*
+	@brief	uDeltaHB = p[5];	uDeltaLB = p[6];
+	*/
+	unsigned char uDeltaHB;
+	unsigned char uDeltaLB;
+
 	unsigned char uCmd[8];
 	unsigned short ux;
 	unsigned short uy;
+	unsigned short udelta;
 
+public:
+	CMDData();
 
-	ClientCMDData()
-	{
-		Reset();
-	}
+	void Reset();
 
-	void Reset()
-	{
-		uCMD = CMD_UNKNOWN;
-		uXHB = 0;
-		uXLB = 0;
-		uYHB = 0;
-		uYLB = 0;
-		memset(uCmd, 0, 8);
-		ux = 0;
-		uy = 0;
-	}
+	CMDData(unsigned char* p);
 
-	ClientCMDData(unsigned char* p)
-	{
-		SetData(p);
-	}
+	void SetData(unsigned char* p);
 
-	void SetData(unsigned char* p)
-	{
-		uCMD = p[0];
-		uXHB = p[1];
-		uXLB = p[2];
-		uYHB = p[3];
-		uYLB = p[4];
+	void GetData(unsigned char* p);
 
-		uCmd[0] = p[0];
-		uCmd[1] = p[1];
-		uCmd[2] = p[2];
-		uCmd[3] = p[3];
-		uCmd[4] = p[4];
-		uCmd[5] = p[5];
-		uCmd[6] = p[6];
-		uCmd[7] = p[7];
+	void GetCMD(CMDTYPE& type);
 
-		ux = GetUSX();
-		uy = GetUSY();
-	}
+	void SetCMD(unsigned char cmd);
 
-	void GetData(unsigned char* p)
-	{
-		p[0] = uCmd[0];
-		p[1] = uCmd[1];
-		p[2] = uCmd[2];
-		p[3] = uCmd[3];
-		p[4] = uCmd[4];
-		p[5] = uCmd[5];
-		p[6] = uCmd[6];
-		p[7] = uCmd[7];
-	}
+	void GetUSX(unsigned short& us);
 
-	CMDTYPE GetCMD()
-	{
-		return (CMDTYPE)uCMD;
-	}
+	void GetUSY(unsigned short& us);
 
-	void SetCMD(unsigned char cmd)
-	{
-		uCMD = cmd;
-		uCmd[0] = cmd;
-	}
+	void GetX(int& x);
 
-	unsigned short GetUSX()
-	{
-		unsigned short us = 0;
-		us = uXHB << 8 | uXLB;
-		return us;
-	}
+	void GetY(int& y);
 
-	unsigned short GetUSY()
-	{
-		unsigned short us = 0;
-		us = uYHB << 8 | uYLB;
-		return us;
-	}
+	void SetX(int x);
 
-	int GetX()
-	{
-		unsigned short us = 0;
-		us = GetUSX();
-		return (int)us;
-	}
+	void SetY(int y);
 
-	int GetY()
-	{
-		unsigned short us = 0;
-		us = GetUSY();
-		return (int)us;
-	}
+	void GetW(int& w);
 
-	int GetW()
-	{
-		unsigned short us = 0;
-		us = GetUSX();
-		return (int)us;
-	}
+	void GetH(int& h);
 
-	int GetH()
-	{
-		unsigned short us = 0;
-		us = GetUSY();
-		return (int)us;
-	}
+	void GetW(unsigned short& w);
 
-	void SetX(int x)
-	{
-		//! 1680 = 0x0690
-		unsigned short us = (unsigned short)x;
-		uXHB = (us & 0xFF00) >> 8;
-		uXLB = (us & 0x00FF);
+	void GetH(unsigned short& h);
 
-		ux = uXHB << 8 | uXLB;
+	void GetDelta(int& delta);
 
-		uCmd[1] = uXHB;
-		uCmd[2] = uXLB;
-	}
+	void SetDelta(int delta);
 
-	void SetY(int y)
-	{
-		unsigned short us = (unsigned short)y;
-		uYHB = (us & 0xFF00) >> 8;
-		uYLB = (us & 0x00FF);
+	void GetDelta(unsigned short& delta);
 
-		uy = uYHB << 8 | uYLB;
+	void SetDelta(unsigned short delta);
+};
 
-		uCmd[3] = uYHB;
-		uCmd[4] = uYLB;
-	}
+/*
+@brief Wrap process cmd msg data storage and analyze.
+	   Each of msg process at derived class.	
+*/
+class CmdHanldeBase
+{
+public:
+	CmdHanldeBase();
+	CmdHanldeBase(unsigned char* p);
+	CmdHanldeBase(const CMDData& data);
+	virtual ~CmdHanldeBase();
+
+public:
+	void SetData(const CMDData& data);
+	void GetData(CMDData& data);
+	void GetData(unsigned char* p);
+
+public:
+	//!
+	void SetCMD(unsigned char cmd);
+	void GetCMD(CMDTYPE& type);
+	void GetUSX(unsigned short& usX);
+	void GetUSY(unsigned short& usY);
+	void GetX(int& x);
+	void GetY(int &y);
+	void SetX(int x);
+	void SetY(int y);
+	void GetW(int& w);
+	void GetH(int& h);
+
+public:
+	CMDData m_cmdData;
 
 };
 
+/*
+@brief	process mouse move
+		CMD_MOUSE_MOVE_TO
+*/
+class CmdMouseMove : public CmdHanldeBase
+{
+public:
+	CmdMouseMove();
+	CmdMouseMove(unsigned char* p);
+	CmdMouseMove(const CMDData& data);
+	~CmdMouseMove();
 
+public:
+	//! extend
+
+private:
+
+};
+
+/*
+@brief	process mouse press
+		CMD_MOUSE_LEFT_DOWN
+*/
+class CmdMouseLeftDown : public CmdHanldeBase
+{
+public:
+	CmdMouseLeftDown();
+	CmdMouseLeftDown(unsigned char* p);
+	CmdMouseLeftDown(const CMDData& data);
+	~CmdMouseLeftDown();
+
+public:
+	//! extend
+
+private:
+	
+};
+
+/*
+@brief	process mouse press
+		CMD_MOUSE_LEFT_UP
+*/
+class CmdMouseLeftUp : public CmdHanldeBase
+{
+public:
+	CmdMouseLeftUp();
+	CmdMouseLeftUp(unsigned char* p);
+	CmdMouseLeftUp(const CMDData& data);
+	~CmdMouseLeftUp();
+
+public:
+	//! extend
+
+private:
+
+};
+
+/*
+@brief	process mouse press
+		CMD_MOUSE_RIGHT_DOWN
+*/
+class CmdMouseRightDown : public CmdHanldeBase
+{
+public:
+	CmdMouseRightDown();
+	CmdMouseRightDown(unsigned char* p);
+	CmdMouseRightDown(const CMDData& data);
+	~CmdMouseRightDown();
+
+public:
+	//! extend
+
+private:
+
+};
+
+/*
+@brief	process mouse press
+		CMD_MOUSE_RIGHT_UP
+*/
+class CmdMouseRightUp : public CmdHanldeBase
+{
+public:
+	CmdMouseRightUp();
+	CmdMouseRightUp(unsigned char* p);
+	CmdMouseRightUp(const CMDData& data);
+	~CmdMouseRightUp();
+
+public:
+	//! extend
+
+private:
+
+};
+
+/*
+@brief	process mouse press
+		CMD_MOUSE_WHEEL
+*/
+class CmdMouseWheel : public CmdHanldeBase
+{
+public:
+	CmdMouseWheel();
+	CmdMouseWheel(unsigned char* p);
+	CmdMouseWheel(const CMDData& data);
+	~CmdMouseWheel();
+
+public:
+	//! extend
+	void SetDelta(const int& delta);
+	void SetDelta(const unsigned short& usDelta);
+	void GetDelta(int& delta);
+	void GetDelta(unsigned short& usDelta);
+
+private:
+	//! mouse wheel step
+	unsigned short m_usDelta;
+};
+
+
+/*
+@brief	process mouse press
+		CMD_MOUSE_DOUBLE_CLICK
+*/
+class CmdMouseDbClick : public CmdHanldeBase
+{
+public:
+	CmdMouseDbClick();
+	CmdMouseDbClick(unsigned char* p);
+	CmdMouseDbClick(const CMDData& data);
+	~CmdMouseDbClick();
+
+public:
+	//! extend
+
+private:
+
+};
+
+/*
+@brief	process keyboard press
+		CMD_KEY_PRESS
+*/
+class CmdKeyPress : public CmdHanldeBase
+{
+public:
+	CmdKeyPress();
+	CmdKeyPress(unsigned char* p);
+	CmdKeyPress(const CMDData& data);
+	~CmdKeyPress();
+
+public:
+	//! extend
+
+private:
+
+};
+
+/*
+@brief	process keyboard release
+		CMD_KEY_RELEASE
+*/
+class CmdKeyRelease : public CmdHanldeBase
+{
+public:
+	CmdKeyRelease();
+	CmdKeyRelease(unsigned char* p);
+	CmdKeyRelease(const CMDData& data);
+	~CmdKeyRelease();
+
+public:
+	//! extend
+
+private:
+
+};
+
+/*
+@brief	process keyboard release
+		CMD_GET_SCREEN_SIZE
+*/
+class CmdGetScreenSize : public CmdHanldeBase
+{
+public:
+	CmdGetScreenSize();
+	CmdGetScreenSize(unsigned char* p);
+	CmdGetScreenSize(const CMDData& data);
+	~CmdGetScreenSize();
+
+public:
+	//! extend
+
+private:
+
+};
+
+/*
+@brief	process keyboard release
+		CMD_GET_SCREEN_SIZE_RES
+*/
+class CmdGetScreenSizeRes : public CmdHanldeBase
+{
+public:
+	CmdGetScreenSizeRes();
+	CmdGetScreenSizeRes(unsigned char* p);
+	CmdGetScreenSizeRes(const CMDData& data);
+	~CmdGetScreenSizeRes();
+
+public:
+	//! extend
+
+private:
+
+};
+
+/*
+@brief	process keyboard release
+		CMD_SEND_SERVER_SCREEN_SIZE
+*/
+class CmdSendServerScreenSize : public CmdHanldeBase
+{
+public:
+	CmdSendServerScreenSize();
+	CmdSendServerScreenSize(unsigned char* p);
+	CmdSendServerScreenSize(const CMDData& data);
+	~CmdSendServerScreenSize();
+
+public:
+	//! extend
+
+private:
+
+};

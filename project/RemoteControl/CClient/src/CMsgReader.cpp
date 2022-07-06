@@ -1,6 +1,5 @@
 #include "CMsgReader.h"
 #include "RWSocket.h"
-#include "consts.h"
 
 
 CMsgReader::CMsgReader(QString add, int p, int w, int h, QObject *parent) :
@@ -86,9 +85,10 @@ void CMsgReader::readMsgFromServer()
 
 void CMsgReader::processMsg()
 {
-    ClientCMDData cmdData;
+    CMDData cmdData;
     cmdData.SetData(cmd_buf);
-    CMDTYPE cmdType = cmdData.GetCMD();
+    CMDTYPE cmdType = CMDTYPE::CMD_UNKNOWN;
+    cmdData.GetCMD(cmdType);
 
     switch (cmdType)
     {
@@ -126,12 +126,12 @@ void CMsgReader::processMsg()
 
 }
 
-void CMsgReader::readServerParamsMsg(ClientCMDData& cmdData)
+void CMsgReader::readServerParamsMsg(CMDData& cmdData)
 {
     unsigned short usW = 0;
     unsigned short usH = 0;
-    usW = cmdData.GetW();
-    usH = cmdData.GetH();
+    cmdData.GetW(usW);
+    cmdData.GetH(usH);
 
     m_serverParmas.SetScreenWidth(usW);
     m_serverParmas.SetScreenHeight(usH);
