@@ -12,7 +12,6 @@
 #include <QTcpSocket>
 #include <QMetaType>
 #include <memory>
-#include "consts.h"
 #include "RWSocket.h"
 #include "command.h"
 

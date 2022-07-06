@@ -1,6 +1,5 @@
 #include "CMsgReader.h"
 #include "RWSocket.h"
-#include "consts.h"
 
 
 CMsgReader::CMsgReader(QString add, int p, int w, int h, QObject *parent) :
