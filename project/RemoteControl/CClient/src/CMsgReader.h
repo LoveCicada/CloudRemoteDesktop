@@ -61,7 +61,7 @@ public:
     void Init();
     void InitData();
     void processMsg();
-    void readServerParamsMsg(ClientCMDData& cmdData);
+    void readServerParamsMsg(CMDData& cmdData);
     
 signals:
     void readServerParams(const ServerParmas& sp);

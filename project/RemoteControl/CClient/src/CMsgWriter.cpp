@@ -36,7 +36,7 @@ void CMsgWriter::readDataFromServer()
         cmd_buf_fill += r;
         if(cmd_buf_fill == 8)
         {
-            m_clientCMDData.SetData(cmd_buf);
+            m_cmdData.SetData(cmd_buf);
             readServerMsg();
             cmd_buf_fill = 0;
         }
@@ -62,11 +62,16 @@ void CMsgWriter::readServerMsg()
 
 #else
 
-    CMDTYPE cmdType = m_clientCMDData.GetCMD();
+    CMDTYPE cmdType = CMDTYPE::CMD_UNKNOWN;
+    m_cmdData.GetCMD(cmdType);
     if (cmdType == CMDTYPE::CMD_GET_SCREEN_SIZE_RES)
     {
-        int w = m_clientCMDData.GetW();
-        int h = m_clientCMDData.GetH();
+        int w = 0;
+        int h = 0;
+        m_cmdData.GetW(w);
+        m_cmdData.GetH(h);
+        m_cmdData.GetW(w);
+        m_cmdData.GetH(h);
 
         emit setServerScreenSize(w, h);
         qDebug() << "get server screen size:" << w << " " << h;
@@ -114,11 +119,11 @@ void CMsgWriter::cmdMouseMoveTo(int x, int y)
 
     //qDebug()<<"mouse move to"<<x<<" "<<y;
 
-    ClientCMDData tmpClientCMDData;
-    tmpClientCMDData.SetCMD(CMD_MOUSE_MOVE_TO);
-    tmpClientCMDData.SetX(x);
-    tmpClientCMDData.SetY(y);
-    tmpClientCMDData.GetData(uc);
+    CMDData tmpCMDData;
+    tmpCMDData.SetCMD(CMD_MOUSE_MOVE_TO);
+    tmpCMDData.SetX(x);
+    tmpCMDData.SetY(y);
+    tmpCMDData.GetData(uc);
 
 #endif // 0
 
@@ -139,11 +144,11 @@ void CMsgWriter::cmdMouseDoubleClick(int x, int y)
 
 #else
 
-    ClientCMDData tmpClientCMDData;
-    tmpClientCMDData.SetCMD(CMD_MOUSE_DOUBLE_CLICK);
-    tmpClientCMDData.SetX(x);
-    tmpClientCMDData.SetY(y);
-    tmpClientCMDData.GetData(uc);
+    CMDData tmpCMDData;
+    tmpCMDData.SetCMD(CMD_MOUSE_DOUBLE_CLICK);
+    tmpCMDData.SetX(x);
+    tmpCMDData.SetY(y);
+    tmpCMDData.GetData(uc);
 
 #endif // 0
 
@@ -164,11 +169,11 @@ void CMsgWriter::cmdMouseLeftDown(int x, int y)
 
 #else
 
-    ClientCMDData tmpClientCMDData;
-    tmpClientCMDData.SetCMD(CMD_MOUSE_LEFT_DOWN);
-    tmpClientCMDData.SetX(x);
-    tmpClientCMDData.SetY(y);
-    tmpClientCMDData.GetData(uc);
+    CMDData tmpCMDData;
+    tmpCMDData.SetCMD(CMD_MOUSE_LEFT_DOWN);
+    tmpCMDData.SetX(x);
+    tmpCMDData.SetY(y);
+    tmpCMDData.GetData(uc);
 
 #endif // 0
 
@@ -189,11 +194,11 @@ void CMsgWriter::cmdMouseLeftUp(int x, int y)
 
 #else
 
-    ClientCMDData tmpClientCMDData;
-    tmpClientCMDData.SetCMD(CMD_MOUSE_LEFT_UP);
-    tmpClientCMDData.SetX(x);
-    tmpClientCMDData.SetY(y);
-    tmpClientCMDData.GetData(uc);
+    CMDData tmpCMDData;
+    tmpCMDData.SetCMD(CMD_MOUSE_LEFT_UP);
+    tmpCMDData.SetX(x);
+    tmpCMDData.SetY(y);
+    tmpCMDData.GetData(uc);
 
 #endif // 0
 
@@ -214,11 +219,11 @@ void CMsgWriter::cmdMouseRightDown(int x, int y)
 
 #else
 
-    ClientCMDData tmpClientCMDData;
-    tmpClientCMDData.SetCMD(CMD_MOUSE_RIGHT_DOWN);
-    tmpClientCMDData.SetX(x);
-    tmpClientCMDData.SetY(y);
-    tmpClientCMDData.GetData(uc);
+    CMDData tmpCMDData;
+    tmpCMDData.SetCMD(CMD_MOUSE_RIGHT_DOWN);
+    tmpCMDData.SetX(x);
+    tmpCMDData.SetY(y);
+    tmpCMDData.GetData(uc);
 
 #endif // 0
 
@@ -239,11 +244,11 @@ void CMsgWriter::cmdMouseRightUp(int x, int y)
 
 #else
 
-    ClientCMDData tmpClientCMDData;
-    tmpClientCMDData.SetCMD(CMD_MOUSE_RIGHT_UP);
-    tmpClientCMDData.SetX(x);
-    tmpClientCMDData.SetY(y);
-    tmpClientCMDData.GetData(uc);
+    CMDData tmpCMDData;
+    tmpCMDData.SetCMD(CMD_MOUSE_RIGHT_UP);
+    tmpCMDData.SetX(x);
+    tmpCMDData.SetY(y);
+    tmpCMDData.GetData(uc);
 
 #endif // 0
 
@@ -287,9 +292,9 @@ void CMsgWriter::cmdScreenSize()
 
 #else
 
-    ClientCMDData tmpClientCMDData;
-    tmpClientCMDData.SetCMD(CMD_GET_SCREEN_SIZE);
-    tmpClientCMDData.GetData(uc);
+    CMDData tmpCMDData;
+    tmpCMDData.SetCMD(CMD_GET_SCREEN_SIZE);
+    tmpCMDData.GetData(uc);
 
 #endif // 0
 
