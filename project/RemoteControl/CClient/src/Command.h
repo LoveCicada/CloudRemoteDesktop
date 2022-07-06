@@ -135,6 +135,7 @@ public:
 public:
 	void SetData(const CMDData& data);
 	void GetData(CMDData& data);
+	void GetData(unsigned char* p);
 
 public:
 	//!

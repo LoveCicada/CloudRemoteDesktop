@@ -215,6 +215,11 @@ void CmdHanldeBase::GetData(CMDData& data)
 	data = m_cmdData;
 }
 
+void CmdHanldeBase::GetData(unsigned char* p)
+{
+	m_cmdData.GetData(p);
+}
+
 void CmdHanldeBase::SetCMD(unsigned char cmd)
 {
 	m_cmdData.SetCMD(cmd);

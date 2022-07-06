@@ -165,25 +165,11 @@ void CMsgWriter::cmdMouseWheel(int delta, int x, int y)
 {
     uchar uc[8] = {0};
 
-#if 1
-
-    uc[0] = CMD_MOUSE_WHEEL;
-    uc[1] = delta / 0x100;
-    uc[2] = delta % 0x100;
-    uc[3] = x / 0x100;
-    uc[4] = x % 0x100;
-    uc[5] = y / 0x100;
-    uc[6] = y % 0x100;
-
-#else
-
-    ClientCMDData tmpClientCMDData;
-    tmpClientCMDData.SetCMD(CMD_MOUSE_WHEEL);
-    tmpClientCMDData.SetX(x);
-    tmpClientCMDData.SetY(y);
-    tmpClientCMDData.GetData(uc);
-
-#endif // 0
+    CmdMouseWheel cmdMouseWheel;
+    cmdMouseWheel.SetX(x);
+    cmdMouseWheel.SetY(y);
+    cmdMouseWheel.SetDelta(delta);
+    cmdMouseWheel.GetData(uc);
 
     BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
