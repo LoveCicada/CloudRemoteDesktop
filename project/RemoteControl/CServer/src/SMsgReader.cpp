@@ -185,6 +185,8 @@ void SMsgReader::cmdMouseDoubleClick()
 
 void SMsgReader::cmdMouseWheel()
 {
+#if 0
+
     int delta = clientMsgData[1];
     delta = delta << 8;
     delta += clientMsgData[2];
@@ -194,6 +196,22 @@ void SMsgReader::cmdMouseWheel()
     int y = clientMsgData[5];
     y = y << 8;
     y += clientMsgData[6];
+
+#else
+
+    int x = clientMsgData[1];
+    x = x << 8;
+    x += clientMsgData[2];
+    int y = clientMsgData[3];
+    y = y << 8;
+    y += clientMsgData[4];
+
+    int delta = clientMsgData[5];
+    delta = delta << 8;
+    delta += clientMsgData[6];
+
+#endif // 0
+
     SMsgHandler::mouseWheel(delta, x, y);
 }
 
