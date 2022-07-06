@@ -6,7 +6,7 @@
 /*
 @brief client/server operation cmd define
 */
-enum CMDTYPE
+typedef enum CMDTYPE
 {
 	CMD_UNKNOWN				= 0,
 	CMD_MOUSE_MOVE_TO		= 1,
@@ -21,7 +21,7 @@ enum CMDTYPE
 	CMD_GET_SCREEN_SIZE		= 11,
 	CMD_GET_SCREEN_SIZE_RES = 12,
 	CMD_SEND_SERVER_SCREEN_SIZE = 13,
-};
+}CMDTYPE;
 
 const int BLOCK_WIDTH = 50;
 const int BLOCK_HEIGHT = 50;
