@@ -45,23 +45,6 @@ void CMsgWriter::readDataFromServer()
 
 void CMsgWriter::readServerMsg()
 {
-#if 0
-
-    int c = cmd_buf[0];
-    if(c == CMD_GET_SCREEN_SIZE_RES)
-    {
-        int w = cmd_buf[1];
-        w = w << 8;
-        w += cmd_buf[2];
-        int h = cmd_buf[3];
-        h = h << 8;
-        h += cmd_buf[4];
-        emit setServerScreenSize(w, h);
-        qDebug()<<"get server screen size:"<<w<<" "<<h;
-    }
-
-#else
-
     CMDTYPE cmdType = CMDTYPE::CMD_UNKNOWN;
     m_cmdData.GetCMD(cmdType);
     if (cmdType == CMDTYPE::CMD_GET_SCREEN_SIZE_RES)
@@ -76,9 +59,6 @@ void CMsgWriter::readServerMsg()
         emit setServerScreenSize(w, h);
         qDebug() << "get server screen size:" << w << " " << h;
     }
-
-#endif // 0
-
 }
 
 void CMsgWriter::connectToServer()
@@ -107,25 +87,11 @@ void CMsgWriter::cmdMouseMoveTo(int x, int y)
         return;
     uchar uc[8] = {0};
 
-#if 0
-
-    uc[0] = CMD_MOUSE_MOVE_TO;
-    uc[1] = x / 0x100;
-    uc[2] = x % 0x100;
-    uc[3] = y / 0x100;
-    uc[4] = y % 0x100;
-
-#else
-
-    //qDebug()<<"mouse move to"<<x<<" "<<y;
-
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMD_MOUSE_MOVE_TO);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
     tmpCMDData.GetData(uc);
-
-#endif // 0
 
     BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
@@ -134,23 +100,11 @@ void CMsgWriter::cmdMouseDoubleClick(int x, int y)
 {
     uchar uc[8] = {0};
 
-#if 0
-
-    uc[0] = CMD_MOUSE_DOUBLE_CLICK;
-    uc[1] = x / 0x100;
-    uc[2] = x % 0x100;
-    uc[3] = y / 0x100;
-    uc[4] = y % 0x100;
-
-#else
-
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMD_MOUSE_DOUBLE_CLICK);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
     tmpCMDData.GetData(uc);
-
-#endif // 0
 
     BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
@@ -159,23 +113,11 @@ void CMsgWriter::cmdMouseLeftDown(int x, int y)
 {
     uchar uc[8] = {0};
 
-#if 0
-
-    uc[0] = CMD_MOUSE_LEFT_DOWN;
-    uc[1] = x / 0x100;
-    uc[2] = x % 0x100;
-    uc[3] = y / 0x100;
-    uc[4] = y % 0x100;
-
-#else
-
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMD_MOUSE_LEFT_DOWN);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
     tmpCMDData.GetData(uc);
-
-#endif // 0
 
     BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
@@ -184,23 +126,11 @@ void CMsgWriter::cmdMouseLeftUp(int x, int y)
 {
     uchar uc[8] = {0};
 
-#if 0
-
-    uc[0] = CMD_MOUSE_LEFT_UP;
-    uc[1] = x / 0x100;
-    uc[2] = x % 0x100;
-    uc[3] = y / 0x100;
-    uc[4] = y % 0x100;
-
-#else
-
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMD_MOUSE_LEFT_UP);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
     tmpCMDData.GetData(uc);
-
-#endif // 0
 
     BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
@@ -209,23 +139,11 @@ void CMsgWriter::cmdMouseRightDown(int x, int y)
 {
     uchar uc[8] = {0};
 
-#if 0
-
-    uc[0] = CMD_MOUSE_RIGHT_DOWN;
-    uc[1] = x / 0x100;
-    uc[2] = x % 0x100;
-    uc[3] = y / 0x100;
-    uc[4] = y % 0x100;
-
-#else
-
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMD_MOUSE_RIGHT_DOWN);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
     tmpCMDData.GetData(uc);
-
-#endif // 0
 
     BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
@@ -234,23 +152,11 @@ void CMsgWriter::cmdMouseRightUp(int x, int y)
 {
     uchar uc[8] = {0};
 
-#if 0
-
-    uc[0] = CMD_MOUSE_RIGHT_UP;
-    uc[1] = x / 0x100;
-    uc[2] = x % 0x100;
-    uc[3] = y / 0x100;
-    uc[4] = y % 0x100;
-
-#else
-
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMD_MOUSE_RIGHT_UP);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
     tmpCMDData.GetData(uc);
-
-#endif // 0
 
     BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
@@ -286,17 +192,9 @@ void CMsgWriter::cmdScreenSize()
 {
     uchar uc[8] = {0};
 
-#if 0
-
-    uc[0] = CMD_GET_SCREEN_SIZE;
-
-#else
-
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMD_GET_SCREEN_SIZE);
     tmpCMDData.GetData(uc);
-
-#endif // 0
 
     BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
