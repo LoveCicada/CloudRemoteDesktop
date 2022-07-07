@@ -1,4 +1,4 @@
-
+[toc]
 # 云桌面开发设计
 
 
@@ -154,6 +154,10 @@ HDR截屏
 [qt程序使用——keybd_event函数的用法和问题 & SetCursorPos & GetCursorPos函数和mouse_event的一些问题](https://blog.51cto.com/u_15067246/3731018)
 
 [基于Qt的OpenGL(一)：OpenGL理论及QOpenGLWidget](https://blog.csdn.net/qq_42308217/article/details/120593392)
+
+[键盘虚拟键值编码表](https://www.cnblogs.com/nemolog/archive/2005/10/30/265035.html)
+
+[虚拟键代码](https://docs.microsoft.com/zh-cn/windows/win32/inputdev/virtual-key-codes)
 
 ***
 

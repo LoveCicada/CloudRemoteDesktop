@@ -127,10 +127,26 @@ void SMsgHandler::setCursorPos(int x, int y)
 
 void SMsgHandler::keyPressed(uchar key)
 {
-    keybd_event(key, 0x45, KEYEVENTF_EXTENDEDKEY, 0);
+    short sVkCode = VkKeyScan(key);
+
+    //! virtual key code must between 1 and 254, [1, 254]
+    if ( sVkCode < 1 || sVkCode > 254) {
+        sVkCode = key;
+    }
+
+    BYTE bScan = MapVirtualKey(sVkCode, 0);
+    keybd_event(sVkCode, bScan, KEYEVENTF_EXTENDEDKEY, 0);
 }
 
 void SMsgHandler::keyReleased(uchar key)
 {
-    keybd_event(key, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+    short sVkCode = VkKeyScan(key);
+
+    //! virtual key code must between 1 and 254, [1, 254]
+    if (sVkCode < 1 || sVkCode > 254) {
+        sVkCode = key;
+    }
+
+    BYTE bScan = MapVirtualKey(sVkCode, 0);
+    keybd_event(sVkCode, bScan, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 }
