@@ -87,7 +87,7 @@ void SMsgWriter::sendServerParams()
 
     unsigned char uc[8] = { 0 };
 
-    ClientCMDData cmdData;
+    CMDData cmdData;
     cmdData.SetCMD(CMDTYPE::CMD_SEND_SERVER_SCREEN_SIZE);
     cmdData.SetX(usW);
     cmdData.SetY(usH);
