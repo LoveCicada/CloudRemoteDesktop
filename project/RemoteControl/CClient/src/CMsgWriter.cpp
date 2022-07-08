@@ -185,10 +185,24 @@ void CMsgWriter::cmdScreenSize()
     BlockWriteSocketData(m_msgSocket.get(), uc, 8);
 }
 
-void CMsgWriter::cmdKeyPress(uchar key)
+void CMsgWriter::cmdKeyPress(int key)
 {
     uchar uc[8] = {0};
 #if 1
+
+    /*
+    @brief use 4 byte storage key value
+        uc[1], uc[2], uc[3], uc[4]
+        eg: Key_Escape = 0x01000000,
+        01      00      00      00
+        uc[1]   uc[2]   uc[3]   uc[4]
+    */
+
+    /*uc[0] = CMD_KEY_PRESS;
+    uc[1] = (key & 0xFF000000) >> 24;
+    uc[2] = (key & 0x00FF0000) >> 16;
+    uc[3] = (key & 0x0000FF00) >> 8;
+    uc[4] = (key & 0x000000FF);*/
 
     uc[0] = CMD_KEY_PRESS;
     uc[1] = key;
@@ -207,6 +221,20 @@ void CMsgWriter::cmdKeyRelease(uchar key)
 {
     uchar uc[8] = {0};
 #if 1
+
+    /*
+    @brief use 4 byte storage key value
+        uc[1], uc[2], uc[3], uc[4]
+        eg: Key_Escape = 0x01000000,
+        01      00      00      00
+        uc[1]   uc[2]   uc[3]   uc[4]
+    */
+
+    /*uc[0] = CMD_KEY_RELEASE;
+    uc[1] = (key & 0xFF000000) >> 24;
+    uc[2] = (key & 0x00FF0000) >> 16;
+    uc[3] = (key & 0x0000FF00) >> 8;
+    uc[4] = (key & 0x000000FF);*/
 
     uc[0] = CMD_KEY_RELEASE;
     uc[1] = key;

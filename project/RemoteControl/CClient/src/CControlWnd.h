@@ -83,7 +83,7 @@ protected:
     void wheelEvent(QWheelEvent *);
     void keyPressEvent(QKeyEvent *);
     void keyReleaseEvent(QKeyEvent *);
-    uchar translateKey(int key);
+    int translateKey(int key);
 };
 
 #endif // CONTROLPANEL_H
