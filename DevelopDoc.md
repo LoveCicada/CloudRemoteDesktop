@@ -169,6 +169,12 @@ HDR截屏
 
 [Qt中postEvent和sendEvent函数](https://blog.csdn.net/xiaoyink/article/details/79404377)
 
+[QT学习记录-按键模拟键盘事件](https://blog.csdn.net/m0_37837218/article/details/103996754)
+
+[Qt—键盘事件](https://blog.csdn.net/qq_35629971/article/details/123617199)
+
+[keybd_event 在F按键系列不起作用的解决办法](http://t.zoukankan.com/pecool-p-12009643.html)
+
 ***
 
 ### VNC vs RDP
