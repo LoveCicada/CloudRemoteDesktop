@@ -119,6 +119,57 @@ public:
 
 	void SetDelta(unsigned short delta);
 };
+ 
+typedef enum MODIFIER
+{
+	NoModifier,
+	ShiftModifier,
+	ControlModifier,
+	AltModifier,
+	MetaModifier,
+	KeypadModifier,
+	GroupSwitchModifier,
+
+}MODIFIER;
+
+
+/*
+@brief	client/server command data define
+		include keyboard value 
+*/
+
+class CMDKbData
+{
+public:
+
+	CMDKbData();
+	~CMDKbData();
+
+	void Init();
+	
+
+private:
+	//! data
+	 
+	//! [0] msg type
+	unsigned char m_msgType;
+	//! [1] control system, windows Linux Mac
+	unsigned char m_sndSystem;
+	//! [2] controlled system
+	unsigned char m_rcvSystem;
+	//! [3]Qt::KeyboardModifiers
+	unsigned char m_kbModifiers;
+
+	//! [4] key value
+	__int32 m_key;
+	//! [5] nativeScanCode
+	unsigned __int32 m_nativeScanCode;
+	//! [6] nativeVirtualKey
+	unsigned __int32 m_nativeVirtualKey;
+	//! [7] nativeModifiers
+	unsigned __int32 m_nativeModifiers;
+};
+
 
 /*
 @brief Wrap process cmd msg data storage and analyze.

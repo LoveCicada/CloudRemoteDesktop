@@ -1,7 +1,7 @@
 [toc]
 ### 远程桌面设计概要
 
-### 控制消息协议定义
+### 控制消息协议定义 V1.0
 1. 协议长度
 8字节
 2. 协议组成
@@ -201,4 +201,225 @@ void SMsgHandler::keyPressed(int key)
 }
 ```
 5. 能否构建一个QKeyEvent事件，然后响应，来实现键盘操作？
-6. 
+
+
+
+
+### 控制消息协议定义 V2.0
+1. 协议长度20字节
+2. 协议组成
+3. 支持鼠标移动/按键消息，键盘按键消息
+- 键盘按键消息协议内容
+``` 
+char c[20];
+
+//!
+c[0] 消息类型（鼠标移动/按键消息，键盘按键消息）
+c[1] 控制端系统类型（客户端），Windows/Linux/Mac
+c[2] 被控制端系统类型（服务端），Windows/Linux/Mac
+c[3] 扩展数据位，Qt::KeyboardModifiers modifiers
+
+//! 键盘键值key value，int32_t
+c[4]
+c[5]
+c[6]
+c[7]
+
+//! 原始扫描码，nativeScanCode，int32_t
+c[8]
+c[9]
+c[10]
+c[11]
+
+//! 原始虚拟键值，nativeVirtualKey，int32_t
+c[12] 
+c[13]
+c[14]
+c[15]
+
+//! 原始modify，nativeModifiers，int32_t
+c[16] 
+c[17]
+c[18]
+c[19]
+```
+
+- 鼠标消息协议内容
+``` 
+char c[20];
+
+//!
+c[0] 消息类型（鼠标移动/按键消息，键盘按键消息）
+c[1] 控制端系统类型（客户端），Windows/Linux/Mac
+c[2] 被控制端系统类型（服务端），Windows/Linux/Mac
+c[3] 扩展数据位，
+
+//! 鼠标位置（pt.x），int32_t
+c[4] 
+c[5] 
+c[6] 
+c[7] 
+
+//! 鼠标位置（pt.y），int32_t
+c[8] 
+c[9] 
+c[10]
+c[11]
+
+//! 鼠标滚轮步进（delta），int32_t
+c[12]  
+c[13] 
+c[14] 
+c[15] 
+
+//! 
+c[16]
+c[17] 
+c[18] 
+c[19] 
+```
+
+### 协议数据存储及解析
+- 读取4字节
+```C++
+//! 
+RCBuffer::RCBuffer(char* b, int nn)
+{
+    p = bytes = b;
+    nb_bytes = nn;
+}
+
+//! 跳过一定字节数
+void RCBuffer::skip(int size)
+{
+    assert(p);
+    assert(p + size >= bytes);
+    assert(p + size <= bytes + nb_bytes);
+    
+    p += size;
+}
+
+void RCBuffer::write_1bytes(int8_t value)
+{
+    assert(require(1));
+    
+    *p++ = value;
+}
+
+int32_t RCBuffer::read_4bytes()
+{
+    assert(require(4));
+    
+    int32_t value;
+    char* pp = (char*)&value;
+    pp[3] = *p++;
+    pp[2] = *p++;
+    pp[1] = *p++;
+    pp[0] = *p++;
+    
+    return value;
+}
+
+```
+- client write data
+```C++
+//! eg, keyboard value
+char c[20];
+RCBuffer rcBuffer(c, 20);
+
+//! write data
+//! c[0] 消息类型
+int8_t msgType = CMDTYPE::CMD_KEY_PRESS;
+rcBuffer.write_1bytes(msgType);
+rcBuffer.skip(1);
+
+//! c[1] 控制端系统类型
+int8_t controlSysType = Windows;
+rcBuffer.write_1bytes(controlSysType);
+rcBuffer.skip(1);
+
+//! c[2] 被控制端系统类型
+int8_t controlledSysType = null;
+rcBuffer.write_1bytes(controlSysType);
+rcBuffer.skip(1);
+
+//! c[3] 扩展数据位
+int8_t extraData = 0;
+rcBuffer.write_1bytes(extraData);
+rcBuffer.skip(1);
+
+//! c[4] c[5] c[6] c[7] 键盘键值（4字节存储，int32_t）
+int32_t keyValue = 0x20;
+rcBuffer.write_4bytes(keyValue);
+rcBuffer.skip(4);
+
+//! c[8] c[9] c[10] c[11] 原始扫描码（4字节存储，int32_t）
+int32_t scanCode = 0x20;
+rcBuffer.write_4bytes(scanCode);
+rcBuffer.skip(4);
+
+//! c[12] c[13] c[14] c[15] 原始虚拟键值（4字节存储，int32_t）
+int32_t virtualKey = 0x20;
+rcBuffer.write_4bytes(virtualKey);
+rcBuffer.skip(4);
+
+//! c[16] c[17] c[18] c[19] 原始modify（4字节存储，int32_t）
+int32_t modifier = 0x20;
+rcBuffer.write_4bytes(modifier);
+rcBuffer.skip(4);
+
+//! server send data to client...
+
+```
+
+- server read data
+```C++
+//! eg, keyboard value
+
+//! server read from client... 
+
+char c[20];
+RCBuffer rcBuffer(c, 20);
+
+//! write data
+//! c[0] 消息类型
+int8_t msgType = CMDTYPE::CMD_KEY_PRESS;
+rcBuffer.read_1bytes(msgType);
+rcBuffer.skip(1);
+
+//! c[1] 控制端系统类型
+int8_t controlSysType = Windows;
+rcBuffer.read_1bytes(controlSysType);
+rcBuffer.skip(1);
+
+//! c[2] 被控制端系统类型
+int8_t controlledSysType = null;
+rcBuffer.read_1bytes(controlSysType);
+rcBuffer.skip(1);
+
+//! c[3] 扩展数据位
+int8_t extraData = 0;
+rcBuffer.read_1bytes(extraData);
+rcBuffer.skip(1);
+
+//! c[4] c[5] c[6] c[7] 键盘键值（4字节存储，int32_t）
+int32_t keyValue = 0x20;
+rcBuffer.read_4bytes(keyValue);
+rcBuffer.skip(4);
+
+//! c[8] c[9] c[10] c[11] 原始扫描码（4字节存储，int32_t）
+int32_t scanCode = 0x20;
+rcBuffer.read_4bytes(scanCode);
+rcBuffer.skip(4);
+
+//! c[12] c[13] c[14] c[15] 原始虚拟键值（4字节存储，int32_t）
+int32_t virtualKey = 0x20;
+rcBuffer.read_4bytes(virtualKey);
+rcBuffer.skip(4);
+
+//! c[16] c[17] c[18] c[19] 原始modify（4字节存储，int32_t）
+int32_t modifier = 0x20;
+rcBuffer.read_4bytes(modifier);
+rcBuffer.skip(4);
+
+```
