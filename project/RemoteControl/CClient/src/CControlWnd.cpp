@@ -186,7 +186,7 @@ void CControlWnd::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 }
 
-uchar CControlWnd::translateKey(int key)
+int CControlWnd::translateKey(int key)
 {
     int k = key;
     bool legal = true;
@@ -254,6 +254,14 @@ void CControlWnd::keyPressEvent(QKeyEvent *e)
 {
     if(!control)
         return;
+
+    quint32 quNativeScanCode = e->nativeScanCode();
+    quint32 quNativeVirtualKey = e->nativeVirtualKey();
+    quint32 quNativeModifiers = e->nativeModifiers();
+
+    qDebug() << "nativeScanCode: " << quNativeScanCode
+        << " nativeVirtualKey: " << quNativeVirtualKey
+        << " nativeModifiers: " << quNativeModifiers;
 
     int k = translateKey(e->key());
     if(k == 0)
