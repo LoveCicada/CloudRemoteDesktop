@@ -94,15 +94,37 @@ void SMsgReader::readClientMsg()
 //buf[1] -> key code
 void SMsgReader::cmdKeyPressed()
 {
+#if 0
+
+    int key = 0;
+    key = (clientMsgData[1] << 24) | (clientMsgData[2] << 16)
+            | (clientMsgData[3] << 8) | (clientMsgData[4]);
+    SMsgHandler::keyPressed(key);
+
+#else
+
     uchar c = clientMsgData[1];
     SMsgHandler::keyPressed(c);
+
+#endif // 0
 }
 
 //buf[1] -> key code
 void SMsgReader::cmdKeyReleased()
 {
+#if 0
+
+    int key = 0;
+    key = (clientMsgData[1] << 24) | (clientMsgData[2] << 16)
+        | (clientMsgData[3] << 8) | (clientMsgData[4]);
+    SMsgHandler::keyPressed(key);
+
+#else
+
     uchar c = clientMsgData[1];
     SMsgHandler::keyReleased(c);
+
+#endif // 0
 }
 
 /**

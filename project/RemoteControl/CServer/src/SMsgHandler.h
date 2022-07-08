@@ -25,8 +25,8 @@ public:
     static void mouseRightUp(int x = -1, int y = -1);
     static void mouseWheel(int delta, int x = -1, int y = -1);
 
-    static void keyPressed(uchar key);
-    static void keyReleased(uchar key);
+    static void keyPressed(int key);
+    static void keyReleased(int key);
     static QPoint getCursorPos();
     static void setCursorPos(int, int);
     static QPixmap grapScreen();

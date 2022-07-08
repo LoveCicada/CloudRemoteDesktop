@@ -161,3 +161,44 @@ CMsgWriter <---> SMsgReader
 CImgReader <---> SImgWriter
 ```
 
+### 键盘指令传输与解析
+1. 采用从QKeyEvent中获取当前控制端按下的键值
+2. 键值映射转换是否应该在服务端处理？
+如下场景：
+2.1 控制端：Windows，被控制端：Linux/Mac
+如果在控制端解析出映射的键值，在被控制端仍然需要处理。
+而如果在被控制端解析键值映射，然后即可按当前系统特性响应键盘操作。
+3. Qt键盘键位值映射
+QKeyEvent::nativeModifiers()
+QKeyEvent::nativeScanCode()
+QKeyEvent::nativeVirtualKey()
+
+4. Windows响应键盘操作
+```C++
+
+/*
+@brief	VK_ESCAPE	0x1B	ESC 键
+	Qt::Key_Escape	0x01000000
+	nativeScanCode:  1  nativeVirtualKey:  27  nativeModifiers:  0
+
+	int key = 0x1B;
+	short sVkCode = VkKeyScan(0x1B);
+	sVkCode = 1;
+	keybd_event(sVkCode, MapVirtualKey(sVkCode, 0), KEYEVENTF_EXTENDEDKEY, 0)
+*/
+
+void SMsgHandler::keyPressed(int key)
+{
+    short sVkCode = VkKeyScan(key);
+
+    //! virtual key code must between 1 and 254, [1, 254]
+    if ( sVkCode < 1 || sVkCode > 254) {
+        sVkCode = key;
+    }
+
+    BYTE bScan = MapVirtualKey(sVkCode, 0);
+    keybd_event(sVkCode, bScan, KEYEVENTF_EXTENDEDKEY, 0);
+}
+```
+5. 能否构建一个QKeyEvent事件，然后响应，来实现键盘操作？
+6. 

@@ -125,7 +125,7 @@ void SMsgHandler::setCursorPos(int x, int y)
     QCursor::setPos(x, y);
 }
 
-void SMsgHandler::keyPressed(uchar key)
+void SMsgHandler::keyPressed(int key)
 {
     short sVkCode = VkKeyScan(key);
 
@@ -138,7 +138,7 @@ void SMsgHandler::keyPressed(uchar key)
     keybd_event(sVkCode, bScan, KEYEVENTF_EXTENDEDKEY, 0);
 }
 
-void SMsgHandler::keyReleased(uchar key)
+void SMsgHandler::keyReleased(int key)
 {
     short sVkCode = VkKeyScan(key);
 

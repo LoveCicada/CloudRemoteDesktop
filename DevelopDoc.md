@@ -159,6 +159,16 @@ HDR截屏
 
 [虚拟键代码](https://docs.microsoft.com/zh-cn/windows/win32/inputdev/virtual-key-codes)
 
+[Qt 之 Windows 键盘消息学习](https://my.oschina.net/VVWhy/blog/16829)
+
+[C++ QKeyEvent::nativeScanCode方法代码示例](https://vimsky.com/examples/detail/cpp-ex---QKeyEvent-nativeScanCode-method.html)
+
+[【QT学习】QKeyEvent键盘事件制作简单软件盘](https://blog.csdn.net/ZZ123ZZWW/article/details/122377242)
+
+[如何使用QCoreApplication :: postEvent注入合成输入事件](http://cn.voidcc.com/question/p-brxtbnmt-rd.html)
+
+[Qt中postEvent和sendEvent函数](https://blog.csdn.net/xiaoyink/article/details/79404377)
+
 ***
 
 ### VNC vs RDP
