@@ -2,12 +2,14 @@
 #include "SMsgHandler.h"
 #include "Command.h"
 #include "RWSocket.h"
+#include <QTcpSocket>
+
 
 SMsgReader::SMsgReader(QTcpSocket* socket, ServerParmas sp, QObject *parent) :
     m_pCmdSocket(socket), m_ServerParmas(sp), RCThread(parent)
 {
     cmdMsgOffset = 0;
-    clientMsgLength = 8;
+    clientMsgLength = msgProtocolLength;
     memset(clientMsgData, 0, clientMsgLength);
     connect(m_pCmdSocket, SIGNAL(readyRead()), this, SLOT(readSocketData()));
 }
@@ -35,7 +37,7 @@ void SMsgReader::readSocketData()
 {
     while(true)
     {
-        qint64 r = m_pCmdSocket->read((char*)(clientMsgData + cmdMsgOffset), clientMsgLength - cmdMsgOffset);
+        qint64 r = m_pCmdSocket->read((clientMsgData + cmdMsgOffset), clientMsgLength - cmdMsgOffset);
         if(r <= 0)
             return;
         cmdMsgOffset += r;
@@ -46,7 +48,7 @@ void SMsgReader::readSocketData()
         }
         else
         {
-            qDebug() << "*** readSocketData !=8 ***";
+            qDebug() << "*** readSocketData !=20 ***";
         }
     }
 
@@ -54,7 +56,6 @@ void SMsgReader::readSocketData()
 
 void SMsgReader::readClientMsg()
 {
-    //qDebug()<<"new command";
     int cmd = clientMsgData[0];
     switch(cmd)
     {
@@ -94,161 +95,174 @@ void SMsgReader::readClientMsg()
 //buf[1] -> key code
 void SMsgReader::cmdKeyPressed()
 {
-#if 0
+    qDebug() << __func__;
 
-    int key = 0;
-    key = (clientMsgData[1] << 24) | (clientMsgData[2] << 16)
-            | (clientMsgData[3] << 8) | (clientMsgData[4]);
-    SMsgHandler::keyPressed(key);
+    int32_t keyValue = 0;
+    int32_t scanCode = 0;
+    int32_t virtualKey = 0;
+    int32_t modifier = 0;
 
-#else
+    CMDData cmdData;
+    cmdData.SetData(clientMsgData);
+    cmdData.GetKeyValue(keyValue);
+    cmdData.GetScanCode(scanCode);
+    cmdData.GetVirtualKey(virtualKey);
+    cmdData.GetModifier(modifier);
 
-    uchar c = clientMsgData[1];
-    SMsgHandler::keyPressed(c);
-
-#endif // 0
+    SMsgHandler::keyPressed(keyValue);
 }
 
 //buf[1] -> key code
 void SMsgReader::cmdKeyReleased()
 {
-#if 0
+    qDebug() << __func__;
 
-    int key = 0;
-    key = (clientMsgData[1] << 24) | (clientMsgData[2] << 16)
-        | (clientMsgData[3] << 8) | (clientMsgData[4]);
-    SMsgHandler::keyPressed(key);
+    int32_t keyValue = 0;
+    int32_t scanCode = 0;
+    int32_t virtualKey = 0;
+    int32_t modifier = 0;
 
-#else
+    CMDData cmdData;
+    cmdData.SetData(clientMsgData);
+    cmdData.GetKeyValue(keyValue);
+    cmdData.GetScanCode(scanCode);
+    cmdData.GetVirtualKey(virtualKey);
+    cmdData.GetModifier(modifier);
 
-    uchar c = clientMsgData[1];
-    SMsgHandler::keyReleased(c);
+    SMsgHandler::keyReleased(keyValue);
 
-#endif // 0
 }
 
-/**
-  *移动鼠标到点x, y
-  * 1 xh, 2 xl, 3 yh, 4yl
-  */
+/*
+ *@brief move to x, y
+ */
 void SMsgReader::cmdMouseMoveTo()
 {
-    int x = clientMsgData[1];
-    x = x << 8;
-    x += clientMsgData[2];
-    int y = clientMsgData[3];
-    y = y << 8;
-    y += clientMsgData[4];
-    //qDebug()<<"mouse move to:"<<x<<" "<<y;
-    SMsgHandler::mouseMoveTo(x, y);
+    qDebug() << __func__;
+
+    int32_t xPos = 0;
+    int32_t yPos = 0;
+
+    CMDData cmdData;
+    cmdData.SetData(clientMsgData);
+    cmdData.GetX(xPos);
+    cmdData.GetY(yPos);
+    
+    SMsgHandler::mouseMoveTo(xPos, yPos);
 }
 
 void SMsgReader::cmdMouseLeftDown()
 {
-    qDebug()<<"left down";
-    int x = clientMsgData[1];
-    x = x << 8;
-    x += clientMsgData[2];
-    int y = clientMsgData[3];
-    y = y << 8;
-    y += clientMsgData[4];
-    SMsgHandler::mouseLeftDown(x, y);
+    qDebug() << __func__;
+
+    int32_t xPos = 0;
+    int32_t yPos = 0;
+
+    CMDData cmdData;
+    cmdData.SetData(clientMsgData);
+    cmdData.GetX(xPos);
+    cmdData.GetY(yPos);
+
+    SMsgHandler::mouseLeftDown(xPos, yPos);
 }
 void SMsgReader::cmdMouseLeftUp()
 {
-    qDebug()<<"left up";
-    int x = clientMsgData[1];
-    x = x << 8;
-    x += clientMsgData[2];
-    int y = clientMsgData[3];
-    y = y << 8;
-    y += clientMsgData[4];
-    SMsgHandler::mouseLeftUp(x, y);
+    qDebug() << __func__;
+
+    int32_t xPos = 0;
+    int32_t yPos = 0;
+
+    CMDData cmdData;
+    cmdData.SetData(clientMsgData);
+    cmdData.GetX(xPos);
+    cmdData.GetY(yPos);
+
+    SMsgHandler::mouseLeftUp(xPos, yPos);
 }
 
 void SMsgReader::cmdMouseRightDown()
 {
-    qDebug()<<"right down";
-    int x = clientMsgData[1];
-    x = x << 8;
-    x += clientMsgData[2];
-    int y = clientMsgData[3];
-    y = y << 8;
-    y += clientMsgData[4];
-    SMsgHandler::mouseRightDown(x, y);
+    qDebug() << __func__;
+
+    int32_t xPos = 0;
+    int32_t yPos = 0;
+
+    CMDData cmdData;
+    cmdData.SetData(clientMsgData);
+    cmdData.GetX(xPos);
+    cmdData.GetY(yPos);
+
+    SMsgHandler::mouseRightDown(xPos, yPos);
 }
 
 void SMsgReader::cmdMouseRightUp()
 {
-    qDebug()<<"right up";
-    int x = clientMsgData[1];
-    x = x << 8;
-    x += clientMsgData[2];
-    int y = clientMsgData[3];
-    y = y << 8;
-    y += clientMsgData[4];
-    SMsgHandler::mouseRightUp(x, y);
+    qDebug() << __func__;
+
+    int32_t xPos = 0;
+    int32_t yPos = 0;
+
+    CMDData cmdData;
+    cmdData.SetData(clientMsgData);
+    cmdData.GetX(xPos);
+    cmdData.GetY(yPos);
+
+    SMsgHandler::mouseRightUp(xPos, yPos);
 }
 
 void SMsgReader::cmdMouseDoubleClick()
 {
-    qDebug()<<"double click";
-    int x = clientMsgData[1];
-    x = x << 8;
-    x += clientMsgData[2];
-    int y = clientMsgData[3];
-    y = y << 8;
-    y += clientMsgData[4];
-    SMsgHandler::mouseLeftDown(x, y);
-    SMsgHandler::mouseLeftUp(x, y);
-    SMsgHandler::mouseLeftDown(x, y);
-    SMsgHandler::mouseLeftUp(x, y);
+    qDebug() << __func__;
+
+    int32_t xPos = 0;
+    int32_t yPos = 0;
+
+    CMDData cmdData;
+    cmdData.SetData(clientMsgData);
+    cmdData.GetX(xPos);
+    cmdData.GetY(yPos);
+
+    SMsgHandler::mouseLeftDown(xPos, yPos);
+    SMsgHandler::mouseLeftUp(xPos, yPos);
+    SMsgHandler::mouseLeftDown(xPos, yPos);
+    SMsgHandler::mouseLeftUp(xPos, yPos);
 }
 
 void SMsgReader::cmdMouseWheel()
 {
-#if 0
+    qDebug() << __func__;
 
-    int delta = clientMsgData[1];
-    delta = delta << 8;
-    delta += clientMsgData[2];
-    int x = clientMsgData[3];
-    x = x << 8;
-    x += clientMsgData[4];
-    int y = clientMsgData[5];
-    y = y << 8;
-    y += clientMsgData[6];
+    int32_t xPos = 0;
+    int32_t yPos = 0;
+    int32_t delta = 0;
 
-#else
+    CMDData cmdData;
+    cmdData.SetData(clientMsgData);
+    cmdData.GetX(xPos);
+    cmdData.GetY(yPos);
+    cmdData.GetDelta(delta);
 
-    int x = clientMsgData[1];
-    x = x << 8;
-    x += clientMsgData[2];
-    int y = clientMsgData[3];
-    y = y << 8;
-    y += clientMsgData[4];
-
-    int delta = clientMsgData[5];
-    delta = delta << 8;
-    delta += clientMsgData[6];
-
-#endif // 0
-
-    SMsgHandler::mouseWheel(delta, x, y);
+    SMsgHandler::mouseWheel(delta, xPos, yPos);
 }
 
 void SMsgReader::cmdScreenSize()
 {
+    qDebug() << __func__;
+
     unsigned short usW = 0;
     unsigned short usH = 0;
     m_ServerParmas.GetScreenWidth(usW);
     m_ServerParmas.GetScreenHeight(usH);
 
-    uchar uc[8];
-    uc[0] = CMD_GET_SCREEN_SIZE_RES;
-    uc[1] = usW / 0x100;
-    uc[2] = usW % 0x100;
-    uc[3] = usH / 0x100;
-    uc[4] = usH % 0x100;
-    BlockWriteSocketData(m_pCmdSocket, uc, 8);
+    char c[msgProtocolLength];
+    CMDData cmdData;
+    cmdData.SetCMD(CMDTYPE::CMD_SEND_SERVER_SCREEN_SIZE);
+    cmdData.SetX(usW);
+    cmdData.SetY(usH);
+
+    CmdGetScreenSizeRes cssr;
+    cssr.SetData(cmdData);
+    cssr.GetData(c);
+
+    BlockWriteSocketData(m_pCmdSocket, c, 8);
 }

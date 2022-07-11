@@ -1,9 +1,8 @@
 #pragma once
 
-#include <QTcpSocket>
+class QTcpSocket;
 
-void BlockWriteSocketData(QTcpSocket* socket, uchar* buf, int len);
-void BlockReadSocketData(QTcpSocket* socket, uchar* buf, int len);
+void BlockWriteSocketData(QTcpSocket* socket, char* buf, int len);
+void BlockReadSocketData(QTcpSocket* socket, char* buf, int len);
 
-int getMin(int, int);
 

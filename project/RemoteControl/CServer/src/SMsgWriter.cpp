@@ -85,15 +85,18 @@ void SMsgWriter::sendServerParams()
     m_serverParmas.GetScreenWidth(usW);
     m_serverParmas.GetScreenHeight(usH);
 
-    unsigned char uc[8] = { 0 };
+    char c[msgProtocolLength] = { 0 };
 
     CMDData cmdData;
     cmdData.SetCMD(CMDTYPE::CMD_SEND_SERVER_SCREEN_SIZE);
     cmdData.SetX(usW);
     cmdData.SetY(usH);
-    cmdData.GetData(uc);
 
-    BlockWriteSocketData(m_msgSocket, uc, 8);
+    CmdSendServerScreenSize csss;
+    csss.SetData(cmdData);
+    csss.GetData(c);
+
+    BlockWriteSocketData(m_msgSocket, c, 8);
 }
 
 void SMsgWriter::sendMsgToClient()
