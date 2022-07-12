@@ -3,6 +3,7 @@
 #include "RWSocket.h"
 #include "Command.h"
 #include <stdlib.h>
+#include <QTcpSocket>
 
 
 SMsgWriter::SMsgWriter(QTcpSocket* socket, ServerParmas sp, QObject *parent) :
@@ -13,12 +14,6 @@ SMsgWriter::SMsgWriter(QTcpSocket* socket, ServerParmas sp, QObject *parent) :
 
 SMsgWriter::~SMsgWriter()
 {
-    if (sent_img_buf != 0)
-        delete[] sent_img_buf;
-    if (curt_img_buf != 0)
-        delete[] curt_img_buf;
-    if (send_data_buf != 0)
-        delete[] send_data_buf;
     qDebug() << __func__;
 }
 
@@ -36,11 +31,7 @@ void SMsgWriter::Init()
 
 void SMsgWriter::InitData()
 {
-    sent_img_buf = 0;
-    curt_img_buf = 0;
-    send_data_buf = 0;
-    cmd_buf_fill = 0;
-    memset(cmd_buf, 0, 4);
+    memset(m_msgData, 0, msgProtocolLength);
     connect(m_msgSocket, SIGNAL(readyRead()), this, SLOT(readMsgFromClient()));
 }
 
@@ -85,7 +76,7 @@ void SMsgWriter::sendServerParams()
     m_serverParmas.GetScreenWidth(usW);
     m_serverParmas.GetScreenHeight(usH);
 
-    char c[msgProtocolLength] = { 0 };
+    memset(m_msgData, 0, msgProtocolLength);
 
     CMDData cmdData;
     cmdData.SetCMD(CMDTYPE::CMD_SEND_SERVER_SCREEN_SIZE);
@@ -94,9 +85,9 @@ void SMsgWriter::sendServerParams()
 
     CmdSendServerScreenSize csss;
     csss.SetData(cmdData);
-    csss.GetData(c);
+    csss.GetData(m_msgData);
 
-    BlockWriteSocketData(m_msgSocket, c, msgProtocolLength);
+    BlockWriteSocketData(m_msgSocket, m_msgData, msgProtocolLength);
 }
 
 void SMsgWriter::sendMsgToClient()

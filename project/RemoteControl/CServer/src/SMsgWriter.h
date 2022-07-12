@@ -9,14 +9,16 @@
 */
 
 #include <QThread>
-#include <QTcpSocket>
 #include <QTimer>
 #include <QColor>
 #include <QImage>
 #include <QPixmap>
 
 #include "Common.h"
+#include "Command.h"
 #include "ServerParams.h"
+
+class QTcpSocket;
 
 class SMsgWriter : public RCThread
 {
@@ -25,18 +27,7 @@ class SMsgWriter : public RCThread
 private:
 
     ServerParmas m_serverParmas;
-
-    int dest_width;           //客户端指定的宽度
-    int dest_height;          //客户端指定的高度
-    int send_width;           //发送图像的宽度
-    int send_height;          //发送图像的高度
-    int scaleby;              //缩放是依据目的图像的高度还是宽度
-
-    uchar* sent_img_buf;   //buffer of the image that have been sent
-    uchar* curt_img_buf;   //buffer of the current image
-    uchar* send_data_buf;
-    uchar cmd_buf[4];
-    int   cmd_buf_fill;
+    char m_msgData[msgProtocolLength];
     
     //! send server msg to client, like server parmas.
     QTcpSocket* m_msgSocket;
