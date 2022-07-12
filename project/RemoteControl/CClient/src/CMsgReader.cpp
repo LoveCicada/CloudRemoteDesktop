@@ -23,7 +23,7 @@ void CMsgReader::InitData()
     socketConnected = false;
     frame_buf_fill = 0;
     cmdReadLength = 0;
-    cmdLength = 8;
+    cmdLength = msgProtocolLength;
     image = 0;
 
     frame_size_setted = false;
@@ -128,17 +128,17 @@ void CMsgReader::processMsg()
 
 void CMsgReader::readServerParamsMsg(CMDData& cmdData)
 {
-    unsigned short usW = 0;
-    unsigned short usH = 0;
-    cmdData.GetW(usW);
-    cmdData.GetH(usH);
+    int32_t iW = 0;
+    int32_t iH = 0;
+    cmdData.GetW(iW);
+    cmdData.GetH(iH);
 
-    m_serverParmas.SetScreenWidth(usW);
-    m_serverParmas.SetScreenHeight(usH);
+    m_serverParmas.SetScreenWidth(iW);
+    m_serverParmas.SetScreenHeight(iH);
 
     emit readServerParams(m_serverParmas);
 
-    qDebug() << __func__ <<usW;
-    qDebug() << __func__ << usH;
+    qDebug() << __func__ << iW;
+    qDebug() << __func__ << iH;
 }
 

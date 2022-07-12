@@ -35,7 +35,7 @@ private:
 
     int    frame_buf_fill;
     int    frame_bytes;
-    unsigned char  cmd_buf[8];
+    char  cmd_buf[msgProtocolLength];
     qint64 cmdReadLength;
     qint64 cmdLength;
 

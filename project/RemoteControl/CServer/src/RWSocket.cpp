@@ -1,6 +1,9 @@
+
+
+#include <QTcpSocket>
 #include "RWSocket.h"
 
-void BlockWriteSocketData(QTcpSocket* socket, uchar* buf, int len)
+void BlockWriteSocketData(QTcpSocket* socket, char* buf, int len)
 {
     int fill = 0;
     int w;
@@ -14,9 +17,10 @@ void BlockWriteSocketData(QTcpSocket* socket, uchar* buf, int len)
         if(fill == len)
             break;
     }
+    socket->flush();
 }
 
-void BlockReadSocketData(QTcpSocket* socket, uchar* buf, int len)
+void BlockReadSocketData(QTcpSocket* socket, char* buf, int len)
 {
     int fill = 0;
     int r;
@@ -32,10 +36,3 @@ void BlockReadSocketData(QTcpSocket* socket, uchar* buf, int len)
     }
 }
 
-int getMin(int x, int y)
-{
-    if(x<=y)
-        return x;
-    else
-        return y;
-}

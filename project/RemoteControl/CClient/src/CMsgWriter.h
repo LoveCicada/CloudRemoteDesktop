@@ -30,7 +30,7 @@ private:
     int         m_port;
     bool socketConnected;
 
-    uchar cmd_buf[8];
+    char cmd_buf[msgProtocolLength];
     CMDData m_cmdData;
 
     int   cmd_buf_fill;
@@ -57,8 +57,8 @@ public slots:
     void cmdScreenSize();
     void cmdMouseDoubleClick(int x, int y);
 
-    void cmdKeyPress(int key);
-    void cmdKeyRelease(uchar key);
+    void cmdKeyPress(int32_t key);
+    void cmdKeyRelease(int32_t key);
 
 
     void run();

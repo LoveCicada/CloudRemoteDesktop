@@ -1,7 +1,8 @@
 
 #pragma once
 
-#include <string.h>
+#include <iostream>
+
 
 /*
 @brief client/server operation cmd define
@@ -23,6 +24,19 @@ typedef enum CMDTYPE
 	CMD_SEND_SERVER_SCREEN_SIZE = 13,
 }CMDTYPE;
 
+/*
+@brief system type
+*/
+typedef enum SYSTYPE
+{
+	UNKNOWN = 0,
+	WINDOWS	= 1,
+	LINUX	= 2,
+	MAC		= 3,
+}SYSTYPE;
+
+constexpr int msgProtocolLength = 20;
+
 const int BLOCK_WIDTH = 50;
 const int BLOCK_HEIGHT = 50;
 const int DIFF_PIX = 5;
@@ -36,140 +50,169 @@ const static int MAP_SERVER_IMG_PORT = 5648;
 
 const static int CMD_SERVER_PORT = 5649;
 
+//**********************************
 
 /*
-@brief client/server command data define
+@brief	control msg define introduce
+		1. msg length is 20 byte.
+		2. mouse msg and keyboard msg
+		2.1 mouse msg
+			c[0]: msg type, include mouse move or press, and keyboard press
+			c[1]: controller(client) system type, eg: Windows/Linux/Mac
+			c[2]: controlled(server) system type, eg: Windows/Linux/Mac
+			c[3]: extend data, default is 0.
+		
+			//! c[4]-c[7], use 4 byte(int32_t) storage mouse position of x
+			c[4]:
+			c[5]:
+			c[6]:
+			c[7]:
+
+			//! c[8]-c[11], use 4 byte(int32_t) storage mouse position of y
+			c[8]:
+			c[9]:
+			c[10]:
+			c[11]:
+
+			//! c[12]-c[15], use 4 byte(int32_t) storage mouse wheel step
+			c[12]:
+			c[13]:
+			c[14]:
+			c[15]:
+
+			//! c[12]-c[15], extend data, default is 0.
+			c[16]:
+			c[17]:
+			c[18]:
+			c[19]:
+
+		2.2 keyboard msg
+			c[0]: msg type, include mouse move or press, and keyboard press
+			c[1]: controller(client) system type, eg: Windows/Linux/Mac
+			c[2]: controlled(server) system type, eg: Windows/Linux/Mac
+			c[3]: extend data, Qt::keyboardModifiers.
+		
+			//! c[4]-c[7], use 4 byte(int32_t) storage keyboard key value
+			c[4]:
+			c[5]:
+			c[6]:
+			c[7]:
+
+			//! c[8]-c[11], use 4 byte(int32_t) storage nativeScanCode
+			c[8]:
+			c[9]:
+			c[10]:
+			c[11]:
+
+			//! c[12]-c[15], use 4 byte(int32_t) storage nativeVirtualKey
+			c[12]:
+			c[13]:
+			c[14]:
+			c[15]:
+
+			//! c[16]-c[19], use 4 byte(int32_t) storage nativemodifiers
+			c[16]:
+			c[17]:
+			c[18]:
+			c[19]:
+*/
+//**********************************
+
+
+/*
+@brief client/server msg protocol data define
 */
 class CMDData
 {
 public:
-	
-	//! command, like mousemove, mouse left button press
-	unsigned char uCMD;
+	//! whole data
+	char c[20];
 
 	/*
-	@brief uXHB = p[1];	uXHB = p[2];
-		   uLHB = p[3];	uLHB = p[4];
-		   x <==> w
-		   y <==> h
-
-		   x point hight bit, like int x = 1680,
-		   uXHB = (x & 0XFF00) >> 8 = 0x06 = 6
-
-		   x point low bit, like int x = 1680
-		   uXLB = (x & 0X00FF) = 0x90 = 144
+	@brief common header data
 	*/
-
-	unsigned char uXHB;
-	unsigned char uXLB;
-	unsigned char uYHB;
-	unsigned char uYLB;
+	//! use 1byte, command, like mousemove, mouse left button press
+	CMDTYPE cmdType;
+	//! use 1byte, client sys type
+	SYSTYPE cSysType;
+	//! use 1byte, server sys type
+	SYSTYPE sSysType;
+	//! use 1byte, extend data
+	char cExtend;
 
 	/*
-	@brief	uDeltaHB = p[5];	uDeltaLB = p[6];
+	@brief mouse msg data
 	*/
-	unsigned char uDeltaHB;
-	unsigned char uDeltaLB;
+	//! use 4byte, pt.x
+	int32_t  xPos;
+	//! use 4byte, pt.y
+	int32_t  yPos;
+	//! use 4byte, mouse wheel, delta
+	int32_t delta;
 
-	unsigned char uCmd[8];
-	unsigned short ux;
-	unsigned short uy;
-	unsigned short udelta;
+	/*
+	@brief keyboard msg data
+	*/
+	//! use 4byte, key value
+	int32_t kbValue;
+	//! use 4byte, native scan code
+	int32_t nativeScanCode;
+	//! use 4byte, native virtual key
+	int32_t nativeVirtualKey;
+	//! use 4byte, native modifiers
+	int32_t nativeModifiers;
+	//! 
 
 public:
 	CMDData();
 
 	void Reset();
 
-	CMDData(unsigned char* p);
+	void SetData(CMDData cmdData);
 
-	void SetData(unsigned char* p);
+	void GetData(CMDData& cmdData);
 
-	void GetData(unsigned char* p);
+	void SetData(char* p);
+
+	void GetData(char* p);
 
 	void GetCMD(CMDTYPE& type);
 
-	void SetCMD(unsigned char cmd);
+	void SetCMD(CMDTYPE cmd);
 
-	void GetUSX(unsigned short& us);
+	void GetX(int32_t& x);
 
-	void GetUSY(unsigned short& us);
+	void GetY(int32_t& y);
 
-	void GetX(int& x);
+	void SetX(int32_t x);
 
-	void GetY(int& y);
+	void SetY(int32_t y);
 
-	void SetX(int x);
+	void GetW(int32_t& w);
 
-	void SetY(int y);
+	void GetH(int32_t& h);
 
-	void GetW(int& w);
+	void GetDelta(int32_t& deltaValue);
 
-	void GetH(int& h);
+	void SetDelta(int32_t deltaValue);
 
-	void GetW(unsigned short& w);
+	void GetKeyValue(int32_t& keyValue);
 
-	void GetH(unsigned short& h);
+	void SetKeyValue(int32_t keyValue);
 
-	void GetDelta(int& delta);
+	void GetScanCode(int32_t& scanCode);
 
-	void SetDelta(int delta);
+	void SetScanCode(int32_t scanCode);
 
-	void GetDelta(unsigned short& delta);
+	void GetVirtualKey(int32_t& virtualKey);
 
-	void SetDelta(unsigned short delta);
+	void SetVirtualKey(int32_t virtualKey);
+
+	void GetModifier(int32_t& modifier);
+
+	void SetModifier(int32_t modifier);
+
 };
- 
-typedef enum MODIFIER
-{
-	NoModifier,
-	ShiftModifier,
-	ControlModifier,
-	AltModifier,
-	MetaModifier,
-	KeypadModifier,
-	GroupSwitchModifier,
-
-}MODIFIER;
-
-
-/*
-@brief	client/server command data define
-		include keyboard value 
-*/
-
-class CMDKbData
-{
-public:
-
-	CMDKbData();
-	~CMDKbData();
-
-	void Init();
-	
-
-private:
-	//! data
-	 
-	//! [0] msg type
-	unsigned char m_msgType;
-	//! [1] control system, windows Linux Mac
-	unsigned char m_sndSystem;
-	//! [2] controlled system
-	unsigned char m_rcvSystem;
-	//! [3]Qt::KeyboardModifiers
-	unsigned char m_kbModifiers;
-
-	//! [4] key value
-	__int32 m_key;
-	//! [5] nativeScanCode
-	unsigned __int32 m_nativeScanCode;
-	//! [6] nativeVirtualKey
-	unsigned __int32 m_nativeVirtualKey;
-	//! [7] nativeModifiers
-	unsigned __int32 m_nativeModifiers;
-};
-
 
 /*
 @brief Wrap process cmd msg data storage and analyze.
@@ -179,27 +222,25 @@ class CmdHanldeBase
 {
 public:
 	CmdHanldeBase();
-	CmdHanldeBase(unsigned char* p);
+	CmdHanldeBase(char* p);
 	CmdHanldeBase(const CMDData& data);
 	virtual ~CmdHanldeBase();
 
 public:
 	void SetData(const CMDData& data);
 	void GetData(CMDData& data);
-	void GetData(unsigned char* p);
+	void GetData(char* p);
 
 public:
 	//!
-	void SetCMD(unsigned char cmd);
+	void SetCMD(CMDTYPE cmd);
 	void GetCMD(CMDTYPE& type);
-	void GetUSX(unsigned short& usX);
-	void GetUSY(unsigned short& usY);
-	void GetX(int& x);
-	void GetY(int &y);
-	void SetX(int x);
-	void SetY(int y);
-	void GetW(int& w);
-	void GetH(int& h);
+	void GetX(int32_t& x);
+	void GetY(int32_t&y);
+	void SetX(int32_t x);
+	void SetY(int32_t y);
+	void GetW(int32_t& w);
+	void GetH(int32_t& h);
 
 public:
 	CMDData m_cmdData;
@@ -214,7 +255,7 @@ class CmdMouseMove : public CmdHanldeBase
 {
 public:
 	CmdMouseMove();
-	CmdMouseMove(unsigned char* p);
+	CmdMouseMove(char* p);
 	CmdMouseMove(const CMDData& data);
 	~CmdMouseMove();
 
@@ -233,7 +274,7 @@ class CmdMouseLeftDown : public CmdHanldeBase
 {
 public:
 	CmdMouseLeftDown();
-	CmdMouseLeftDown(unsigned char* p);
+	CmdMouseLeftDown(char* p);
 	CmdMouseLeftDown(const CMDData& data);
 	~CmdMouseLeftDown();
 
@@ -252,7 +293,7 @@ class CmdMouseLeftUp : public CmdHanldeBase
 {
 public:
 	CmdMouseLeftUp();
-	CmdMouseLeftUp(unsigned char* p);
+	CmdMouseLeftUp(char* p);
 	CmdMouseLeftUp(const CMDData& data);
 	~CmdMouseLeftUp();
 
@@ -271,7 +312,7 @@ class CmdMouseRightDown : public CmdHanldeBase
 {
 public:
 	CmdMouseRightDown();
-	CmdMouseRightDown(unsigned char* p);
+	CmdMouseRightDown(char* p);
 	CmdMouseRightDown(const CMDData& data);
 	~CmdMouseRightDown();
 
@@ -290,7 +331,7 @@ class CmdMouseRightUp : public CmdHanldeBase
 {
 public:
 	CmdMouseRightUp();
-	CmdMouseRightUp(unsigned char* p);
+	CmdMouseRightUp(char* p);
 	CmdMouseRightUp(const CMDData& data);
 	~CmdMouseRightUp();
 
@@ -309,20 +350,15 @@ class CmdMouseWheel : public CmdHanldeBase
 {
 public:
 	CmdMouseWheel();
-	CmdMouseWheel(unsigned char* p);
+	CmdMouseWheel(char* p);
 	CmdMouseWheel(const CMDData& data);
 	~CmdMouseWheel();
 
 public:
 	//! extend
-	void SetDelta(const int& delta);
-	void SetDelta(const unsigned short& usDelta);
-	void GetDelta(int& delta);
-	void GetDelta(unsigned short& usDelta);
 
 private:
-	//! mouse wheel step
-	unsigned short m_usDelta;
+	//! 
 };
 
 
@@ -334,7 +370,7 @@ class CmdMouseDbClick : public CmdHanldeBase
 {
 public:
 	CmdMouseDbClick();
-	CmdMouseDbClick(unsigned char* p);
+	CmdMouseDbClick(char* p);
 	CmdMouseDbClick(const CMDData& data);
 	~CmdMouseDbClick();
 
@@ -353,7 +389,7 @@ class CmdKeyPress : public CmdHanldeBase
 {
 public:
 	CmdKeyPress();
-	CmdKeyPress(unsigned char* p);
+	CmdKeyPress(char* p);
 	CmdKeyPress(const CMDData& data);
 	~CmdKeyPress();
 
@@ -372,7 +408,7 @@ class CmdKeyRelease : public CmdHanldeBase
 {
 public:
 	CmdKeyRelease();
-	CmdKeyRelease(unsigned char* p);
+	CmdKeyRelease(char* p);
 	CmdKeyRelease(const CMDData& data);
 	~CmdKeyRelease();
 
@@ -391,7 +427,7 @@ class CmdGetScreenSize : public CmdHanldeBase
 {
 public:
 	CmdGetScreenSize();
-	CmdGetScreenSize(unsigned char* p);
+	CmdGetScreenSize(char* p);
 	CmdGetScreenSize(const CMDData& data);
 	~CmdGetScreenSize();
 
@@ -410,7 +446,7 @@ class CmdGetScreenSizeRes : public CmdHanldeBase
 {
 public:
 	CmdGetScreenSizeRes();
-	CmdGetScreenSizeRes(unsigned char* p);
+	CmdGetScreenSizeRes(char* p);
 	CmdGetScreenSizeRes(const CMDData& data);
 	~CmdGetScreenSizeRes();
 
@@ -429,7 +465,7 @@ class CmdSendServerScreenSize : public CmdHanldeBase
 {
 public:
 	CmdSendServerScreenSize();
-	CmdSendServerScreenSize(unsigned char* p);
+	CmdSendServerScreenSize(char* p);
 	CmdSendServerScreenSize(const CMDData& data);
 	~CmdSendServerScreenSize();
 

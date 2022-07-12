@@ -8,9 +8,11 @@
 */
 
 #include <QThread>
-#include <QTcpSocket>
 #include "Common.h"
+#include "Command.h"
 #include "ServerParams.h"
+
+class QTcpSocket;
 
 class SMsgReader : public RCThread
 {
@@ -21,7 +23,7 @@ private:
 
     qint64  cmdMsgOffset;
     qint64  clientMsgLength;
-    uchar   clientMsgData[8];             //client command msg use 8 byte
+    char   clientMsgData[msgProtocolLength];             //client command msg use 20 byte
     ServerParmas m_ServerParmas;
 public:
     explicit SMsgReader(QTcpSocket* socket, ServerParmas sp, QObject *parent = 0);

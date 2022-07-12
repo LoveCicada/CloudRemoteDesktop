@@ -30,11 +30,11 @@ void CMsgWriter::readDataFromServer()
 {
     while(true)
     {
-        int r = m_msgSocket->read((char*)(cmd_buf + cmd_buf_fill), 8 - cmd_buf_fill);
+        int r = m_msgSocket->read((char*)(cmd_buf + cmd_buf_fill), msgProtocolLength - cmd_buf_fill);
         if(r <= 0)
             return;
         cmd_buf_fill += r;
-        if(cmd_buf_fill == 8)
+        if(cmd_buf_fill == msgProtocolLength)
         {
             m_cmdData.SetData(cmd_buf);
             readServerMsg();
@@ -82,170 +82,158 @@ void CMsgWriter::connectSucceed()
 
 void CMsgWriter::cmdMouseMoveTo(int x, int y)
 {
-    //qDebug()<<"mouse move to";
     if(socketConnected == false)
         return;
-    uchar uc[8] = {0};
+    char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMD_MOUSE_MOVE_TO);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
-    tmpCMDData.GetData(uc);
+    
+    CmdMouseMove cmdMouseMove;
+    cmdMouseMove.SetData(tmpCMDData);
+    cmdMouseMove.GetData(c);
 
-    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
 
 void CMsgWriter::cmdMouseDoubleClick(int x, int y)
 {
-    uchar uc[8] = {0};
+    char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMD_MOUSE_DOUBLE_CLICK);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
-    tmpCMDData.GetData(uc);
+   
+    CmdMouseDbClick cmdc;
+    cmdc.SetData(tmpCMDData);
 
-    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
 
 void CMsgWriter::cmdMouseLeftDown(int x, int y)
 {
-    uchar uc[8] = {0};
+    char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMD_MOUSE_LEFT_DOWN);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
-    tmpCMDData.GetData(uc);
+    
 
-    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
+    CmdMouseLeftDown cmld;
+    cmld.SetData(tmpCMDData);
+    cmld.GetData(c);
+
+    BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
 
 void CMsgWriter::cmdMouseLeftUp(int x, int y)
 {
-    uchar uc[8] = {0};
+    char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMD_MOUSE_LEFT_UP);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
-    tmpCMDData.GetData(uc);
 
-    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
+    CmdMouseLeftDown cmld;
+    cmld.SetData(tmpCMDData);
+    cmld.GetData(c);
+
+    BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
 
 void CMsgWriter::cmdMouseRightDown(int x, int y)
 {
-    uchar uc[8] = {0};
+    char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMD_MOUSE_RIGHT_DOWN);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
-    tmpCMDData.GetData(uc);
 
-    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
+    CmdMouseRightDown cmdrd;
+    cmdrd.SetData(tmpCMDData);
+    cmdrd.GetData(c);
+
+    BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
 
 void CMsgWriter::cmdMouseRightUp(int x, int y)
 {
-    uchar uc[8] = {0};
+    char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMD_MOUSE_RIGHT_UP);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
-    tmpCMDData.GetData(uc);
+    
+    CmdMouseRightUp cmru;
+    cmru.SetData(tmpCMDData);
+    cmru.GetData(c);
 
-    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
 
 void CMsgWriter::cmdMouseWheel(int delta, int x, int y)
 {
-    uchar uc[8] = {0};
+    char c[msgProtocolLength] = {0};
 
-    CmdMouseWheel cmdMouseWheel;
-    cmdMouseWheel.SetX(x);
-    cmdMouseWheel.SetY(y);
-    cmdMouseWheel.SetDelta(delta);
-    cmdMouseWheel.GetData(uc);
+    CMDData tmpCMDData;
+    tmpCMDData.SetCMD(CMD_MOUSE_WHEEL);
+    tmpCMDData.SetX(x);
+    tmpCMDData.SetY(y);
+    tmpCMDData.SetDelta(delta);
+    
+    CmdMouseWheel cmw;
+    cmw.SetData(tmpCMDData);
+    cmw.GetData(c);
 
-    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
 
 void CMsgWriter::cmdScreenSize()
 {
-    uchar uc[8] = {0};
+    char c[msgProtocolLength] = {0};
+
+    CMDData cmdData;
+    cmdData.SetCMD(CMDTYPE::CMD_GET_SCREEN_SIZE);
+    CmdGetScreenSize css;
+    css.SetData(cmdData);
+    css.GetData(c);
+
+    BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
+}
+
+void CMsgWriter::cmdKeyPress(int32_t key)
+{
+    char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
-    tmpCMDData.SetCMD(CMD_GET_SCREEN_SIZE);
-    tmpCMDData.GetData(uc);
+    tmpCMDData.SetCMD(CMD_KEY_PRESS);
+    tmpCMDData.SetKeyValue(key);
 
-    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
+    CmdKeyPress ckp;
+    ckp.SetData(tmpCMDData);
+    ckp.GetData(c);
+
+    BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
 
-void CMsgWriter::cmdKeyPress(int key)
+void CMsgWriter::cmdKeyRelease(int32_t key)
 {
-    uchar uc[8] = {0};
-#if 1
+    char c[msgProtocolLength] = {0};
 
-    /*
-    @brief use 4 byte storage key value
-        uc[1], uc[2], uc[3], uc[4]
-        eg: Key_Escape = 0x01000000,
-        01      00      00      00
-        uc[1]   uc[2]   uc[3]   uc[4]
-    */
+    CMDData tmpCMDData;
+    tmpCMDData.SetCMD(CMD_KEY_RELEASE);
+    tmpCMDData.SetKeyValue(key);
 
-    /*uc[0] = CMD_KEY_PRESS;
-    uc[1] = (key & 0xFF000000) >> 24;
-    uc[2] = (key & 0x00FF0000) >> 16;
-    uc[3] = (key & 0x0000FF00) >> 8;
-    uc[4] = (key & 0x000000FF);*/
+    CmdKeyRelease ckr;
+    ckr.SetData(tmpCMDData);
+    ckr.GetData(c);
 
-    uc[0] = CMD_KEY_PRESS;
-    uc[1] = key;
-
-#else
-
-    ClientCMDData tmpClientCMDData;
-    tmpClientCMDData.SetCMD(CMD_KEY_PRESS);
-    tmpClientCMDData.GetData(uc);
-
-#endif // 0
-    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
-}
-
-void CMsgWriter::cmdKeyRelease(uchar key)
-{
-    uchar uc[8] = {0};
-#if 1
-
-    /*
-    @brief use 4 byte storage key value
-        uc[1], uc[2], uc[3], uc[4]
-        eg: Key_Escape = 0x01000000,
-        01      00      00      00
-        uc[1]   uc[2]   uc[3]   uc[4]
-    */
-
-    /*uc[0] = CMD_KEY_RELEASE;
-    uc[1] = (key & 0xFF000000) >> 24;
-    uc[2] = (key & 0x00FF0000) >> 16;
-    uc[3] = (key & 0x0000FF00) >> 8;
-    uc[4] = (key & 0x000000FF);*/
-
-    uc[0] = CMD_KEY_RELEASE;
-    uc[1] = key;
-
-#else
-
-    ClientCMDData tmpClientCMDData;
-    tmpClientCMDData.SetCMD(CMD_KEY_RELEASE);
-    tmpClientCMDData.GetData(uc);
-
-#endif // 0
-
-    BlockWriteSocketData(m_msgSocket.get(), uc, 8);
+    BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }

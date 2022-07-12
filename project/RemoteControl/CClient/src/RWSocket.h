@@ -1,9 +1,8 @@
-#ifndef ALGO_H
-#define ALGO_H
+#pragma once
 
-#include <QTcpSocket>
+class QTcpSocket;
 
-void BlockWriteSocketData(QTcpSocket* socket, uchar* buf, int len);
-void BlockReadSocketData(QTcpSocket* socket, uchar* buf, int len);
+void BlockWriteSocketData(QTcpSocket* socket, char* buf, int len);
+void BlockReadSocketData(QTcpSocket* socket, char* buf, int len);
 
-#endif // ALGO_H
+

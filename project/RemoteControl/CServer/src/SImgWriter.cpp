@@ -170,8 +170,8 @@ void SImgWriter::sendFrame()
     {
         for(int wi = 0; wi*BLOCK_WIDTH < width; wi ++)
         {
-            block_width = getMin(BLOCK_WIDTH, width - wi*BLOCK_WIDTH);
-            block_height = getMin(BLOCK_HEIGHT, height - hi * BLOCK_HEIGHT);
+            block_width = std::min(BLOCK_WIDTH, width - wi*BLOCK_WIDTH);
+            block_height = std::min(BLOCK_HEIGHT, height - hi * BLOCK_HEIGHT);
             //block_width = (BLOCK_WIDTH <= (width - wi*BLOCK_WIDTH)) ? BLOCK_WIDTH : (width - wi*BLOCK_WIDTH);
             //block_height = (BLOCK_HEIGHT <= (height - hi * BLOCK_HEIGHT)) ? BLOCK_HEIGHT : (height - hi * BLOCK_HEIGHT);
             int diff = 0;
@@ -220,7 +220,7 @@ void SImgWriter::sendFrame()
     send_data_buf[fill+7] = 0;
     fill += 8;
 
-    BlockWriteSocketData(m_imgSocket, send_data_buf, fill);
+    BlockWriteSocketData(m_imgSocket, (char*)(send_data_buf), fill);
     qDebug()<<"fill:"<<fill;
 
     uchar* tp;
@@ -253,7 +253,7 @@ void SImgWriter::sendServerParams()
     uc[2] = usW % 0x100;
     uc[3] = usH / 0x100;
     uc[4] = usH % 0x100;
-    BlockWriteSocketData(m_imgSocket, uc, 8);
+    BlockWriteSocketData(m_imgSocket, (char*)uc, 8);
 }
 
 bool SImgWriter::checkConnect()

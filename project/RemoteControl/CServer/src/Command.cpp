@@ -1,5 +1,5 @@
 #include "Command.h"
-
+#include "RCBuffer.h"
 
 CMDData::CMDData()
 {
@@ -8,180 +8,190 @@ CMDData::CMDData()
 
 void CMDData::Reset()
 {
-	uCMD = CMD_UNKNOWN;
-	uXHB = 0;
-	uXLB = 0;
-	uYHB = 0;
-	uYLB = 0;
-	uDeltaHB = 0;
-	uDeltaLB = 0;
-	memset(uCmd, 0, 8);
-	ux = 0;
-	uy = 0;
-	udelta = 0;
+	memset(c, 0, msgProtocolLength);
+	cmdType	 = CMD_UNKNOWN;
+	cSysType = sSysType = SYSTYPE::UNKNOWN;
+	cExtend	 = 0;
+
+	xPos	 = 0;
+	yPos	 = 0;
+	delta	 = 0;
+	kbValue  = 0;
+
+	nativeScanCode	 = 0;
+	nativeVirtualKey = 0;
+	nativeModifiers  = 0;
 }
 
-CMDData::CMDData(unsigned char* p)
+void CMDData::SetData(CMDData cmdData)
 {
-	SetData(p);
+	RCBuffer stream(c, msgProtocolLength);
+
+	//! common header
+	cmdType = cmdData.cmdType;
+	stream.write_1bytes(static_cast<int8_t>(cmdData.cmdType));
+
+	cSysType = cmdData.cSysType;
+	stream.write_1bytes(static_cast<int8_t>(cmdData.cSysType));
+
+	sSysType = cmdData.sSysType;
+	stream.write_1bytes(static_cast<int8_t>(cmdData.sSysType));
+
+	cExtend = cmdData.cExtend;
+	stream.write_1bytes(static_cast<int8_t>(cmdData.cExtend));
+
+	//!
+	kbValue = xPos = cmdData.kbValue;
+	stream.write_4bytes(cmdData.kbValue);
+
+	//!
+	nativeScanCode = yPos = cmdData.nativeScanCode;
+	stream.write_4bytes(cmdData.nativeScanCode);
+
+	//!
+	nativeVirtualKey = delta = cmdData.nativeVirtualKey;
+	stream.write_4bytes(cmdData.nativeVirtualKey);
+
+	//!  
+	nativeModifiers = cmdData.nativeModifiers;
+	stream.write_4bytes(cmdData.nativeModifiers);
 }
 
-void CMDData::SetData(unsigned char* p)
+void CMDData::GetData(CMDData& cmdData)
 {
-	uCMD = p[0];
-	uXHB = p[1];
-	uXLB = p[2];
-	uYHB = p[3];
-	uYLB = p[4];
-
-	uDeltaHB = p[5];
-	uDeltaLB = p[6];
-
-	uCmd[0] = p[0];
-	uCmd[1] = p[1];
-	uCmd[2] = p[2];
-	uCmd[3] = p[3];
-	uCmd[4] = p[4];
-	uCmd[5] = p[5];
-	uCmd[6] = p[6];
-	uCmd[7] = p[7];
-
-	GetUSX(ux);
-	GetUSY(uy);
-	GetDelta(udelta);
+	memcpy(cmdData.c, c, msgProtocolLength);
+	cmdData.cmdType		= cmdType;
+	cmdData.cSysType	= cSysType;
+	cmdData.sSysType	= sSysType;
+	cmdData.cExtend		= cExtend;
+	cmdData.xPos		= cmdData.kbValue			= xPos;
+	cmdData.yPos		= cmdData.nativeScanCode	= yPos;
+	cmdData.delta		= cmdData.nativeVirtualKey	= delta;
+	cmdData.nativeModifiers = nativeModifiers;
 }
 
-void CMDData::GetData(unsigned char* p)
+void CMDData::SetData(char* p)
 {
-	p[0] = uCmd[0];
-	p[1] = uCmd[1];
-	p[2] = uCmd[2];
-	p[3] = uCmd[3];
-	p[4] = uCmd[4];
-	p[5] = uCmd[5];
-	p[6] = uCmd[6];
-	p[7] = uCmd[7];
+	static_cast<void*>(p);
+	memcpy(c, p, msgProtocolLength);
+
+	RCBuffer stream(c, msgProtocolLength);
+
+	//! common header
+	cmdType = static_cast<CMDTYPE>(stream.read_1bytes());
+
+	cSysType = static_cast<SYSTYPE>(stream.read_1bytes());
+
+	sSysType = static_cast<SYSTYPE>(stream.read_1bytes());
+
+	cExtend = static_cast<char>(stream.read_1bytes());
+
+	//! mouse msg or keyboard msg
+	kbValue = xPos = stream.read_4bytes();
+
+	//!
+	nativeScanCode = yPos = stream.read_4bytes();
+
+	//!
+	nativeVirtualKey = delta = stream.read_4bytes();
+
+	//!  
+	nativeModifiers = stream.read_4bytes();
+}
+
+void CMDData::GetData(char* p)
+{
+	memcpy(p, c, msgProtocolLength);
 }
 
 void CMDData::GetCMD(CMDTYPE& type)
 {
-	type = static_cast<CMDTYPE>(uCMD);
+	type = static_cast<CMDTYPE>(cmdType);
 }
 
-void CMDData::SetCMD(unsigned char cmd)
+void CMDData::SetCMD(CMDTYPE cmd)
 {
-	uCMD = cmd;
-	uCmd[0] = cmd;
+	cmdType = cmd;
 }
 
-void CMDData::GetUSX(unsigned short& us)
+void CMDData::GetX(int32_t& x)
 {
-	us = uXHB << 8 | uXLB;
+	x = xPos;
 }
 
-void CMDData::GetUSY(unsigned short& us)
+void CMDData::GetY(int32_t& y)
 {
-	us = uYHB << 8 | uYLB;
+	y = yPos;
 }
 
-void CMDData::GetX(int& x)
+void CMDData::SetX(int32_t x)
 {
-	unsigned short us = 0;
-	GetUSX(us);
-	x = (int)us;
+	xPos = x;
 }
 
-void CMDData::GetY(int& y)
+void CMDData::SetY(int32_t y)
 {
-	unsigned short us = 0;
-	GetUSY(us);
-	y = (int)us;
+	yPos = y;
 }
 
-void CMDData::SetX(int x)
+void CMDData::GetW(int32_t& w)
 {
-	//! 1680 = 0x0690
-	unsigned short us = (unsigned short)x;
-	uXHB = (us & 0xFF00) >> 8;
-	uXLB = (us & 0x00FF);
-
-	ux = uXHB << 8 | uXLB;
-
-	uCmd[1] = uXHB;
-	uCmd[2] = uXLB;
+	w = xPos;
 }
 
-void CMDData::SetY(int y)
+void CMDData::GetH(int32_t& h)
 {
-	unsigned short us = (unsigned short)y;
-	uYHB = (us & 0xFF00) >> 8;
-	uYLB = (us & 0x00FF);
-
-	uy = uYHB << 8 | uYLB;
-
-	uCmd[3] = uYHB;
-	uCmd[4] = uYLB;
+	h = yPos;
 }
 
-void CMDData::GetW(int& w)
+void CMDData::GetDelta(int32_t& deltaValue)
 {
-	unsigned short us = 0;
-	GetW(us);
-	w = (int)us;
+	deltaValue = this->delta;
 }
 
-void CMDData::GetH(int& h)
+void CMDData::SetDelta(int32_t deltaValue)
 {
-	unsigned short us = 0;
-	GetH(us);
-	h = (int)us;
+	this->delta = deltaValue;
 }
 
-void CMDData::GetW(unsigned short& w)
+void CMDData::GetKeyValue(int32_t& keyValue)
 {
-	unsigned short us = 0;
-	GetUSX(us);
-	w = us;
+	keyValue = kbValue;
 }
 
-void CMDData::GetH(unsigned short& h)
+void CMDData::SetKeyValue(int32_t keyValue)
 {
-	unsigned short us = 0;
-	GetUSY(us);
-	h = us;
+	kbValue = keyValue;
 }
 
-void CMDData::GetDelta(int& delta)
+void CMDData::GetScanCode(int32_t& scanCode)
 {
-	unsigned short us = (unsigned short)delta;
-	GetDelta(us);
-	delta = (int)us;
+	scanCode = nativeScanCode;
 }
 
-void CMDData::SetDelta(int delta)
+void CMDData::SetScanCode(int32_t scanCode)
 {
-	unsigned short us = (unsigned short)delta;
-	SetDelta(us);
+	nativeScanCode = scanCode;
 }
 
-void CMDData::GetDelta(unsigned short& delta)
+void CMDData::GetVirtualKey(int32_t& virtualKey)
 {
-	udelta = uDeltaHB << 8 | uDeltaLB;
-	delta = udelta;
+	virtualKey = nativeVirtualKey;
 }
 
-void CMDData::SetDelta(unsigned short delta)
+void CMDData::SetVirtualKey(int32_t virtualKey)
 {
-	udelta = delta;
+	nativeVirtualKey = virtualKey;
+}
 
-	unsigned short us = delta;
-	uDeltaHB = (us & 0xFF00) >> 8;
-	uDeltaLB = (us & 0x00FF);
+void CMDData::GetModifier(int32_t& modifier)
+{
+	modifier = nativeModifiers;
+}
 
-	udelta = uDeltaHB << 8 | uDeltaLB;
-
-	uCmd[5] = uDeltaHB;
-	uCmd[6] = uDeltaLB;
+void CMDData::SetModifier(int32_t modifier)
+{
+	nativeModifiers = modifier;
 }
 
 
@@ -191,7 +201,7 @@ CmdHanldeBase::CmdHanldeBase()
 
 }
 
-CmdHanldeBase::CmdHanldeBase(unsigned char* p)
+CmdHanldeBase::CmdHanldeBase(char* p)
 {
 	m_cmdData.SetData(p);
 }
@@ -199,6 +209,7 @@ CmdHanldeBase::CmdHanldeBase(unsigned char* p)
 CmdHanldeBase::CmdHanldeBase(const CMDData& data)
 {
 	m_cmdData = data;
+	m_cmdData.SetData(data);
 }
 
 CmdHanldeBase::~CmdHanldeBase()
@@ -207,20 +218,21 @@ CmdHanldeBase::~CmdHanldeBase()
 
 void CmdHanldeBase::SetData(const CMDData& data)
 {
-	m_cmdData = data;
+	m_cmdData.SetData(data);
 }
 
 void CmdHanldeBase::GetData(CMDData& data)
 {
 	data = m_cmdData;
+	m_cmdData.GetData(data);
 }
 
-void CmdHanldeBase::GetData(unsigned char* p)
+void CmdHanldeBase::GetData(char* p)
 {
 	m_cmdData.GetData(p);
 }
 
-void CmdHanldeBase::SetCMD(unsigned char cmd)
+void CmdHanldeBase::SetCMD(CMDTYPE cmd)
 {
 	m_cmdData.SetCMD(cmd);
 }
@@ -230,42 +242,32 @@ void CmdHanldeBase::GetCMD(CMDTYPE& type)
 	m_cmdData.GetCMD(type);
 }
 
-void CmdHanldeBase::GetUSX(unsigned short& usX)
-{
-	m_cmdData.GetUSX(usX);
-}
-
-void CmdHanldeBase::GetUSY(unsigned short& usY)
-{
-	m_cmdData.GetUSY(usY);
-}
-
-void CmdHanldeBase::GetX(int& x)
+void CmdHanldeBase::GetX(int32_t& x)
 {
 	m_cmdData.GetX(x);
 }
 
-void CmdHanldeBase::GetY(int& y)
+void CmdHanldeBase::GetY(int32_t& y)
 {
 	m_cmdData.GetY(y);
 }
 
-void CmdHanldeBase::SetX(int x)
+void CmdHanldeBase::SetX(int32_t x)
 {
 	m_cmdData.SetX(x);
 }
 
-void CmdHanldeBase::SetY(int y)
+void CmdHanldeBase::SetY(int32_t y)
 {
 	m_cmdData.SetY(y);
 }
 
-void CmdHanldeBase::GetW(int& w)
+void CmdHanldeBase::GetW(int32_t& w)
 {
 	m_cmdData.GetW(w);
 }
 
-void CmdHanldeBase::GetH(int& h)
+void CmdHanldeBase::GetH(int32_t& h)
 {
 	m_cmdData.GetH(h);
 }
@@ -277,7 +279,7 @@ CmdMouseMove::CmdMouseMove()
 	SetCMD(CMDTYPE::CMD_MOUSE_MOVE_TO);
 }
 
-CmdMouseMove::CmdMouseMove(unsigned char* p) : CmdHanldeBase(p)
+CmdMouseMove::CmdMouseMove(char* p) : CmdHanldeBase(p)
 {
 	SetCMD(CMDTYPE::CMD_MOUSE_MOVE_TO);
 }
@@ -299,7 +301,7 @@ CmdMouseLeftDown::CmdMouseLeftDown()
 	SetCMD(CMDTYPE::CMD_MOUSE_LEFT_DOWN);
 }
 
-CmdMouseLeftDown::CmdMouseLeftDown(unsigned char* p) : CmdHanldeBase(p)
+CmdMouseLeftDown::CmdMouseLeftDown(char* p) : CmdHanldeBase(p)
 {
 	SetCMD(CMDTYPE::CMD_MOUSE_LEFT_DOWN);
 }
@@ -321,7 +323,7 @@ CmdMouseLeftUp::CmdMouseLeftUp()
 	SetCMD(CMDTYPE::CMD_MOUSE_LEFT_UP);
 }
 
-CmdMouseLeftUp::CmdMouseLeftUp(unsigned char* p) : CmdHanldeBase(p)
+CmdMouseLeftUp::CmdMouseLeftUp(char* p) : CmdHanldeBase(p)
 {
 	SetCMD(CMDTYPE::CMD_MOUSE_LEFT_UP);
 }
@@ -342,7 +344,7 @@ CmdMouseRightDown::CmdMouseRightDown()
 	SetCMD(CMDTYPE::CMD_MOUSE_RIGHT_DOWN);
 }
 
-CmdMouseRightDown::CmdMouseRightDown(unsigned char* p) : CmdHanldeBase(p)
+CmdMouseRightDown::CmdMouseRightDown(char* p) : CmdHanldeBase(p)
 {
 	SetCMD(CMDTYPE::CMD_MOUSE_RIGHT_DOWN);
 }
@@ -363,7 +365,7 @@ CmdMouseRightUp::CmdMouseRightUp()
 	SetCMD(CMDTYPE::CMD_MOUSE_RIGHT_UP);
 }
 
-CmdMouseRightUp::CmdMouseRightUp(unsigned char* p) : CmdHanldeBase(p)
+CmdMouseRightUp::CmdMouseRightUp(char* p) : CmdHanldeBase(p)
 {
 	SetCMD(CMDTYPE::CMD_MOUSE_RIGHT_UP);
 }
@@ -382,48 +384,20 @@ CmdMouseRightUp::~CmdMouseRightUp()
 CmdMouseWheel::CmdMouseWheel()
 {
 	SetCMD(CMDTYPE::CMD_MOUSE_WHEEL);
-	m_usDelta = 0;
 }
 
-CmdMouseWheel::CmdMouseWheel(unsigned char* p) : CmdHanldeBase(p)
+CmdMouseWheel::CmdMouseWheel(char* p) : CmdHanldeBase(p)
 {
 	SetCMD(CMDTYPE::CMD_MOUSE_WHEEL);
-	GetDelta(m_usDelta);
 }
 
 CmdMouseWheel::CmdMouseWheel(const CMDData& data) : CmdHanldeBase(data)
 {
-	GetDelta(m_usDelta);
 }
 
 CmdMouseWheel::~CmdMouseWheel()
 {
 
-}
-
-void CmdMouseWheel::SetDelta(const int& delta)
-{
-	unsigned short usDelta = (unsigned short)(delta);
-	SetDelta(usDelta);
-}
-
-void CmdMouseWheel::SetDelta(const unsigned short& usDelta)
-{
-	m_cmdData.SetDelta(usDelta);
-	m_cmdData.GetDelta(m_usDelta);
-}
-
-void CmdMouseWheel::GetDelta(int& delta)
-{
-	unsigned short usDelta = (unsigned short)(delta);
-	GetDelta(usDelta);
-	delta = usDelta;
-}
-
-void CmdMouseWheel::GetDelta(unsigned short& usDelta)
-{
-	m_cmdData.GetDelta(m_usDelta);
-	usDelta = m_usDelta;
 }
 
 //***************************
@@ -432,7 +406,7 @@ CmdMouseDbClick::CmdMouseDbClick()
 	SetCMD(CMDTYPE::CMD_MOUSE_DOUBLE_CLICK);
 }
 
-CmdMouseDbClick::CmdMouseDbClick(unsigned char* p) : CmdHanldeBase(p)
+CmdMouseDbClick::CmdMouseDbClick(char* p) : CmdHanldeBase(p)
 {
 	SetCMD(CMDTYPE::CMD_MOUSE_DOUBLE_CLICK);
 }
@@ -453,7 +427,7 @@ CmdKeyPress::CmdKeyPress()
 	SetCMD(CMDTYPE::CMD_KEY_PRESS);
 }
 
-CmdKeyPress::CmdKeyPress(unsigned char* p) : CmdHanldeBase(p)
+CmdKeyPress::CmdKeyPress(char* p) : CmdHanldeBase(p)
 {
 	SetCMD(CMDTYPE::CMD_KEY_PRESS);
 }
@@ -474,7 +448,7 @@ CmdKeyRelease::CmdKeyRelease()
 	SetCMD(CMDTYPE::CMD_KEY_RELEASE);
 }
 
-CmdKeyRelease::CmdKeyRelease(unsigned char* p) : CmdHanldeBase(p)
+CmdKeyRelease::CmdKeyRelease(char* p) : CmdHanldeBase(p)
 {
 	SetCMD(CMDTYPE::CMD_KEY_RELEASE);
 }
@@ -495,7 +469,7 @@ CmdGetScreenSize::CmdGetScreenSize()
 	SetCMD(CMDTYPE::CMD_GET_SCREEN_SIZE);
 }
 
-CmdGetScreenSize::CmdGetScreenSize(unsigned char* p) : CmdHanldeBase(p)
+CmdGetScreenSize::CmdGetScreenSize(char* p) : CmdHanldeBase(p)
 {
 	SetCMD(CMDTYPE::CMD_GET_SCREEN_SIZE);
 }
@@ -516,7 +490,7 @@ CmdGetScreenSizeRes::CmdGetScreenSizeRes()
 	SetCMD(CMDTYPE::CMD_GET_SCREEN_SIZE_RES);
 }
 
-CmdGetScreenSizeRes::CmdGetScreenSizeRes(unsigned char* p) : CmdHanldeBase(p)
+CmdGetScreenSizeRes::CmdGetScreenSizeRes(char* p) : CmdHanldeBase(p)
 {
 	SetCMD(CMDTYPE::CMD_GET_SCREEN_SIZE_RES);
 }
@@ -538,7 +512,7 @@ CmdSendServerScreenSize::CmdSendServerScreenSize()
 	SetCMD(CMDTYPE::CMD_SEND_SERVER_SCREEN_SIZE);
 }
 
-CmdSendServerScreenSize::CmdSendServerScreenSize(unsigned char* p) : CmdHanldeBase(p)
+CmdSendServerScreenSize::CmdSendServerScreenSize(char* p) : CmdHanldeBase(p)
 {
 	SetCMD(CMDTYPE::CMD_SEND_SERVER_SCREEN_SIZE);
 }
