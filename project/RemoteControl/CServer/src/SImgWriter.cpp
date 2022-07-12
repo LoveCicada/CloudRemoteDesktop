@@ -221,7 +221,9 @@ void SImgWriter::sendFrame()
     fill += 8;
 
     BlockWriteSocketData(m_imgSocket, (char*)(send_data_buf), fill);
-    qDebug()<<"fill:"<<fill;
+#if 0
+    qDebug() << "fill:" << fill;
+#endif // 0
 
     uchar* tp;
     tp = sent_img_buf;

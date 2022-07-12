@@ -175,6 +175,8 @@ HDR截屏
 
 [keybd_event 在F按键系列不起作用的解决办法](http://t.zoukankan.com/pecool-p-12009643.html)
 
+[Qt事件系统之三：键盘事件](https://www.cnblogs.com/linuxAndMcu/p/11023299.html)
+
 ***
 
 ### VNC vs RDP

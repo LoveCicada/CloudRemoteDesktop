@@ -117,7 +117,8 @@ QPoint SMsgHandler::getCursorPos()
 
 QPixmap SMsgHandler::grapScreen()
 {
-    return QPixmap::grabWindow(QApplication::desktop()->winId());
+    QScreen* pScreen = QGuiApplication::primaryScreen();
+    return pScreen->grabWindow(QApplication::desktop()->winId());
 }
 
 void SMsgHandler::setCursorPos(int x, int y)
@@ -125,8 +126,13 @@ void SMsgHandler::setCursorPos(int x, int y)
     QCursor::setPos(x, y);
 }
 
-void SMsgHandler::keyPressed(int key)
+void SMsgHandler::keyPressed(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier)
 {
+    qDebug() << "key: " << key
+        << "nativeScanCode: " << scanCode
+        << " nativeVirtualKey: " << virtualKey
+        << " modifiers: " << modifier;
+
     short sVkCode = VkKeyScan(key);
 
     //! virtual key code must between 1 and 254, [1, 254]
@@ -138,8 +144,13 @@ void SMsgHandler::keyPressed(int key)
     keybd_event(sVkCode, bScan, KEYEVENTF_EXTENDEDKEY, 0);
 }
 
-void SMsgHandler::keyReleased(int key)
+void SMsgHandler::keyReleased(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier)
 {
+    qDebug() << "key: " << key
+        << "nativeScanCode: " << scanCode
+        << " nativeVirtualKey: " << virtualKey
+        << " modifiers: " << modifier;
+
     short sVkCode = VkKeyScan(key);
 
     //! virtual key code must between 1 and 254, [1, 254]
