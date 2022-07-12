@@ -57,8 +57,8 @@ public slots:
     void cmdScreenSize();
     void cmdMouseDoubleClick(int x, int y);
 
-    void cmdKeyPress(int32_t key);
-    void cmdKeyRelease(int32_t key);
+    void cmdKeyPress(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier);
+    void cmdKeyRelease(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier);
 
 
     void run();

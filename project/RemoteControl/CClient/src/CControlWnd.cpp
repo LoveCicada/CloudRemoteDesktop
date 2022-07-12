@@ -176,7 +176,10 @@ void CControlWnd::wheelEvent(QWheelEvent *e)
 
 void CControlWnd::paintEvent(QPaintEvent *e)
 {
+#if 0
     qDebug() << "*** paintEvent ***";
+#endif // 0
+    
     if(image != 0)
     {
         QPainter p(this);
@@ -254,18 +257,24 @@ void CControlWnd::keyPressEvent(QKeyEvent *e)
     if(!control)
         return;
 
+    int keyVal = e->key();
     quint32 quNativeScanCode = e->nativeScanCode();
     quint32 quNativeVirtualKey = e->nativeVirtualKey();
     quint32 quNativeModifiers = e->nativeModifiers();
+    Qt::KeyboardModifiers kModifier = e->modifiers();
+    QString str = e->text();
 
-    qDebug() << "nativeScanCode: " << quNativeScanCode
+    qDebug() <<"key: " << str
+        << "key: " << keyVal
+        << "nativeScanCode: " << quNativeScanCode
         << " nativeVirtualKey: " << quNativeVirtualKey
-        << " nativeModifiers: " << quNativeModifiers;
+        << " nativeModifiers: " << quNativeModifiers
+        << " modifiers: " << static_cast<int32_t>(kModifier);
 
     int k = translateKey(e->key());
     if(k == 0)
         return;
-    m_pCMsgWriter->cmdKeyPress(k);
+    m_pCMsgWriter->cmdKeyPress(k, quNativeScanCode, quNativeVirtualKey, kModifier);
     e->ignore();
 }
 
@@ -274,10 +283,24 @@ void CControlWnd::keyReleaseEvent(QKeyEvent *e)
     if(!control)
         return;
 
+    int keyVal = e->key();
+    quint32 quNativeScanCode = e->nativeScanCode();
+    quint32 quNativeVirtualKey = e->nativeVirtualKey();
+    quint32 quNativeModifiers = e->nativeModifiers();
+    Qt::KeyboardModifiers kModifier = e->modifiers();
+    QString str = e->text();
+
+    qDebug() << "key: " << str
+        << "key: " << keyVal
+        << "nativeScanCode: " << quNativeScanCode
+        << " nativeVirtualKey: " << quNativeVirtualKey
+        << " nativeModifiers: " << quNativeModifiers
+        << " modifiers: " << static_cast<int32_t>(kModifier);
+
     int k = translateKey(e->key());
     if(k == 0)
         return;
-    m_pCMsgWriter->cmdKeyRelease(k);
+    m_pCMsgWriter->cmdKeyRelease(k, quNativeScanCode, quNativeVirtualKey, kModifier);
     e->ignore();
 }
 
