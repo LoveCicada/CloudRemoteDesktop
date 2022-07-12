@@ -368,7 +368,7 @@ int32_t modifier = 0x20;
 rcBuffer.write_4bytes(modifier);
 rcBuffer.skip(4);
 
-//! server send data to client...
+//! client send data to client...
 
 ```
 
