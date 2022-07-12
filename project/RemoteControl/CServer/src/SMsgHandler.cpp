@@ -141,7 +141,17 @@ void SMsgHandler::keyPressed(int32_t key, int32_t scanCode, int32_t virtualKey, 
     }
 
     BYTE bScan = MapVirtualKey(sVkCode, 0);
+    static_cast<void>(bScan);
+
+#if 0
+
     keybd_event(sVkCode, bScan, KEYEVENTF_EXTENDEDKEY, 0);
+
+#else //! maybe we directly use Qt nativeVirtualKey and nativeScanCode
+
+    keybd_event(virtualKey, scanCode, KEYEVENTF_EXTENDEDKEY, 0);
+
+#endif
 }
 
 void SMsgHandler::keyReleased(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier)
@@ -159,5 +169,15 @@ void SMsgHandler::keyReleased(int32_t key, int32_t scanCode, int32_t virtualKey,
     }
 
     BYTE bScan = MapVirtualKey(sVkCode, 0);
+    static_cast<void>(bScan);
+
+#if 0
+
     keybd_event(sVkCode, bScan, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+
+#else //! maybe we directly use Qt nativeVirtualKey and nativeScanCode
+
+    keybd_event(virtualKey, scanCode, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+
+#endif // 0
 }
