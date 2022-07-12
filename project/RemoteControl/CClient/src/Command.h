@@ -7,7 +7,7 @@
 /*
 @brief client/server operation cmd define
 */
-typedef enum CMDTYPE
+enum class CMDTYPE
 {
 	CMD_UNKNOWN				= 0,
 	CMD_MOUSE_MOVE_TO		= 1,
@@ -22,18 +22,18 @@ typedef enum CMDTYPE
 	CMD_GET_SCREEN_SIZE		= 11,
 	CMD_GET_SCREEN_SIZE_RES = 12,
 	CMD_SEND_SERVER_SCREEN_SIZE = 13,
-}CMDTYPE;
+};
 
 /*
 @brief system type
 */
-typedef enum SYSTYPE
+enum class SYSTYPE
 {
 	UNKNOWN = 0,
 	WINDOWS	= 1,
 	LINUX	= 2,
 	MAC		= 3,
-}SYSTYPE;
+};
 
 constexpr int msgProtocolLength = 20;
 

@@ -87,7 +87,7 @@ void CMsgWriter::cmdMouseMoveTo(int x, int y)
     char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
-    tmpCMDData.SetCMD(CMD_MOUSE_MOVE_TO);
+    tmpCMDData.SetCMD(CMDTYPE::CMD_MOUSE_MOVE_TO);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
     
@@ -103,7 +103,7 @@ void CMsgWriter::cmdMouseDoubleClick(int x, int y)
     char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
-    tmpCMDData.SetCMD(CMD_MOUSE_DOUBLE_CLICK);
+    tmpCMDData.SetCMD(CMDTYPE::CMD_MOUSE_DOUBLE_CLICK);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
    
@@ -118,7 +118,7 @@ void CMsgWriter::cmdMouseLeftDown(int x, int y)
     char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
-    tmpCMDData.SetCMD(CMD_MOUSE_LEFT_DOWN);
+    tmpCMDData.SetCMD(CMDTYPE::CMD_MOUSE_LEFT_DOWN);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
     
@@ -135,7 +135,7 @@ void CMsgWriter::cmdMouseLeftUp(int x, int y)
     char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
-    tmpCMDData.SetCMD(CMD_MOUSE_LEFT_UP);
+    tmpCMDData.SetCMD(CMDTYPE::CMD_MOUSE_LEFT_UP);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
 
@@ -151,7 +151,7 @@ void CMsgWriter::cmdMouseRightDown(int x, int y)
     char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
-    tmpCMDData.SetCMD(CMD_MOUSE_RIGHT_DOWN);
+    tmpCMDData.SetCMD(CMDTYPE::CMD_MOUSE_RIGHT_DOWN);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
 
@@ -167,7 +167,7 @@ void CMsgWriter::cmdMouseRightUp(int x, int y)
     char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
-    tmpCMDData.SetCMD(CMD_MOUSE_RIGHT_UP);
+    tmpCMDData.SetCMD(CMDTYPE::CMD_MOUSE_RIGHT_UP);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
     
@@ -183,7 +183,7 @@ void CMsgWriter::cmdMouseWheel(int delta, int x, int y)
     char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
-    tmpCMDData.SetCMD(CMD_MOUSE_WHEEL);
+    tmpCMDData.SetCMD(CMDTYPE::CMD_MOUSE_WHEEL);
     tmpCMDData.SetX(x);
     tmpCMDData.SetY(y);
     tmpCMDData.SetDelta(delta);
@@ -213,7 +213,7 @@ void CMsgWriter::cmdKeyPress(int32_t key)
     char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
-    tmpCMDData.SetCMD(CMD_KEY_PRESS);
+    tmpCMDData.SetCMD(CMDTYPE::CMD_KEY_PRESS);
     tmpCMDData.SetKeyValue(key);
 
     CmdKeyPress ckp;
@@ -228,7 +228,7 @@ void CMsgWriter::cmdKeyRelease(int32_t key)
     char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
-    tmpCMDData.SetCMD(CMD_KEY_RELEASE);
+    tmpCMDData.SetCMD(CMDTYPE::CMD_KEY_RELEASE);
     tmpCMDData.SetKeyValue(key);
 
     CmdKeyRelease ckr;

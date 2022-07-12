@@ -92,32 +92,33 @@ void CMsgReader::processMsg()
 
     switch (cmdType)
     {
-    case CMD_UNKNOWN:
+    case CMDTYPE::CMD_UNKNOWN:
         break;
-    case CMD_MOUSE_MOVE_TO:
+    case CMDTYPE::CMD_MOUSE_MOVE_TO:
         break;
-    case CMD_MOUSE_LEFT_DOWN:
+    case CMDTYPE::CMD_MOUSE_LEFT_DOWN:
         break;
-    case CMD_MOUSE_LEFT_UP:
+    case CMDTYPE::CMD_MOUSE_LEFT_UP:
         break;
-    case CMD_MOUSE_RIGHT_DOWN:
+    case CMDTYPE::CMD_MOUSE_RIGHT_DOWN:
         break;
-    case CMD_MOUSE_RIGHT_UP:
+    case CMDTYPE::CMD_MOUSE_RIGHT_UP:
         break;
-    case CMD_MOUSE_WHEEL:
+    case CMDTYPE::CMD_MOUSE_WHEEL:
         break;
-    case CMD_MOUSE_DOUBLE_CLICK:
+    case CMDTYPE::CMD_MOUSE_DOUBLE_CLICK:
         break;
-    case CMD_KEY_PRESS:
+    case CMDTYPE::CMD_KEY_PRESS:
         break;
-    case CMD_KEY_RELEASE:
+    case CMDTYPE::CMD_KEY_RELEASE:
         break;
-    case CMD_GET_SCREEN_SIZE:
+    case CMDTYPE::CMD_GET_SCREEN_SIZE:
         break;
-    case CMD_GET_SCREEN_SIZE_RES:
+    case CMDTYPE::CMD_GET_SCREEN_SIZE_RES:
         break;
-    case CMD_SEND_SERVER_SCREEN_SIZE:
-        qDebug() << "CMsgReader " << __func__ << cmdType;
+    case CMDTYPE::CMD_SEND_SERVER_SCREEN_SIZE:
+        qDebug() << __FUNCTION__ << "line: " << __LINE__ 
+                << " msgType: " <<  static_cast<int>(cmdType);
         readServerParamsMsg(cmdData);
         break;
     default:
