@@ -24,10 +24,10 @@ void CControlWnd::Init()
 
 void CControlWnd::InitData()
 {
-    server_screen_width = -1;
-    server_screen_height = -1;
+    m_nServerScreenWidth  = -1;
+    m_nServerScreenHeight = -1;
     image = 0;
-    frame_width = -1;
+    frame_width  = -1;
     frame_height = -1;
 
     m_CRenderHelper = make_shared<CRenderHelper>();
@@ -44,7 +44,6 @@ void CControlWnd::InitData()
     m_pCImgReader->start();
 
     m_pCMsgWriter = new CMsgWriter(addr, CMD_SERVER_PORT);
-    connect(m_pCMsgWriter, SIGNAL(setServerScreenSize(int, int)), this, SLOT(gotServerScreenSize(int, int)));
     m_pCMsgWriter->run();
 }
 
@@ -70,7 +69,7 @@ void CControlWnd::mouseMoveEvent(QMouseEvent *e)
     if(!control)
         return;
 
-    if(server_screen_width < 0 || m_pCImgReader->received_frame_width < 0)
+    if(m_nServerScreenWidth < 0 || m_pCImgReader->received_frame_width < 0)
         return;
     int x = e->pos().x();
     int y = e->pos().y();
@@ -78,8 +77,8 @@ void CControlWnd::mouseMoveEvent(QMouseEvent *e)
         return;
     double off_x = (double)x / m_pCImgReader->received_frame_width;
     double off_y = (double)y / m_pCImgReader->received_frame_height;
-    x = (int)(server_screen_width * off_x);
-    y = (int)(server_screen_height * off_y);
+    x = (int)(m_nServerScreenWidth * off_x);
+    y = (int)(m_nServerScreenHeight * off_y);
     m_pCMsgWriter->cmdMouseMoveTo(x, y);
 }
 
@@ -89,7 +88,7 @@ void CControlWnd::mousePressEvent(QMouseEvent *e)
     if(!control)
         return;
 
-    if(server_screen_width < 0 || m_pCImgReader->received_frame_width < 0)
+    if(m_nServerScreenHeight < 0 || m_pCImgReader->received_frame_width < 0)
         return;
     int x = e->pos().x();
     int y = e->pos().y();
@@ -97,8 +96,8 @@ void CControlWnd::mousePressEvent(QMouseEvent *e)
         return;
     double off_x = (double)x / m_pCImgReader->received_frame_width;
     double off_y = (double)y / m_pCImgReader->received_frame_height;
-    x = (int)(server_screen_width * off_x);
-    y = (int)(server_screen_height * off_y);
+    x = (int)(m_nServerScreenWidth * off_x);
+    y = (int)(m_nServerScreenHeight * off_y);
     if(e->button() == Qt::LeftButton)
     {
         m_pCMsgWriter->cmdMouseLeftDown(x, y);
@@ -116,7 +115,7 @@ void CControlWnd::mouseReleaseEvent(QMouseEvent *e)
     if(!control)
         return;
 
-    if(server_screen_width < 0 || m_pCImgReader->received_frame_width < 0)
+    if(m_nServerScreenWidth < 0 || m_pCImgReader->received_frame_width < 0)
         return;
     int x = e->pos().x();
     int y = e->pos().y();
@@ -124,8 +123,8 @@ void CControlWnd::mouseReleaseEvent(QMouseEvent *e)
         return;
     double off_x = (double)x / m_pCImgReader->received_frame_width;
     double off_y = (double)y / m_pCImgReader->received_frame_height;
-    x = (int)(server_screen_width * off_x);
-    y = (int)(server_screen_height * off_y);
+    x = (int)(m_nServerScreenWidth * off_x);
+    y = (int)(m_nServerScreenHeight * off_y);
     if(e->button() == Qt::LeftButton)
     {
         m_pCMsgWriter->cmdMouseLeftUp(x, y);
@@ -142,7 +141,7 @@ void CControlWnd::mouseDoubleClickEvent(QMouseEvent *e)
     if(!control)
         return;
 
-    if(server_screen_width < 0 || m_pCImgReader->received_frame_width < 0)
+    if(m_nServerScreenWidth < 0 || m_pCImgReader->received_frame_width < 0)
         return;
     int x = e->pos().x();
     int y = e->pos().y();
@@ -150,8 +149,8 @@ void CControlWnd::mouseDoubleClickEvent(QMouseEvent *e)
         return;
     double off_x = (double)x / m_pCImgReader->received_frame_width;
     double off_y = (double)y / m_pCImgReader->received_frame_height;
-    x = (int)(server_screen_width * off_x);
-    y = (int)(server_screen_height * off_y);
+    x = (int)(m_nServerScreenWidth * off_x);
+    y = (int)(m_nServerScreenHeight * off_y);
     m_pCMsgWriter->cmdMouseDoubleClick(x, y);
 }
 
@@ -161,7 +160,7 @@ void CControlWnd::wheelEvent(QWheelEvent *e)
     if(!control)
         return;
 
-    if(server_screen_width < 0 || m_pCImgReader->received_frame_width < 0)
+    if(m_nServerScreenWidth < 0 || m_pCImgReader->received_frame_width < 0)
         return;
     int x = e->globalX();
     int y = e->globalY();
@@ -169,8 +168,8 @@ void CControlWnd::wheelEvent(QWheelEvent *e)
         return;
     double off_x = (double)x / m_pCImgReader->received_frame_width;
     double off_y = (double)y / m_pCImgReader->received_frame_height;
-    x = (int)(server_screen_width * off_x);
-    y = (int)(server_screen_height * off_y);
+    x = (int)(m_nServerScreenWidth * off_x);
+    y = (int)(m_nServerScreenHeight * off_y);
     int d = e->delta();
     m_pCMsgWriter->cmdMouseWheel(d, x, y);
 }
@@ -301,7 +300,7 @@ void CControlWnd::receiveServerParams(const ServerParmas& sp)
     m_serverParams.GetScreenWidth(usW);
     m_serverParams.GetScreenHeight(usH);
 
-    gotServerScreenSize(usW, usH);
+    getServerScreenSize(usW, usH);
 
     if (usW != m_rect.width() || usH != m_rect.height())
     {
@@ -323,8 +322,8 @@ void CControlWnd::changeFrameSize(int w, int h)
     frame_height = h;
 }
 
-void CControlWnd::gotServerScreenSize(int w, int h)
+void CControlWnd::getServerScreenSize(int w, int h)
 {
-    server_screen_width  = w;
-    server_screen_height = h;
+    m_nServerScreenWidth = w;
+    m_nServerScreenHeight = h;
 }
