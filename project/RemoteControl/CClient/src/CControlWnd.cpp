@@ -301,6 +301,8 @@ void CControlWnd::receiveServerParams(const ServerParmas& sp)
     m_serverParams.GetScreenWidth(usW);
     m_serverParams.GetScreenHeight(usH);
 
+    gotServerScreenSize(usW, usH);
+
     if (usW != m_rect.width() || usH != m_rect.height())
     {
         QRect rt(0, 0, usW, usH);
