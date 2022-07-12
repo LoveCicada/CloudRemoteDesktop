@@ -1,5 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
 #include <memory>
@@ -25,4 +24,3 @@ private:
     QLabel* m_pLabelInfo;
 };
 
-#endif // MAINWINDOW_H

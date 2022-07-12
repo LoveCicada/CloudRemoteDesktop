@@ -1,5 +1,4 @@
-#ifndef MAPTHREAD_H
-#define MAPTHREAD_H
+#pragma once
 
 /*
 @brief SMsgWriter - class for server send messages on the server side.
@@ -55,4 +54,3 @@ protected:
     
 };
 
-#endif // MAPTHREAD_H

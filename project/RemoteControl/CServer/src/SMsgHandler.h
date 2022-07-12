@@ -1,5 +1,4 @@
-#ifndef INTERFACE_H
-#define INTERFACE_H
+#pragma once
 
 #include "windows.h"
 #include "Winuser.h"
@@ -40,4 +39,3 @@ private:
     static ServerParmas m_ServerParams;
 };
 
-#endif // INTERFACE_H

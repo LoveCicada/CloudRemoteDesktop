@@ -1,5 +1,4 @@
-#ifndef CMDTHREAD_H
-#define CMDTHREAD_H
+#pragma once
 
 /*
 @brief SMsgReader - class for reading client command messages on the server side
@@ -53,4 +52,3 @@ protected:
     
 };
 
-#endif // CMDTHREAD_H

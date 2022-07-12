@@ -1,5 +1,4 @@
-#ifndef CONTROLER_H
-#define CONTROLER_H
+#pragma once
 
 /*
 @brief server process SMsgReader and SMsgWriter
@@ -110,5 +109,3 @@ public slots:
     void readClientMsg();
     void someSocketDisconnected();
 };
-
-#endif // CONTROLER_H
