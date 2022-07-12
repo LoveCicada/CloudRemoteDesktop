@@ -41,16 +41,19 @@ void CMDData::SetData(CMDData cmdData)
 	stream.write_1bytes(static_cast<int8_t>(cmdData.cExtend));
 
 	//!
-	kbValue = xPos = cmdData.kbValue;
-	stream.write_4bytes(cmdData.kbValue);
+	int32_t xValid = cmdData.xPos ? cmdData.xPos : cmdData.kbValue;
+	kbValue = xPos = xValid;
+	stream.write_4bytes(xValid);
 
 	//!
+	int32_t yValid = cmdData.yPos ? cmdData.yPos : cmdData.nativeScanCode;
 	nativeScanCode = yPos = cmdData.nativeScanCode;
-	stream.write_4bytes(cmdData.nativeScanCode);
+	stream.write_4bytes(yValid);
 
 	//!
+	int32_t deltaValid = cmdData.delta ? cmdData.delta : cmdData.nativeVirtualKey;
 	nativeVirtualKey = delta = cmdData.nativeVirtualKey;
-	stream.write_4bytes(cmdData.nativeVirtualKey);
+	stream.write_4bytes(deltaValid);
 
 	//!  
 	nativeModifiers = cmdData.nativeModifiers;
@@ -64,9 +67,17 @@ void CMDData::GetData(CMDData& cmdData)
 	cmdData.cSysType	= cSysType;
 	cmdData.sSysType	= sSysType;
 	cmdData.cExtend		= cExtend;
-	cmdData.xPos		= cmdData.kbValue			= xPos;
-	cmdData.yPos		= cmdData.nativeScanCode	= yPos;
-	cmdData.delta		= cmdData.nativeVirtualKey	= delta;
+
+	//!
+	int32_t xValid	= cmdData.xPos ? cmdData.xPos : cmdData.kbValue;
+	cmdData.xPos	= cmdData.kbValue = xValid;
+
+	int32_t yValid	= cmdData.yPos ? cmdData.yPos : cmdData.nativeScanCode;
+	cmdData.yPos	= cmdData.nativeScanCode = yValid;
+
+	int32_t deltaValid	= cmdData.delta ? cmdData.delta : cmdData.nativeVirtualKey;
+	cmdData.delta		= cmdData.nativeVirtualKey = deltaValid;
+
 	cmdData.nativeModifiers = nativeModifiers;
 }
 

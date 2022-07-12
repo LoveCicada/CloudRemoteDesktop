@@ -96,7 +96,7 @@ void SMsgWriter::sendServerParams()
     csss.SetData(cmdData);
     csss.GetData(c);
 
-    BlockWriteSocketData(m_msgSocket, c, 8);
+    BlockWriteSocketData(m_msgSocket, c, msgProtocolLength);
 }
 
 void SMsgWriter::sendMsgToClient()
