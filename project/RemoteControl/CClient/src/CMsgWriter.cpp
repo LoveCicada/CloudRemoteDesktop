@@ -208,13 +208,16 @@ void CMsgWriter::cmdScreenSize()
     BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
 
-void CMsgWriter::cmdKeyPress(int32_t key)
+void CMsgWriter::cmdKeyPress(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier)
 {
     char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMDTYPE::CMD_KEY_PRESS);
     tmpCMDData.SetKeyValue(key);
+    tmpCMDData.SetScanCode(scanCode);
+    tmpCMDData.SetVirtualKey(virtualKey);
+    tmpCMDData.SetModifier(modifier);
 
     CmdKeyPress ckp;
     ckp.SetData(tmpCMDData);
@@ -223,13 +226,16 @@ void CMsgWriter::cmdKeyPress(int32_t key)
     BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
 
-void CMsgWriter::cmdKeyRelease(int32_t key)
+void CMsgWriter::cmdKeyRelease(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier)
 {
     char c[msgProtocolLength] = {0};
 
     CMDData tmpCMDData;
     tmpCMDData.SetCMD(CMDTYPE::CMD_KEY_RELEASE);
     tmpCMDData.SetKeyValue(key);
+    tmpCMDData.SetScanCode(scanCode);
+    tmpCMDData.SetVirtualKey(virtualKey);
+    tmpCMDData.SetModifier(modifier);
 
     CmdKeyRelease ckr;
     ckr.SetData(tmpCMDData);
