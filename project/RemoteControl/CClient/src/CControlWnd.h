@@ -39,8 +39,8 @@ private:
     CMsgWriter* m_pCMsgWriter;
     int frame_width;
     int frame_height;
-    int server_screen_width;
-    int server_screen_height;
+    int m_nServerScreenWidth;
+    int m_nServerScreenHeight;
 
     //! client params
     ClientParams m_clientParams;
@@ -69,7 +69,7 @@ public slots:
     void receiveServerParams(const ServerParmas& sp);
     void frameChanged(QImage*);
     void changeFrameSize(int, int);
-    void gotServerScreenSize(int, int);
+    void getServerScreenSize(int, int);
 
     void keyPressSlot(QKeyEvent *);
     void keyReleaseSlot(QKeyEvent *);
