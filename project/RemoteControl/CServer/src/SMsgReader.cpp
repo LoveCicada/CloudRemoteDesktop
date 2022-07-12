@@ -114,7 +114,7 @@ void SMsgReader::cmdKeyPressed()
     cmdData.GetVirtualKey(virtualKey);
     cmdData.GetModifier(modifier);
 
-    SMsgHandler::keyPressed(keyValue);
+    SMsgHandler::keyPressed(keyValue, scanCode, virtualKey, modifier);
 }
 
 //buf[1] -> key code
@@ -134,7 +134,7 @@ void SMsgReader::cmdKeyReleased()
     cmdData.GetVirtualKey(virtualKey);
     cmdData.GetModifier(modifier);
 
-    SMsgHandler::keyReleased(keyValue);
+    SMsgHandler::keyReleased(keyValue, scanCode, virtualKey, modifier);
 
 }
 
@@ -143,7 +143,9 @@ void SMsgReader::cmdKeyReleased()
  */
 void SMsgReader::cmdMouseMoveTo()
 {
+#if 0
     qDebug() << __func__;
+#endif // 0
 
     int32_t xPos = 0;
     int32_t yPos = 0;
