@@ -17,7 +17,10 @@ void BlockWriteSocketData(QTcpSocket* socket, char* buf, int len)
         if(fill == len)
             break;
     }
-    socket->flush();
+    bool bOk = socket->flush();
+    if (!bOk) {
+        qDebug() << __func__ << " send data fail";
+    }
 }
 
 void BlockReadSocketData(QTcpSocket* socket, char* buf, int len)
