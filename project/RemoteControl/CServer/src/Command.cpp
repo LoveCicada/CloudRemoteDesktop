@@ -9,7 +9,7 @@ CMDData::CMDData()
 void CMDData::Reset()
 {
 	memset(c, 0, msgProtocolLength);
-	cmdType	 = CMD_UNKNOWN;
+	cmdType	 = CMDTYPE::CMD_UNKNOWN;
 	cSysType = sSysType = SYSTYPE::UNKNOWN;
 	cExtend	 = 0;
 

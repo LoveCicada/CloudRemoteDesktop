@@ -248,7 +248,7 @@ void SImgWriter::sendServerParams()
     m_serverParmas.GetScreenHeight(usH);
 
     unsigned char uc[8] = { 0 };
-    uc[0] = CMDTYPE::CMD_SEND_SERVER_SCREEN_SIZE;
+    uc[0] = static_cast<unsigned char>(CMDTYPE::CMD_SEND_SERVER_SCREEN_SIZE);
     uc[1] = usW / 0x100;
     uc[2] = usW % 0x100;
     uc[3] = usH / 0x100;

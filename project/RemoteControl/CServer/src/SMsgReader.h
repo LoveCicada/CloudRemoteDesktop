@@ -19,11 +19,13 @@ class SMsgReader : public RCThread
 
 private:
     QTcpSocket*  m_pCmdSocket;
-
-    qint64  cmdMsgOffset;
-    qint64  clientMsgLength;
-    char   clientMsgData[msgProtocolLength];             //client command msg use 20 byte
     ServerParmas m_ServerParmas;
+
+    qint64 m_cmdMsgOffset;
+    qint64 m_clientMsgLength;
+    //! msg protocol length is 20 byte
+    char   m_msgData[msgProtocolLength];             
+    
 public:
     explicit SMsgReader(QTcpSocket* socket, ServerParmas sp, QObject *parent = 0);
     ~SMsgReader();

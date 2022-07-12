@@ -8,9 +8,9 @@
 SMsgReader::SMsgReader(QTcpSocket* socket, ServerParmas sp, QObject *parent) :
     m_pCmdSocket(socket), m_ServerParmas(sp), RCThread(parent)
 {
-    cmdMsgOffset = 0;
-    clientMsgLength = msgProtocolLength;
-    memset(clientMsgData, 0, clientMsgLength);
+    m_cmdMsgOffset = 0;
+    m_clientMsgLength = msgProtocolLength;
+    memset(m_msgData, 0, m_clientMsgLength);
     connect(m_pCmdSocket, SIGNAL(readyRead()), this, SLOT(readSocketData()));
 }
 
@@ -37,18 +37,18 @@ void SMsgReader::readSocketData()
 {
     while(true)
     {
-        qint64 r = m_pCmdSocket->read((clientMsgData + cmdMsgOffset), clientMsgLength - cmdMsgOffset);
+        qint64 r = m_pCmdSocket->read((m_msgData + m_cmdMsgOffset), m_clientMsgLength - m_cmdMsgOffset);
         if(r <= 0)
             return;
-        cmdMsgOffset += r;
-        if(cmdMsgOffset == clientMsgLength)
+        m_cmdMsgOffset += r;
+        if(m_cmdMsgOffset == m_clientMsgLength)
         {
             readClientMsg();
-            cmdMsgOffset = 0;
+            m_cmdMsgOffset = 0;
         }
         else
         {
-            qDebug() << "*** readSocketData !=20 ***";
+            qDebug() << __FUNCTION__ << " line: " << __LINE__ << " *** readSocketData !=20 ***";
         }
     }
 
@@ -56,38 +56,43 @@ void SMsgReader::readSocketData()
 
 void SMsgReader::readClientMsg()
 {
-    int cmd = clientMsgData[0];
+    CMDTYPE cmd = static_cast<CMDTYPE>(m_msgData[0]);
     switch(cmd)
     {
-        case CMD_MOUSE_MOVE_TO:
+        case CMDTYPE::CMD_UNKNOWN:
+            qDebug() << __FUNCTION__ << " line: " << __LINE__ << " *** unknown msg ***";
+            break;
+        case CMDTYPE::CMD_MOUSE_MOVE_TO:
             cmdMouseMoveTo();
             break;
-        case CMD_MOUSE_LEFT_DOWN:
+        case CMDTYPE::CMD_MOUSE_LEFT_DOWN:
             cmdMouseLeftDown();
             break;
-        case CMD_MOUSE_LEFT_UP:
+        case CMDTYPE::CMD_MOUSE_LEFT_UP:
             cmdMouseLeftUp();
             break;
-        case CMD_MOUSE_RIGHT_DOWN:
+        case CMDTYPE::CMD_MOUSE_RIGHT_DOWN:
             cmdMouseRightDown();
             break;
-        case CMD_MOUSE_RIGHT_UP:
+        case CMDTYPE::CMD_MOUSE_RIGHT_UP:
             cmdMouseRightUp();
             break;
-        case CMD_MOUSE_WHEEL:
+        case CMDTYPE::CMD_MOUSE_WHEEL:
             cmdMouseWheel();
             break;
-        case CMD_GET_SCREEN_SIZE:
+        case CMDTYPE::CMD_GET_SCREEN_SIZE:
             cmdScreenSize();
             break;
-        case CMD_MOUSE_DOUBLE_CLICK:
+        case CMDTYPE::CMD_MOUSE_DOUBLE_CLICK:
             cmdMouseDoubleClick();
             break;
-        case CMD_KEY_PRESS:
+        case CMDTYPE::CMD_KEY_PRESS:
             cmdKeyPressed();
             break;
-        case CMD_KEY_RELEASE:
+        case CMDTYPE::CMD_KEY_RELEASE:
             cmdKeyReleased();
+            break;
+        default:
             break;
     }
 }
@@ -103,7 +108,7 @@ void SMsgReader::cmdKeyPressed()
     int32_t modifier = 0;
 
     CMDData cmdData;
-    cmdData.SetData(clientMsgData);
+    cmdData.SetData(m_msgData);
     cmdData.GetKeyValue(keyValue);
     cmdData.GetScanCode(scanCode);
     cmdData.GetVirtualKey(virtualKey);
@@ -123,7 +128,7 @@ void SMsgReader::cmdKeyReleased()
     int32_t modifier = 0;
 
     CMDData cmdData;
-    cmdData.SetData(clientMsgData);
+    cmdData.SetData(m_msgData);
     cmdData.GetKeyValue(keyValue);
     cmdData.GetScanCode(scanCode);
     cmdData.GetVirtualKey(virtualKey);
@@ -144,7 +149,7 @@ void SMsgReader::cmdMouseMoveTo()
     int32_t yPos = 0;
 
     CMDData cmdData;
-    cmdData.SetData(clientMsgData);
+    cmdData.SetData(m_msgData);
     cmdData.GetX(xPos);
     cmdData.GetY(yPos);
     
@@ -159,7 +164,7 @@ void SMsgReader::cmdMouseLeftDown()
     int32_t yPos = 0;
 
     CMDData cmdData;
-    cmdData.SetData(clientMsgData);
+    cmdData.SetData(m_msgData);
     cmdData.GetX(xPos);
     cmdData.GetY(yPos);
 
@@ -173,7 +178,7 @@ void SMsgReader::cmdMouseLeftUp()
     int32_t yPos = 0;
 
     CMDData cmdData;
-    cmdData.SetData(clientMsgData);
+    cmdData.SetData(m_msgData);
     cmdData.GetX(xPos);
     cmdData.GetY(yPos);
 
@@ -188,7 +193,7 @@ void SMsgReader::cmdMouseRightDown()
     int32_t yPos = 0;
 
     CMDData cmdData;
-    cmdData.SetData(clientMsgData);
+    cmdData.SetData(m_msgData);
     cmdData.GetX(xPos);
     cmdData.GetY(yPos);
 
@@ -203,7 +208,7 @@ void SMsgReader::cmdMouseRightUp()
     int32_t yPos = 0;
 
     CMDData cmdData;
-    cmdData.SetData(clientMsgData);
+    cmdData.SetData(m_msgData);
     cmdData.GetX(xPos);
     cmdData.GetY(yPos);
 
@@ -218,7 +223,7 @@ void SMsgReader::cmdMouseDoubleClick()
     int32_t yPos = 0;
 
     CMDData cmdData;
-    cmdData.SetData(clientMsgData);
+    cmdData.SetData(m_msgData);
     cmdData.GetX(xPos);
     cmdData.GetY(yPos);
 
@@ -237,7 +242,7 @@ void SMsgReader::cmdMouseWheel()
     int32_t delta = 0;
 
     CMDData cmdData;
-    cmdData.SetData(clientMsgData);
+    cmdData.SetData(m_msgData);
     cmdData.GetX(xPos);
     cmdData.GetY(yPos);
     cmdData.GetDelta(delta);
