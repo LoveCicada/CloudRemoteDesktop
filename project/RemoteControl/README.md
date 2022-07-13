@@ -1,6 +1,17 @@
 
+### 工程目录结构
+```
+.
+├── CClient
+│   └── src
+└── CServer
+    ├── build
+    └── src
+```
+
+
 ### 工程编译
-```sh
+```bash
 
 # CClient
 cd CClient
