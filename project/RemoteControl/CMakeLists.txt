@@ -4,6 +4,5 @@ set(PROJECT_NAME "RemoteControl")
 project(${PROJECT_NAME} VERSION 1.0.0)
 
 
-
-add_subdirectory("./Client")
-add_subdirectory("./Server")
+add_subdirectory("./app")
+add_subdirectory("./utils")
