@@ -44,7 +44,7 @@ void CControlWnd::InitData()
     m_pCImgReader->start();
 
     m_pCMsgWriter = new CMsgWriter(addr, CMD_SERVER_PORT);
-    m_pCMsgWriter->run();
+    m_pCMsgWriter->start();
 }
 
 void CControlWnd::GetClientParams(ClientParams& cp)

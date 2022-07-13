@@ -4,11 +4,11 @@ CMsgWriter::CMsgWriter(QString add, int p, QObject* parent) : QObject(parent)
 {
     m_address = add;
     m_port = p;
-    socketConnected = false;
-    cmd_buf_fill = 0;
+    m_bSocketConnected = false;
+    m_msgOffsetLength = 0;
 }
 
-void CMsgWriter::run()
+void CMsgWriter::start()
 {
     qRegisterMetaType<QAbstractSocket::SocketError>("SocketError");
     m_msgSocket = make_shared<QTcpSocket>();
@@ -30,15 +30,15 @@ void CMsgWriter::readDataFromServer()
 {
     while(true)
     {
-        int r = m_msgSocket->read((char*)(cmd_buf + cmd_buf_fill), msgProtocolLength - cmd_buf_fill);
+        int r = m_msgSocket->read((char*)(m_msgData + m_msgOffsetLength), msgProtocolLength - m_msgOffsetLength);
         if(r <= 0)
             return;
-        cmd_buf_fill += r;
-        if(cmd_buf_fill == msgProtocolLength)
+        m_msgOffsetLength += r;
+        if(m_msgOffsetLength == msgProtocolLength)
         {
-            m_cmdData.SetData(cmd_buf);
+            m_cmdData.SetData(m_msgData);
             readServerMsg();
-            cmd_buf_fill = 0;
+            m_msgOffsetLength = 0;
         }
     }
 }
@@ -67,6 +67,11 @@ void CMsgWriter::connectToServer()
     m_msgSocket->connectToHost(m_address, m_port);
 }
 
+void CMsgWriter::reconnectToServer()
+{
+
+}
+
 void CMsgWriter::connectError(QAbstractSocket::SocketError)
 {
     qDebug() << __FILE__ << " " << __func__;
@@ -77,12 +82,12 @@ void CMsgWriter::connectError(QAbstractSocket::SocketError)
 void CMsgWriter::connectSucceed()
 {
     qDebug()<<"connect succeed";
-    socketConnected = true;
+    m_bSocketConnected = true;
 }
 
 void CMsgWriter::cmdMouseMoveTo(int x, int y)
 {
-    if(socketConnected == false)
+    if(m_bSocketConnected == false)
         return;
     char c[msgProtocolLength] = {0};
 

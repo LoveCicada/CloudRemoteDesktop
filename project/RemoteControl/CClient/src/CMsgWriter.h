@@ -25,20 +25,20 @@ class CMsgWriter : public QObject
 private:
     typedef shared_ptr<QTcpSocket> QTcpSocketPtr;
 private:
-    QTcpSocketPtr m_msgSocket;
-    QString     m_address;
-    int         m_port;
-    bool socketConnected;
+    QTcpSocketPtr   m_msgSocket;
+    QString         m_address;
+    int             m_port;
+    bool            m_bSocketConnected;
 
-    char cmd_buf[msgProtocolLength];
-    CMDData m_cmdData;
+    char            m_msgData[msgProtocolLength];
+    CMDData         m_cmdData;
 
-    int   cmd_buf_fill;
+    int   m_msgOffsetLength;
 public:
     CMsgWriter(QString add, int p, QObject* parent = 0);
     void connectToServer();
     void reconnectToServer();
-
+    void start();
 
 signals:
     void setServerScreenSize(int, int);
@@ -60,9 +60,6 @@ public slots:
     void cmdKeyPress(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier);
     void cmdKeyRelease(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier);
 
-
-    void run();
-    
 };
 
 
