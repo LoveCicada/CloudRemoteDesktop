@@ -8,6 +8,11 @@ CMsgWriter::CMsgWriter(QString add, int p, QObject* parent) : QObject(parent)
     m_msgOffsetLength = 0;
 }
 
+CMsgWriter::~CMsgWriter()
+{
+    qDebug() << __FUNCTION__;
+}
+
 void CMsgWriter::start()
 {
     qRegisterMetaType<QAbstractSocket::SocketError>("SocketError");

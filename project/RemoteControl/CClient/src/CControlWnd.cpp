@@ -14,7 +14,23 @@ CControlWnd::CControlWnd(QRect rect, QWidget *parent)
 
 CControlWnd::~CControlWnd()
 {
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
+
+    if (m_pCMsgReader) {
+        delete m_pCMsgReader;
+        m_pCMsgReader = nullptr;
+    }
+
+
+    if (m_pCImgReader) {
+        delete m_pCImgReader;
+        m_pCImgReader = nullptr;
+    }
+    
+    if (m_pCMsgWriter) {
+        delete m_pCMsgWriter;
+        m_pCMsgWriter = nullptr;
+    }
 }
 
 void CControlWnd::Init()

@@ -10,7 +10,9 @@ CMsgReader::CMsgReader(QString add, int p, int w, int h, QObject *parent) :
 
 CMsgReader::~CMsgReader()
 {
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
+    quit();
+    wait();
 }
 
 void CMsgReader::Init()

@@ -39,6 +39,13 @@ CImgReader::CImgReader(QString add, int p, int w, int h, QObject *parent) :
     m_msgSocket->connectToHost(m_address, m_port);
 }
 
+CImgReader::~CImgReader()
+{
+    qDebug() << __FUNCTION__;
+    quit();
+    wait();
+}
+
 void CImgReader::run()
 {
     QThread::run();

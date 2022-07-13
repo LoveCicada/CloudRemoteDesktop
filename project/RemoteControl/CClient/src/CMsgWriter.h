@@ -36,6 +36,8 @@ private:
     int   m_msgOffsetLength;
 public:
     CMsgWriter(QString add, int p, QObject* parent = 0);
+    ~CMsgWriter();
+
     void connectToServer();
     void reconnectToServer();
     void start();

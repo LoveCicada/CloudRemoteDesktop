@@ -53,7 +53,11 @@ public:
     int received_frame_height;
     QImage*  image;
 
+public:
+
     CImgReader(QString add, int p, int w, int h, QObject *parent = 0);
+    ~CImgReader();
+
     void sendRequestSize(int width, int height);
     void getSubWindow();
     void parseCommand();
