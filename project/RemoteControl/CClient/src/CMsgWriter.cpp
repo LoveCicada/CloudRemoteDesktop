@@ -109,6 +109,7 @@ void CMsgWriter::cmdMouseDoubleClick(int x, int y)
    
     CmdMouseDbClick cmdc;
     cmdc.SetData(tmpCMDData);
+    cmdc.GetData(c);
 
     BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
