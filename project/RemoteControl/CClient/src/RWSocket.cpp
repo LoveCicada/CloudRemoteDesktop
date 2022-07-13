@@ -9,6 +9,10 @@ void BlockWriteSocketData(QTcpSocket* socket, char* buf, int len)
     int w;
     while(true)
     {
+        if (buf[0] == 0) {
+            qDebug() << __FUNCTION__ << " msg error";
+        }
+
         w = socket->write((char*)(buf + fill), len - fill);
         if(w > 0)
         {
