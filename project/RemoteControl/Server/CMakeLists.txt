@@ -1,11 +1,12 @@
 
-cmake_minimum_required(VERSION 3.5)
+# remove last end of "/"
+string(REGEX REPLACE "/$" "" CURRENT_FOLDER_ABSOLUTE ${CMAKE_CURRENT_SOURCE_DIR})
 
-get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
-string(REPLACE " " "_" PROJECT_NAME ${PROJECT_NAME})
-project(${PROJECT_NAME} VERSION 1.0.0)
+# get current relative dir name and set target name
+string(REGEX REPLACE ".*/(.*)" "\\1" CURRENT_FOLDER ${CURRENT_FOLDER_ABSOLUTE})
+set (TARGET_NAME ${CURRENT_FOLDER})
 
-message(STATUS "Project Source Directory: ${PROJECT_SOURCE_DIR}")
+message("STATUS" ${TARGET_NAME})
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -45,22 +46,22 @@ foreach(FILE ${SRC_FILES})
 endforeach() 
 
 source_group(TREE ${CMAKE_SOURCE_DIR} FILES ${SRC_FILES})
-add_executable(${PROJECT_NAME} ${SRC_FILES})
+add_executable(${TARGET_NAME} ${SRC_FILES})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_link_libraries(${TARGET_NAME} PRIVATE
     ${Qt}::Widgets
     ${Qt}::Core
     ${Qt}::Gui
     ${Qt}::Network
 )
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE
+target_compile_definitions(${TARGET_NAME} PRIVATE
     NOMINMAX
 )
 if(MSVC)
-    target_compile_options(${PROJECT_NAME} PRIVATE /MP /W4 /WX)
+    target_compile_options(${TARGET_NAME} PRIVATE /MP /W4 /WX)
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic -Werror)
+    target_compile_options(${TARGET_NAME} PRIVATE -Wall -Wextra -pedantic -Werror)
 endif()
 
 if(DEPLOY_QT_RUNTIME)
@@ -73,10 +74,10 @@ if(DEPLOY_QT_RUNTIME)
         list(APPEND arg --no-translations)
         list(APPEND arg --pdb)
         list(APPEND arg --plugindir)
-        list(APPEND arg $<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins)
-        list(APPEND arg $<TARGET_FILE:${PROJECT_NAME}>)
+        list(APPEND arg $<TARGET_FILE_DIR:${TARGET_NAME}>/plugins)
+        list(APPEND arg $<TARGET_FILE:${TARGET_NAME}>)
         add_custom_command(
-            TARGET ${PROJECT_NAME} POST_BUILD
+            TARGET ${TARGET_NAME} POST_BUILD
             COMMAND ${deployqt} ${arg}
         )
     endif() 
