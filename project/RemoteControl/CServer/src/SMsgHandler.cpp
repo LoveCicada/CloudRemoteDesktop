@@ -152,6 +152,9 @@ void SMsgHandler::keyPressed(int32_t key, int32_t scanCode, int32_t virtualKey, 
     keybd_event(virtualKey, scanCode, KEYEVENTF_EXTENDEDKEY, 0);
 
 #endif
+
+    DWORD error = GetLastError();
+    qDebug() << __FUNCTION__ << " err: " << error;
 }
 
 void SMsgHandler::keyReleased(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier)
@@ -180,4 +183,7 @@ void SMsgHandler::keyReleased(int32_t key, int32_t scanCode, int32_t virtualKey,
     keybd_event(virtualKey, scanCode, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 
 #endif // 0
+    DWORD error = GetLastError();
+    qDebug() << __FUNCTION__ << " err: " << error;
+
 }

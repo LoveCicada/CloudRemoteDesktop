@@ -177,6 +177,8 @@ HDR截屏
 
 [Qt事件系统之三：键盘事件](https://www.cnblogs.com/linuxAndMcu/p/11023299.html)
 
+[网络编程keybd_event 达到远控目的](https://www.cnblogs.com/Mj-NaijAm/p/13615559.html)
+
 ***
 
 ### VNC vs RDP
