@@ -1,1 +1,0 @@
-qmake.exe -tp vc ./client.pro
