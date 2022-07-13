@@ -15,22 +15,6 @@ CControlWnd::CControlWnd(QRect rect, QWidget *parent)
 CControlWnd::~CControlWnd()
 {
     qDebug() << __FUNCTION__;
-
-    if (m_pCMsgReader) {
-        delete m_pCMsgReader;
-        m_pCMsgReader = nullptr;
-    }
-
-
-    if (m_pCImgReader) {
-        delete m_pCImgReader;
-        m_pCImgReader = nullptr;
-    }
-    
-    if (m_pCMsgWriter) {
-        delete m_pCMsgWriter;
-        m_pCMsgWriter = nullptr;
-    }
 }
 
 void CControlWnd::Init()
@@ -50,16 +34,16 @@ void CControlWnd::InitData()
     m_CRenderHelper->SetWindowHanlde(this);
 
     m_pCMsgReader = nullptr;
-    m_pCMsgReader = new CMsgReader(addr, MAP_SERVER_MSG_PORT, m_rect.width(), m_rect.height());
-    connect(m_pCMsgReader, SIGNAL(readServerParams(const ServerParmas&)), this, SLOT(receiveServerParams(const ServerParmas&)));
+    m_pCMsgReader = make_shared<CMsgReader>(addr, MAP_SERVER_MSG_PORT, m_rect.width(), m_rect.height());
+    connect(m_pCMsgReader.get(), SIGNAL(readServerParams(const ServerParmas&)), this, SLOT(receiveServerParams(const ServerParmas&)));
     m_pCMsgReader->start();
 
-    m_pCImgReader = new CImgReader(addr, MAP_SERVER_IMG_PORT, m_rect.width(), m_rect.height());
-    connect(m_pCImgReader, SIGNAL(frameGot(QImage*)), this, SLOT(frameChanged(QImage*)));
-    connect(m_pCImgReader, SIGNAL(frameSizeChanged(int, int)), this, SLOT(changeFrameSize(int, int)));
+    m_pCImgReader = make_shared<CImgReader>(addr, MAP_SERVER_IMG_PORT, m_rect.width(), m_rect.height());
+    connect(m_pCImgReader.get(), SIGNAL(frameGot(QImage*)), this, SLOT(frameChanged(QImage*)));
+    connect(m_pCImgReader.get(), SIGNAL(frameSizeChanged(int, int)), this, SLOT(changeFrameSize(int, int)));
     m_pCImgReader->start();
 
-    m_pCMsgWriter = new CMsgWriter(addr, CMD_SERVER_PORT);
+    m_pCMsgWriter = make_shared<CMsgWriter>(addr, CMD_SERVER_PORT);
     m_pCMsgWriter->start();
 }
 

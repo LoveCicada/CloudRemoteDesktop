@@ -30,13 +30,15 @@ class CControlWnd : public QOpenGLWidget
 
 private:
     typedef shared_ptr<CRenderHelper> CRenderHelperPtr;
-
+    typedef shared_ptr<CMsgReader> CMsgReaderPtr;
+    typedef shared_ptr<CMsgWriter> CMsgWriterPtr;
+    typedef shared_ptr<CImgReader> CImgReaderPtr;
 private:
     QRect m_rect;
     QImage* image;
-    CMsgReader* m_pCMsgReader;
-    CImgReader* m_pCImgReader;
-    CMsgWriter* m_pCMsgWriter;
+    CMsgReaderPtr m_pCMsgReader;
+    CImgReaderPtr m_pCImgReader;
+    CMsgWriterPtr m_pCMsgWriter;
     int frame_width;
     int frame_height;
     int m_nServerScreenWidth;
