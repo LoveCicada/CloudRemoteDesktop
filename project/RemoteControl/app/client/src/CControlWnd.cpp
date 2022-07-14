@@ -1,11 +1,9 @@
 #include "CControlWnd.h"
-#include "mainwindow.h"
-#include "values.h"
 #include "Command.h"
 
 
-CControlWnd::CControlWnd(QRect rect, QWidget *parent)
-    : m_rect(rect), QOpenGLWidget(parent)
+CControlWnd::CControlWnd(QRect rect, ClientData data, QWidget *parent)
+    : m_rect(rect), m_clientData(data), QOpenGLWidget(parent)
 {
     setGeometry(m_rect);
     setMouseTracking(true);
@@ -34,17 +32,20 @@ void CControlWnd::InitData()
     m_CRenderHelper = make_shared<CRenderHelper>();
     m_CRenderHelper->SetWindowHanlde(this);
 
-    m_pCMsgReader = nullptr;
-    m_pCMsgReader = make_shared<CMsgReader>(addr, MAP_SERVER_MSG_PORT, m_rect.width(), m_rect.height());
+    QString ip = QString::fromStdString(m_clientData.ip);
+    int w = static_cast<int>(m_clientData.width);
+    int h = static_cast<int>(m_clientData.height);
+
+    m_pCMsgReader = make_shared<CMsgReader>(ip, MAP_SERVER_MSG_PORT, w, h);
     connect(m_pCMsgReader.get(), SIGNAL(readServerParams(const ServerParmas&)), this, SLOT(receiveServerParams(const ServerParmas&)));
     m_pCMsgReader->start();
 
-    m_pCImgReader = make_shared<CImgReader>(addr, MAP_SERVER_IMG_PORT, m_rect.width(), m_rect.height());
+    m_pCImgReader = make_shared<CImgReader>(ip, MAP_SERVER_IMG_PORT, w, h);
     connect(m_pCImgReader.get(), SIGNAL(frameGot(QImage*)), this, SLOT(frameChanged(QImage*)));
     connect(m_pCImgReader.get(), SIGNAL(frameSizeChanged(int, int)), this, SLOT(changeFrameSize(int, int)));
     m_pCImgReader->start();
 
-    m_pCMsgWriter = make_shared<CMsgWriter>(addr, CMD_SERVER_PORT);
+    m_pCMsgWriter = make_shared<CMsgWriter>(ip, CMD_SERVER_PORT);
     m_pCMsgWriter->start();
 }
 
@@ -67,7 +68,10 @@ void CControlWnd::UpdateControlWndRect()
 void CControlWnd::mouseMoveEvent(QMouseEvent *e)
 {
     QWidget::mouseMoveEvent(e);
-    if(!control)
+
+    bool bControl = true;
+    m_clientParams.GetControlState(bControl);
+    if(!bControl)
         return;
 
     if(m_nServerScreenWidth < 0 || m_pCImgReader->received_frame_width < 0)
@@ -86,7 +90,11 @@ void CControlWnd::mouseMoveEvent(QMouseEvent *e)
 void CControlWnd::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
-    if(!control)
+
+    bool bControl = true;
+    m_clientParams.GetControlState(bControl);
+
+    if(!bControl)
         return;
 
     if(m_nServerScreenHeight < 0 || m_pCImgReader->received_frame_width < 0)
@@ -113,7 +121,11 @@ void CControlWnd::mousePressEvent(QMouseEvent *e)
 void CControlWnd::mouseReleaseEvent(QMouseEvent *e)
 {
     QWidget::mouseReleaseEvent(e);
-    if(!control)
+
+    bool bControl = true;
+    m_clientParams.GetControlState(bControl);
+
+    if (!bControl)
         return;
 
     if(m_nServerScreenWidth < 0 || m_pCImgReader->received_frame_width < 0)
@@ -139,7 +151,11 @@ void CControlWnd::mouseReleaseEvent(QMouseEvent *e)
 void CControlWnd::mouseDoubleClickEvent(QMouseEvent *e)
 {
     QWidget::mouseDoubleClickEvent(e);
-    if(!control)
+
+    bool bControl = true;
+    m_clientParams.GetControlState(bControl);
+
+    if (!bControl)
         return;
 
     if(m_nServerScreenWidth < 0 || m_pCImgReader->received_frame_width < 0)
@@ -158,7 +174,11 @@ void CControlWnd::mouseDoubleClickEvent(QMouseEvent *e)
 void CControlWnd::wheelEvent(QWheelEvent *e)
 {
     QWidget::wheelEvent(e);
-    if(!control)
+
+    bool bControl = true;
+    m_clientParams.GetControlState(bControl);
+
+    if (!bControl)
         return;
 
     if(m_nServerScreenWidth < 0 || m_pCImgReader->received_frame_width < 0)
@@ -255,7 +275,11 @@ int CControlWnd::translateKey(int key)
 
 void CControlWnd::keyPressEvent(QKeyEvent *e)
 {
-    if(!control)
+
+    bool bControl = true;
+    m_clientParams.GetControlState(bControl);
+
+    if (!bControl)
         return;
 
     int keyVal = e->key();
@@ -281,7 +305,11 @@ void CControlWnd::keyPressEvent(QKeyEvent *e)
 
 void CControlWnd::keyReleaseEvent(QKeyEvent *e)
 {
-    if(!control)
+
+    bool bControl = true;
+    m_clientParams.GetControlState(bControl);
+
+    if (!bControl)
         return;
 
     int keyVal = e->key();

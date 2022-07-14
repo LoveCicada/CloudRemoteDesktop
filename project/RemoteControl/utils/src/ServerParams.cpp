@@ -15,24 +15,24 @@ public:
 
 	void Init()
 	{
-		m_screenWidth = 0;
-		m_screenHeight = 0;
-		m_clientName = "";
+		m_screenWidth	= 0;
+		m_screenHeight	= 0;
+		m_serverName	= "";
 	}
 
 	ServerParamsPrivate(const ServerParamsPrivate& cp)
 	{
-		m_screenWidth = cp.m_screenWidth;
-		m_screenHeight = cp.m_screenHeight;
-		m_clientName = cp.m_clientName;
+		m_screenWidth	= cp.m_screenWidth;
+		m_screenHeight	= cp.m_screenHeight;
+		m_serverName	= cp.m_serverName;
 	}
 
 	ServerParamsPrivate& operator=(const ServerParamsPrivate& sp)
 	{
 		if (this != &sp) {
-			m_screenWidth = sp.m_screenWidth;
-			m_screenHeight = sp.m_screenHeight;
-			m_clientName = sp.m_clientName;
+			m_screenWidth	= sp.m_screenWidth;
+			m_screenHeight	= sp.m_screenHeight;
+			m_serverName	= sp.m_serverName;
 		}
 
 		return *this;
@@ -48,9 +48,9 @@ public:
 		m_screenHeight = usH;
 	}
 
-	void SetServerName(string clientName)
+	void SetServerName(string serverName)
 	{
-		m_clientName = clientName;
+		m_serverName = serverName;
 	}
 
 	void GetScreenWidth(unsigned short& usW)
@@ -63,16 +63,16 @@ public:
 		usH = m_screenHeight;
 	}
 
-	void GetServerName(string& clientName)
+	void GetServerName(string& serverName)
 	{
-		clientName = m_clientName;
+		serverName = m_serverName;
 	}
 
 
 public:
 	unsigned short m_screenWidth;
 	unsigned short m_screenHeight;
-	string m_clientName;
+	string m_serverName;
 };
 
 

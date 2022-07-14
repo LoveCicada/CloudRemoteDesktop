@@ -18,9 +18,9 @@
 #include "CMsgWriter.h"
 #include "CImgReader.h"
 #include "CRenderHelper.h"
-
 #include "ClientParams.h"
 #include "ServerParams.h"
+#include "ClientData.h"
 
 using std::shared_ptr;
 using std::make_shared;
@@ -51,11 +51,15 @@ private:
     //! server params
     ServerParmas m_serverParams;
 
+    //!
+    ClientData m_clientData;
+
+
 private:
     CRenderHelperPtr m_CRenderHelper;
     
 public:
-    CControlWnd(QRect rect, QWidget *parent = 0);
+    explicit CControlWnd(QRect rect, ClientData data, QWidget *parent = 0);
     ~CControlWnd();
     void Init();
     void InitData();

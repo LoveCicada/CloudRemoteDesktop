@@ -39,6 +39,8 @@ public:
 	void Release();
 	ClientParamsPrivate* GetPrivateImp();
 
+	void SetControlState(bool bAllow);
+	void GetControlState(bool& bAllow);
 	void SetScreenWidth(unsigned short usW);
 	void SetScreenHeight(unsigned short usH);
 	void SetServerName(string clientName);

@@ -15,27 +15,40 @@ public:
 
 	void Init()
 	{
-		m_screenWidth = 0;
-		m_screenHeight = 0;
-		m_clientName = "";
+		m_bControl		= true;
+		m_screenWidth	= 0;
+		m_screenHeight	= 0;
+		m_clientName	= "";
 	}
 
 	ClientParamsPrivate(const ClientParamsPrivate& cp)
 	{
+		m_bControl		= cp.m_bControl;
 		m_screenWidth	= cp.m_screenWidth;
 		m_screenHeight	= cp.m_screenHeight;
 		m_clientName	= cp.m_clientName;
 	}
 
-	ClientParamsPrivate& operator=(const ClientParamsPrivate& sp)
+	ClientParamsPrivate& operator=(const ClientParamsPrivate& cp)
 	{
-		if (this != &sp) {
-			m_screenWidth	= sp.m_screenWidth;
-			m_screenHeight	= sp.m_screenHeight;
-			m_clientName	= sp.m_clientName;
+		if (this != &cp) {
+			m_bControl		= cp.m_bControl;
+			m_screenWidth	= cp.m_screenWidth;
+			m_screenHeight	= cp.m_screenHeight;
+			m_clientName	= cp.m_clientName;
 		}
 
 		return *this;
+	}
+
+	void SetControlState(bool bAllow)
+	{
+		m_bControl = bAllow;
+	}
+
+	void GetControlState(bool& bAllow)
+	{
+		bAllow = m_bControl;
 	}
 
 	void SetScreenWidth(unsigned short usW)
@@ -70,6 +83,14 @@ public:
 
 
 public:
+
+	/*
+	* @brief client wether could control server.
+	*		 true: allow control server.
+	*		 fasle: not allow control server, just allow view.
+	*		 default: allow control server.
+	*/
+	bool m_bControl;
 	unsigned short m_screenWidth;
 	unsigned short m_screenHeight;
 	string m_clientName;
@@ -120,6 +141,16 @@ ClientParamsPrivate* ClientParams::GetPrivateImp()
 	}
 
 	return nullptr;
+}
+
+void ClientParams::SetControlState(bool bAllow)
+{
+	m_pImp->SetControlState(bAllow);
+}
+
+void ClientParams::GetControlState(bool& bAllow)
+{
+	m_pImp->GetControlState(bAllow);
 }
 
 void ClientParams::SetScreenWidth(unsigned short usW)
