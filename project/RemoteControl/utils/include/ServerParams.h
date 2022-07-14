@@ -15,6 +15,15 @@
 #include <string>
 using std::string;
 
+
+/**
+ * @brief use pimpl wrap
+ *		  ClientParamsPrivate is imp.
+ *
+ */
+
+class ServerParamsPrivate;
+
 class RTC_EXPORT ServerParmas
 {
 public:
@@ -25,6 +34,8 @@ public:
 	ServerParmas& operator=(const ServerParmas& sp);
 
 	void Init();
+	void Release();
+	ServerParamsPrivate* GetPrivateImp();
 
 	void SetScreenWidth(unsigned short usW);
 	void SetScreenHeight(unsigned short usH);
@@ -33,10 +44,7 @@ public:
 	void GetScreenWidth(unsigned short& usW);
 	void GetScreenHeight(unsigned short& usH);
 	void GetServerName(string& serverName);
-
 private:
 
-	unsigned short m_screenWidth;
-	unsigned short m_screenHeight;
-	//string m_serverName;
+	ServerParamsPrivate* m_pImp;
 };

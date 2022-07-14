@@ -4,8 +4,8 @@
 
 /**
  * @file ClientParams.h
- * @author your name (you@domain.com)
- * @brief 
+ * @author dyf
+ * @brief ClientParams - structure describing the current state of the remote server.
  * @version 0.1
  * @date 2022-07-13
  * 
@@ -15,12 +15,17 @@
 
 #include "ExportMacro.h"
 #include <string>
+
 using std::string;
 
 /**
- * @brief 
+ * @brief use pimpl wrap
+ *		  ClientParamsPrivate is imp.
  * 
  */
+
+class ClientParamsPrivate;
+
 class RTC_EXPORT ClientParams
 {
 public:
@@ -31,6 +36,8 @@ public:
 	ClientParams& operator=(const ClientParams& sp);
 
 	void Init();
+	void Release();
+	ClientParamsPrivate* GetPrivateImp();
 
 	void SetScreenWidth(unsigned short usW);
 	void SetScreenHeight(unsigned short usH);
@@ -41,8 +48,6 @@ public:
 	void GetServerName(string& clientName);
 
 private:
-
-	unsigned short m_screenWidth;
-	unsigned short m_screenHeight;
-	//string m_clientName;
+	
+	ClientParamsPrivate* m_pImp;
 };
