@@ -46,12 +46,15 @@ enum class SYSTYPE
 	MAC		= 3,
 };
 
-constexpr int msgProtocolLength = 20;
 
+//! In the future, we can delete.
 const int BLOCK_WIDTH = 50;
 const int BLOCK_HEIGHT = 50;
 const int DIFF_PIX = 5;
 const int DIFF_THN = 10;
+
+//! msg protocol length
+constexpr int msgProtocolLength = 20;
 
 //! server <--> client msg
 const static int MAP_SERVER_MSG_PORT = 5647;

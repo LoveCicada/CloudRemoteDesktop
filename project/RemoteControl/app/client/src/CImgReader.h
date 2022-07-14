@@ -25,7 +25,7 @@ private:
     QTcpSocketPtr m_msgSocket;
     QString     m_address;
     int         m_port;
-    bool socketConnected;
+    bool        m_bSocketConnected;
 
     int request_width;
     int request_height;
@@ -55,8 +55,11 @@ public:
 
 public:
 
-    CImgReader(QString add, int p, int w, int h, QObject *parent = 0);
+    explicit CImgReader(QString add, int p, int w, int h, QObject *parent = 0);
     ~CImgReader();
+
+    void Init();
+    void InitData();
 
     void sendRequestSize(int width, int height);
     void getSubWindow();
@@ -73,7 +76,7 @@ public slots:
     void hostConnected();
 
 protected:
-    void run();
+    void run() override;
     
 };
 

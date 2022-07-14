@@ -4,22 +4,36 @@
 #include "Command.h"
 
 CImgReader::CImgReader(QString add, int p, int w, int h, QObject *parent) :
-    QThread(parent)
+    m_address(add), m_port(p), request_width(w), request_height(h), 
+    m_bSocketConnected(false), QThread(parent)
+{
+    Init();
+}
+
+CImgReader::~CImgReader()
+{
+    qDebug() << __FUNCTION__;
+    quit();
+    wait();
+}
+
+void CImgReader::Init()
+{
+    InitData();
+}
+
+void CImgReader::InitData()
 {
     m_msgSocket = make_shared<QTcpSocket>();
-    m_address   = add;
-    m_port      = p;
-    socketConnected = false;
-
-    request_width  = w;
-    request_height = h;
 
     connect(m_msgSocket.get(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(connectError(QAbstractSocket::SocketError)));
     connect(m_msgSocket.get(), SIGNAL(connected()), this, SLOT(hostConnected()));
     connect(m_msgSocket.get(), SIGNAL(readyRead()), this, SLOT(readDataFromServer()));
 
-    recv_buf  = new uchar[BLOCK_WIDTH * BLOCK_HEIGHT * 3];
-    frame_buf = new uchar[20000000];
+    recv_buf = new uchar[BLOCK_WIDTH * BLOCK_HEIGHT * 3];
+
+    int nImg = 1920 * 1080 * 3;
+    frame_buf = new uchar[/*20000000*/nImg];
     frame_buf_fill = 0;
     cmd_buf_fill = 0;
     image = 0;
@@ -32,19 +46,12 @@ CImgReader::CImgReader(QString add, int p, int w, int h, QObject *parent) :
     cmd_parsed = false;
     subX = 0;
     subY = 0;
-    subWidth  = 0;
+    subWidth = 0;
     subHeight = 0;
-    subSize   = 0;
-    subFill   = 0;
+    subSize = 0;
+    subFill = 0;
 
     m_msgSocket->connectToHost(m_address, m_port);
-}
-
-CImgReader::~CImgReader()
-{
-    qDebug() << __FUNCTION__;
-    quit();
-    wait();
 }
 
 void CImgReader::run()
@@ -55,7 +62,7 @@ void CImgReader::run()
 void CImgReader::hostConnected()
 {
     qDebug() << "CImgReader socker connected successful";
-    socketConnected = true;
+    m_bSocketConnected = true;
     sendRequestSize(request_width, request_height);
 }
 

@@ -39,7 +39,7 @@ private:
     QLineEdit*      m_pWidthEdit;
     QLineEdit*      m_pHeightEdit;
     
-    //ui data
+    //! ui data
     ClientData      m_clientData;
 
     //! client params
