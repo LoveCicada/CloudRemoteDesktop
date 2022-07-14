@@ -47,7 +47,7 @@ private:
     QTimer* timer;
 
 public:
-    SImgWriter(QTcpSocket* imgSocket, ServerParmas sp, QObject *parent = 0);
+    explicit SImgWriter(QTcpSocket* imgSocket, ServerParmas sp, QObject *parent = 0);
     ~SImgWriter();
 
     void Extend(void* param = nullptr) override;
@@ -69,7 +69,7 @@ public slots:
     void quit();
 
 protected:
-    void run();
+    void run() override;
     
 };
 

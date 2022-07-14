@@ -8,11 +8,6 @@
 */
 
 #include <QThread>
-#include <QTimer>
-#include <QColor>
-#include <QImage>
-#include <QPixmap>
-
 #include "Common.h"
 #include "Command.h"
 #include "ServerParams.h"
@@ -32,7 +27,7 @@ private:
     QTcpSocket* m_msgSocket;
 
 public:
-    SMsgWriter(QTcpSocket* socket, ServerParmas sp, QObject *parent = 0);
+    explicit SMsgWriter(QTcpSocket* socket, ServerParmas sp, QObject *parent = 0);
     ~SMsgWriter();
     void Extend(void* param = nullptr) override;
 
@@ -47,10 +42,9 @@ signals:
     
 public slots:
     void readMsgFromClient();
-    void quit();
 
 protected:
-    void run();
-    
+    void run() override;
+    void quit();
 };
 

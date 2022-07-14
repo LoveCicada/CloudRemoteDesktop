@@ -10,10 +10,11 @@
 #include "SMsgWriter.h"
 #include "SImgWriter.h"
 #include "SMsgReader.h"
+
 #include <QTcpServer>
 #include <QTcpSocket>
-#include <QDebug>
 #include <QHostAddress>
+#include <QDebug>
 #include <QObject>
 #include <QVector>
 #include <vector>

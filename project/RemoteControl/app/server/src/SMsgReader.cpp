@@ -1,9 +1,9 @@
-#include "SMsgReader.h"
-#include "SMsgHandler.h"
-#include "Command.h"
-#include "RWSocket.h"
 
 #include <QTcpSocket>
+#include "Command.h"
+#include "RWSocket.h"
+#include "SMsgReader.h"
+#include "SMsgHandler.h"
 
 
 SMsgReader::SMsgReader(QTcpSocket* socket, ServerParmas sp, QObject *parent) :
@@ -32,7 +32,7 @@ void SMsgReader::run()
 }
 
 /*
-* when tcp socket have receive new data, read socket data
+*@brief when tcp socket have receive new data, read socket data
 */
 void SMsgReader::readSocketData()
 {
@@ -98,7 +98,9 @@ void SMsgReader::readClientMsg()
     }
 }
 
-//buf[1] -> key code
+/*
+* @brief
+*/
 void SMsgReader::cmdKeyPressed()
 {
     qDebug() << __func__;
@@ -118,7 +120,9 @@ void SMsgReader::cmdKeyPressed()
     SMsgHandler::keyPressed(keyValue, scanCode, virtualKey, modifier);
 }
 
-//buf[1] -> key code
+/*
+* @brief
+*/
 void SMsgReader::cmdKeyReleased()
 {
     qDebug() << __func__;
@@ -145,7 +149,7 @@ void SMsgReader::cmdKeyReleased()
 void SMsgReader::cmdMouseMoveTo()
 {
 #if 0
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
 #endif // 0
 
     int32_t xPos = 0;
@@ -159,9 +163,12 @@ void SMsgReader::cmdMouseMoveTo()
     SMsgHandler::mouseMoveTo(xPos, yPos);
 }
 
+/*
+* @brief
+*/
 void SMsgReader::cmdMouseLeftDown()
 {
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
 
     int32_t xPos = 0;
     int32_t yPos = 0;
@@ -173,9 +180,13 @@ void SMsgReader::cmdMouseLeftDown()
 
     SMsgHandler::mouseLeftDown(xPos, yPos);
 }
+
+/*
+* @brief
+*/
 void SMsgReader::cmdMouseLeftUp()
 {
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
 
     int32_t xPos = 0;
     int32_t yPos = 0;
@@ -188,9 +199,12 @@ void SMsgReader::cmdMouseLeftUp()
     SMsgHandler::mouseLeftUp(xPos, yPos);
 }
 
+/*
+* @brief
+*/
 void SMsgReader::cmdMouseRightDown()
 {
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
 
     int32_t xPos = 0;
     int32_t yPos = 0;
@@ -203,9 +217,12 @@ void SMsgReader::cmdMouseRightDown()
     SMsgHandler::mouseRightDown(xPos, yPos);
 }
 
+/*
+* @brief
+*/
 void SMsgReader::cmdMouseRightUp()
 {
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
 
     int32_t xPos = 0;
     int32_t yPos = 0;
@@ -218,9 +235,12 @@ void SMsgReader::cmdMouseRightUp()
     SMsgHandler::mouseRightUp(xPos, yPos);
 }
 
+/*
+* @brief
+*/
 void SMsgReader::cmdMouseDoubleClick()
 {
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
 
     int32_t xPos = 0;
     int32_t yPos = 0;
@@ -236,9 +256,12 @@ void SMsgReader::cmdMouseDoubleClick()
     SMsgHandler::mouseLeftUp(xPos, yPos);
 }
 
+/*
+* @brief
+*/
 void SMsgReader::cmdMouseWheel()
 {
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
 
     int32_t xPos = 0;
     int32_t yPos = 0;
@@ -253,9 +276,12 @@ void SMsgReader::cmdMouseWheel()
     SMsgHandler::mouseWheel(delta, xPos, yPos);
 }
 
+/*
+* @brief
+*/
 void SMsgReader::cmdScreenSize()
 {
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
 
     unsigned short usW = 0;
     unsigned short usH = 0;

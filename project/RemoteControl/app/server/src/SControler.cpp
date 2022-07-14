@@ -117,7 +117,7 @@ void SControler::writeServerImg()
 }
 
 /*
-@brief Start a new thread, in order to receive client msg from client.
+@brief Start a new thread, in order to receive client control msg protocol from client.
        client --> server
 */
 void SControler::readClientMsg()
@@ -191,11 +191,15 @@ void SControler::WriteCbLog(const string& str)
 void SControler::GetServerMachineInfo()
 {
     QDesktopWidget* pDeskWidget = qApp->desktop();
-    QRect screenRect = pDeskWidget->screenGeometry();
-    unsigned short usW = static_cast<unsigned short>(screenRect.width());
-    unsigned short usH = static_cast<unsigned short>(screenRect.height());
-    m_serverParmas.SetScreenWidth(usW);
-    m_serverParmas.SetScreenHeight(usH);
+    if (pDeskWidget) {
+        qDebug() << __FUNCTION__ << " ok";
+
+        QRect screenRect = pDeskWidget->screenGeometry();
+        unsigned short usW = static_cast<unsigned short>(screenRect.width());
+        unsigned short usH = static_cast<unsigned short>(screenRect.height());
+        m_serverParmas.SetScreenWidth(usW);
+        m_serverParmas.SetScreenHeight(usH);
+    }
 
     QString hostName = QHostInfo::localHostName();
     string strHostName = hostName.toStdString();

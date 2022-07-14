@@ -59,6 +59,7 @@ const static int MAP_SERVER_MSG_PORT = 5647;
 //! server <--> client img
 const static int MAP_SERVER_IMG_PORT = 5648;
 
+//! client command msg
 const static int CMD_SERVER_PORT = 5649;
 
 //**********************************

@@ -1,9 +1,10 @@
+
+#include <stdlib.h>
+#include "Command.h"
+#include "RWSocket.h"
 #include "SImgWriter.h"
 #include "SMsgHandler.h"
-#include <stdlib.h>
 
-#include "RWSocket.h"
-#include "Command.h"
 
 /**
   * send server desktop img to client
@@ -27,12 +28,6 @@ SImgWriter::SImgWriter(QTcpSocket* imgSocket, ServerParmas sp, QObject *parent) 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(sendFrame()));
     timer->start(interval);
-}
-
-
-void SImgWriter::run()
-{
-    QThread::run();
 }
 
 /*
@@ -324,5 +319,10 @@ SImgWriter::~SImgWriter()
 void SImgWriter::Extend(void* param)
 {
     static_cast<void*>(param);
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
+}
+
+void SImgWriter::run()
+{
+    QThread::run();
 }

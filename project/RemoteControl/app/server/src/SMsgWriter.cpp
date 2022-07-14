@@ -14,13 +14,13 @@ SMsgWriter::SMsgWriter(QTcpSocket* socket, ServerParmas sp, QObject *parent) :
 
 SMsgWriter::~SMsgWriter()
 {
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
 }
 
 void SMsgWriter::Extend(void* param)
 {
     static_cast<void*>(param);
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
 }
 
 void SMsgWriter::Init()
@@ -33,11 +33,6 @@ void SMsgWriter::InitData()
 {
     memset(m_msgData, 0, msgProtocolLength);
     connect(m_msgSocket, SIGNAL(readyRead()), this, SLOT(readMsgFromClient()));
-}
-
-void SMsgWriter::run()
-{
-    QThread::run();
 }
 
 bool SMsgWriter::checkConnect()
@@ -98,6 +93,11 @@ void SMsgWriter::sendMsgToClient()
 void SMsgWriter::readMsgFromClient()
 {
 
+}
+
+void SMsgWriter::run()
+{
+    QThread::run();
 }
 
 void SMsgWriter::quit()
