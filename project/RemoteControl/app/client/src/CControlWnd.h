@@ -1,5 +1,4 @@
-#ifndef CONTROLPANEL_H
-#define CONTROLPANEL_H
+#pragma once
 
 #include <QWidget>
 #include <QMainWindow>
@@ -93,4 +92,3 @@ protected:
     int translateKey(int key);
 };
 
-#endif // CONTROLPANEL_H

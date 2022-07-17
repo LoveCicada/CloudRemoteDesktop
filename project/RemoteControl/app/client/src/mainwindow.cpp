@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QHostInfo>
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -125,9 +126,27 @@ void MainWindow::tryconnect()
 {
     GetClientUIData(m_clientData);
 
+#if 0
+
+    m_pScroll = new QScrollArea(this);
+    //m_pScroll->setFixedSize(1680, 1050);
+    m_pScroll->setWidgetResizable(true);
+    QRect rt(0, 0, m_clientData.width, m_clientData.height);
+    m_pCControlWnd = new CControlWnd(rt, m_clientData/*, m_pScroll*/);
+    m_pScroll->setWidget(m_pCControlWnd);
+    this->setCentralWidget(m_pScroll);
+
+
+#else
+
+    m_pScroll = nullptr;
     QRect rt(0, 0, m_clientData.width, m_clientData.height);
     m_pCControlWnd = new CControlWnd(rt, m_clientData, this);
     this->setCentralWidget(m_pCControlWnd);
+
+
+#endif // 0
+
     connect(this, SIGNAL(keyPressed(QKeyEvent*)), m_pCControlWnd, SLOT(keyPressSlot(QKeyEvent*)));
     connect(this, SIGNAL(keyReleased(QKeyEvent*)), m_pCControlWnd, SLOT(keyReleaseSlot(QKeyEvent*)));
 }

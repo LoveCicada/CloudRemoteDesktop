@@ -1,5 +1,5 @@
-#ifndef CMDTHREAD_H
-#define CMDTHREAD_H
+
+#pragma once
 
 /*
 @brief CMsgWriter - class for send client command messages on the client side
@@ -65,6 +65,3 @@ public slots:
     void cmdKeyRelease(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier);
 
 };
-
-
-#endif // CMDTHREAD_H

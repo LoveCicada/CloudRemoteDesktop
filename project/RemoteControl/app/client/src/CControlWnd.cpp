@@ -36,7 +36,7 @@ void CControlWnd::InitData()
     int w = static_cast<int>(m_clientData.width);
     int h = static_cast<int>(m_clientData.height);
 
-    m_pCMsgReader = make_shared<CMsgReader>(ip, MAP_SERVER_MSG_PORT, w, h);
+    m_pCMsgReader = make_shared<CMsgReader>(ip, MAP_SERVER_MSG_PORT);
     connect(m_pCMsgReader.get(), SIGNAL(readServerParams(const ServerParmas&)), this, SLOT(receiveServerParams(const ServerParmas&)));
     m_pCMsgReader->start();
 
@@ -62,6 +62,7 @@ void CControlWnd::SetClientParams(const ClientParams& cp)
 void CControlWnd::UpdateControlWndRect()
 {
     this->setGeometry(m_rect);
+    //this->adjustSize();
     this->update();
 }
 

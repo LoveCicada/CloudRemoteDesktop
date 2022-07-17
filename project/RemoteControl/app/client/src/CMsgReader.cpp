@@ -2,8 +2,8 @@
 #include "RWSocket.h"
 
 
-CMsgReader::CMsgReader(QString add, int p, int w, int h, QObject *parent) :
-    m_address(add), m_port(p), request_width(w), request_height(h), QThread(parent)
+CMsgReader::CMsgReader(QString add, int p, QObject *parent) :
+    m_address(add), m_port(p), QThread(parent)
 {
     Init();
 }
@@ -22,22 +22,9 @@ void CMsgReader::Init()
 
 void CMsgReader::InitData()
 {
-    socketConnected = false;
-    frame_buf_fill = 0;
+    m_bSocketConnected = false;
     cmdReadLength = 0;
     cmdLength = msgProtocolLength;
-    image = 0;
-
-    frame_size_setted = false;
-    received_frame_width = -1;
-    received_frame_height = -1;
-
-    subX = 0;
-    subY = 0;
-    subWidth = 0;
-    subHeight = 0;
-    subSize = 0;
-    subFill = 0;
 
     m_msgSocket = make_shared<QTcpSocket>();
     connect(m_msgSocket.get(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(connectError(QAbstractSocket::SocketError)));
@@ -61,7 +48,7 @@ void CMsgReader::connectError(QAbstractSocket::SocketError)
 void CMsgReader::hostConnected()
 {
     qDebug() << "CMsgReader socker connected successful";
-    socketConnected = true;
+    m_bSocketConnected = true;
 }
 
 void CMsgReader::readMsgFromServer()

@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+
+#pragma once
 
 #include <QMainWindow>
 #include <QRect>
@@ -15,6 +15,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QScrollArea>
 
 #include "CMsgReader.h"
 #include "CMsgWriter.h"
@@ -22,13 +23,14 @@
 #include "ClientData.h"
 #include "ClientParams.h"
 
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 private:
     CControlWnd*    m_pCControlWnd;
-
+    QScrollArea*    m_pScroll;
 private:
 
     //! ui
@@ -69,4 +71,3 @@ protected:
 
 };
 
-#endif // MAINWINDOW_H
