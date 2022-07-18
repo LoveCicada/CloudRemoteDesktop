@@ -20,6 +20,7 @@
 #include "ClientParams.h"
 #include "ServerParams.h"
 #include "ClientData.h"
+#include "CKeyAssistant.h"
 
 using std::shared_ptr;
 using std::make_shared;
@@ -33,6 +34,7 @@ private:
     typedef shared_ptr<CMsgReader> CMsgReaderPtr;
     typedef shared_ptr<CMsgWriter> CMsgWriterPtr;
     typedef shared_ptr<CImgReader> CImgReaderPtr;
+    typedef shared_ptr<CKeyAssistant> CKeyAssistantPtr;
 private:
     QRect m_rect;
     QImage* image;
@@ -55,13 +57,14 @@ private:
 
 
 private:
-    CRenderHelperPtr m_CRenderHelper;
-    
+    CRenderHelperPtr m_pCRenderHelper;
+    CKeyAssistantPtr m_pCKeyAssistant;
 public:
     explicit CControlWnd(QRect rect, ClientData data, QWidget *parent = 0);
     ~CControlWnd();
     void Init();
     void InitData();
+    void InitKeyAssistantCb();
 
 public:
 
@@ -90,5 +93,8 @@ protected:
     void keyPressEvent(QKeyEvent *);
     void keyReleaseEvent(QKeyEvent *);
     int translateKey(int key);
+
+protected:
+    static void SendKbMsg(void* pOwner, int cmdType);
 };
 

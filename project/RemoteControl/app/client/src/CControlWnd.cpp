@@ -1,6 +1,9 @@
 #include "CControlWnd.h"
 #include "Command.h"
 
+#if WIN32
+#include "CKeyAssistantWin.h"
+#endif // WIN32
 
 CControlWnd::CControlWnd(QRect rect, ClientData data, QWidget *parent)
     : m_rect(rect), m_clientData(data), QOpenGLWidget(parent)
@@ -29,8 +32,10 @@ void CControlWnd::InitData()
     frame_width  = -1;
     frame_height = -1;
 
-    m_CRenderHelper = make_shared<CRenderHelper>();
-    m_CRenderHelper->SetWindowHanlde(this);
+    m_pCRenderHelper = make_shared<CRenderHelper>();
+    m_pCRenderHelper->SetWindowHanlde(this);
+
+    InitKeyAssistantCb();
 
     QString ip = QString::fromStdString(m_clientData.ip);
     int w = static_cast<int>(m_clientData.width);
@@ -47,6 +52,20 @@ void CControlWnd::InitData()
 
     m_pCMsgWriter = make_shared<CMsgWriter>(ip, CMD_SERVER_PORT);
     m_pCMsgWriter->start();
+}
+
+void CControlWnd::InitKeyAssistantCb()
+{
+#if WIN32
+    m_pCKeyAssistant = make_shared<CKeyAssistantWin>();
+#endif // 0
+
+    CallBack cb;
+    cb.cb = CControlWnd::SendKbMsg;
+    cb.user = this;
+    if (m_pCKeyAssistant) {
+        m_pCKeyAssistant->SetCallBack(cb);
+    }
 }
 
 void CControlWnd::GetClientParams(ClientParams& cp)
@@ -379,4 +398,12 @@ void CControlWnd::getServerScreenSize(int w, int h)
 {
     m_nServerScreenWidth = w;
     m_nServerScreenHeight = h;
+}
+
+void CControlWnd::SendKbMsg(void* pOwner, int cmdType)
+{
+    CControlWnd* pThis = static_cast<CControlWnd*>(pOwner);
+    if (pThis) {
+        qDebug() << __FUNCTION__ << " cmdType: " << cmdType;
+    }
 }
