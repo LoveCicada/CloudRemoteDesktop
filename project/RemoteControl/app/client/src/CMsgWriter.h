@@ -13,8 +13,8 @@
 #include <QMetaType>
 #include <memory>
 
-#include "../../../utils/include/RWSocket.h"
-#include "../../../utils/include/Command.h"
+#include "RWSocket.h"
+#include "Command.h"
 
 
 using std::shared_ptr;
@@ -63,5 +63,8 @@ public slots:
 
     void cmdKeyPress(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier);
     void cmdKeyRelease(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier);
+
+public:
+    void cmdKeySpAltLTab();
 
 };

@@ -93,6 +93,9 @@ void SMsgReader::readClientMsg()
         case CMDTYPE::CMD_KEY_RELEASE:
             cmdKeyReleased();
             break;
+        case CMDTYPE::CMD_KEY_SP_ALTL_TAB:
+            cmdKeySpAltLTab();
+            break;
         default:
             break;
     }
@@ -299,4 +302,31 @@ void SMsgReader::cmdScreenSize()
     cssr.GetData(c);
 
     BlockWriteSocketData(m_pCmdSocket, c, 8);
+}
+
+/*
+* @brief special process alt+tab
+*/
+void SMsgReader::cmdKeySpAltLTab()
+{
+    qDebug() << __FUNCTION__;
+
+    //! alt press + tab press, tab release, alt press release
+    //! alt
+    int32_t altKey = 18;
+    int32_t altScanCode = 56;
+    int32_t altVirtualKey = 18;
+    int32_t altModifier = 134217728;
+
+    //! tab
+    int32_t tabKey = 9;
+    int32_t tabScanCode = 15;
+    int32_t tabVirtualKey = 9;
+    int32_t tabModifier = 0;
+
+    SMsgHandler::keyPressed(altKey, altScanCode, altVirtualKey, altModifier);
+    SMsgHandler::keyPressed(tabKey, tabScanCode, tabVirtualKey, tabModifier);
+
+    SMsgHandler::keyReleased(altKey, altScanCode, altVirtualKey, 0);
+    SMsgHandler::keyReleased(tabKey, tabScanCode, tabVirtualKey, tabModifier);
 }

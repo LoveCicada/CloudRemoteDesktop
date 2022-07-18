@@ -254,3 +254,17 @@ void CMsgWriter::cmdKeyRelease(int32_t key, int32_t scanCode, int32_t virtualKey
 
     BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
+
+void CMsgWriter::cmdKeySpAltLTab()
+{
+    char c[msgProtocolLength] = { 0 };
+
+    CMDData tmpCMDData;
+    tmpCMDData.SetCMD(CMDTYPE::CMD_KEY_SP_ALTL_TAB);
+
+    CmdKeySpAltLTab cksalt;
+    cksalt.SetData(tmpCMDData);
+    cksalt.GetData(c);
+
+    BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
+}

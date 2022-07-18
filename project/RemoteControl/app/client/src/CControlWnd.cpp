@@ -405,5 +405,6 @@ void CControlWnd::SendKbMsg(void* pOwner, int cmdType)
     CControlWnd* pThis = static_cast<CControlWnd*>(pOwner);
     if (pThis) {
         qDebug() << __FUNCTION__ << " cmdType: " << cmdType;
+        pThis->m_pCMsgWriter->cmdKeySpAltLTab();
     }
 }

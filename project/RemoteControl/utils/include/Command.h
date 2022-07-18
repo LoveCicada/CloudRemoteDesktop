@@ -33,6 +33,8 @@ enum class CMDTYPE
 	CMD_GET_SCREEN_SIZE		= 11,
 	CMD_GET_SCREEN_SIZE_RES = 12,
 	CMD_SEND_SERVER_SCREEN_SIZE = 13,
+	CMD_KEY_SP_ALTL_TAB		= 14,
+	CMD_KEY_SP_ALTR_TAB		= 15,
 };
 
 /*
@@ -483,6 +485,27 @@ public:
 	CmdSendServerScreenSize(char* p);
 	CmdSendServerScreenSize(const CMDData& data);
 	~CmdSendServerScreenSize();
+
+public:
+	//! extend
+
+private:
+
+};
+
+
+//
+/*
+@brief	special keyboard event process
+		CMD_KEY_SP_ALTL_TAB
+*/
+class RTC_EXPORT CmdKeySpAltLTab : public CmdHanldeBase
+{
+public:
+	CmdKeySpAltLTab();
+	CmdKeySpAltLTab(char* p);
+	CmdKeySpAltLTab(const CMDData& data);
+	~CmdKeySpAltLTab();
 
 public:
 	//! extend

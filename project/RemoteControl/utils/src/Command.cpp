@@ -539,3 +539,22 @@ CmdSendServerScreenSize::~CmdSendServerScreenSize()
 }
 
 //***************************
+CmdKeySpAltLTab::CmdKeySpAltLTab()
+{
+	SetCMD(CMDTYPE::CMD_KEY_SP_ALTL_TAB);
+}
+
+CmdKeySpAltLTab::CmdKeySpAltLTab(char* p) : CmdHanldeBase(p)
+{
+	SetCMD(CMDTYPE::CMD_KEY_SP_ALTL_TAB);
+}
+
+CmdKeySpAltLTab::CmdKeySpAltLTab(const CMDData& data) : CmdHanldeBase(data)
+{
+
+}
+
+CmdKeySpAltLTab::~CmdKeySpAltLTab()
+{
+
+}

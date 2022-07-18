@@ -50,6 +50,9 @@ public slots:
     void cmdKeyPressed();
     void cmdKeyReleased();
 
+public:
+    void cmdKeySpAltLTab();
+
 protected:
     void run();
     
