@@ -558,3 +558,45 @@ CmdKeySpAltLTab::~CmdKeySpAltLTab()
 {
 
 }
+
+//***************************
+CmdKeySpAltRTab::CmdKeySpAltRTab()
+{
+	SetCMD(CMDTYPE::CMD_KEY_SP_ALTR_TAB);
+}
+
+CmdKeySpAltRTab::CmdKeySpAltRTab(char* p) : CmdHanldeBase(p)
+{
+	SetCMD(CMDTYPE::CMD_KEY_SP_ALTR_TAB);
+}
+
+CmdKeySpAltRTab::CmdKeySpAltRTab(const CMDData& data) : CmdHanldeBase(data)
+{
+
+}
+
+CmdKeySpAltRTab::~CmdKeySpAltRTab()
+{
+
+}
+
+//***************************
+CmdKeySpWinL::CmdKeySpWinL()
+{
+	SetCMD(CMDTYPE::CMD_KEY_SP_WIN_L);
+}
+
+CmdKeySpWinL::CmdKeySpWinL(char* p) : CmdHanldeBase(p)
+{
+	SetCMD(CMDTYPE::CMD_KEY_SP_WIN_L);
+}
+
+CmdKeySpWinL::CmdKeySpWinL(const CMDData& data) : CmdHanldeBase(data)
+{
+
+}
+
+CmdKeySpWinL::~CmdKeySpWinL()
+{
+
+}

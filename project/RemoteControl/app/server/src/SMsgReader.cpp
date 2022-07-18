@@ -305,7 +305,7 @@ void SMsgReader::cmdScreenSize()
 }
 
 /*
-* @brief special process alt+tab
+* @brief special process alt left+tab
 */
 void SMsgReader::cmdKeySpAltLTab()
 {
@@ -330,3 +330,55 @@ void SMsgReader::cmdKeySpAltLTab()
     SMsgHandler::keyReleased(altKey, altScanCode, altVirtualKey, 0);
     SMsgHandler::keyReleased(tabKey, tabScanCode, tabVirtualKey, tabModifier);
 }
+
+/*
+* @brief special process alt right+tab
+*/
+void SMsgReader::cmdKeySpAltRTab()
+{
+    qDebug() << __FUNCTION__;
+
+    //! alt press + tab press, tab release, alt press release
+    //! alt
+    int32_t altKey = 18;
+    int32_t altScanCode = 56;
+    int32_t altVirtualKey = 18;
+    int32_t altModifier = 134217728;
+
+    //! tab
+    int32_t tabKey = 9;
+    int32_t tabScanCode = 15;
+    int32_t tabVirtualKey = 9;
+    int32_t tabModifier = 0;
+
+    SMsgHandler::keyPressed(altKey, altScanCode, altVirtualKey, altModifier);
+    SMsgHandler::keyPressed(tabKey, tabScanCode, tabVirtualKey, tabModifier);
+
+    SMsgHandler::keyReleased(altKey, altScanCode, altVirtualKey, 0);
+    SMsgHandler::keyReleased(tabKey, tabScanCode, tabVirtualKey, tabModifier);
+}
+
+void SMsgReader::cmdKeySpWinL()
+{
+    qDebug() << __FUNCTION__;
+
+    //! win press + L/l press, win release, L/l press release
+    //! win
+    int32_t winKey = 91;
+    int32_t winScanCode = 347;
+    int32_t winVirtualKey = 91;
+    int32_t winModifier = 16777224;
+
+    //! l/L
+    int32_t LKey = 76;
+    int32_t LScanCode = 38;
+    int32_t LVirtualKey = 76;
+    int32_t LModifier = 0;
+
+    SMsgHandler::keyPressed(winKey, winScanCode, winVirtualKey, winModifier);
+    SMsgHandler::keyPressed(LKey, LScanCode, LVirtualKey, LModifier);
+
+    SMsgHandler::keyReleased(winKey, winScanCode, winVirtualKey, 0);
+    SMsgHandler::keyReleased(LKey, LScanCode, LVirtualKey, LModifier);
+}
+

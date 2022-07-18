@@ -65,6 +65,14 @@ public slots:
     void cmdKeyRelease(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier);
 
 public:
+    //! filter special keyboard event
+    void filterSpMsg(CMDTYPE cmdType);
+
+    //! alt left + tab
     void cmdKeySpAltLTab();
+    //! alt left + tab
+    void cmdKeySpAltRTab();
+    //! win + L/l
+    void cmdKeySpWinL();
 
 };

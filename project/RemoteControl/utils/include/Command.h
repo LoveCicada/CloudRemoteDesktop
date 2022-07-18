@@ -33,8 +33,11 @@ enum class CMDTYPE
 	CMD_GET_SCREEN_SIZE		= 11,
 	CMD_GET_SCREEN_SIZE_RES = 12,
 	CMD_SEND_SERVER_SCREEN_SIZE = 13,
+	//! alt+tab
 	CMD_KEY_SP_ALTL_TAB		= 14,
 	CMD_KEY_SP_ALTR_TAB		= 15,
+	//! lock screen, win+l
+	CMD_KEY_SP_WIN_L		= 16,	
 };
 
 /*
@@ -494,7 +497,6 @@ private:
 };
 
 
-//
 /*
 @brief	special keyboard event process
 		CMD_KEY_SP_ALTL_TAB
@@ -506,6 +508,45 @@ public:
 	CmdKeySpAltLTab(char* p);
 	CmdKeySpAltLTab(const CMDData& data);
 	~CmdKeySpAltLTab();
+
+public:
+	//! extend
+
+private:
+
+};
+
+/*
+@brief	special keyboard event process
+		CMD_KEY_SP_ALTR_TAB
+*/
+class RTC_EXPORT CmdKeySpAltRTab : public CmdHanldeBase
+{
+public:
+	CmdKeySpAltRTab();
+	CmdKeySpAltRTab(char* p);
+	CmdKeySpAltRTab(const CMDData& data);
+	~CmdKeySpAltRTab();
+
+public:
+	//! extend
+
+private:
+
+};
+
+
+/*
+@brief	special keyboard event process
+		CMD_KEY_SP_WIN_L
+*/
+class RTC_EXPORT CmdKeySpWinL : public CmdHanldeBase
+{
+public:
+	CmdKeySpWinL();
+	CmdKeySpWinL(char* p);
+	CmdKeySpWinL(const CMDData& data);
+	~CmdKeySpWinL();
 
 public:
 	//! extend

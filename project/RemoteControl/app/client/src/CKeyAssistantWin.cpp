@@ -7,6 +7,7 @@ using std::cout;
 using std::endl;
 
 HHOOK g_hKeyBoard;
+int nativeVirtualKeyBefore = 0;
 
 //! bottom keyboard system caller, filter alt+tab
 static LRESULT CALLBACK KeyBoardProc(int code, WPARAM wParam, LPARAM lParam)
@@ -23,14 +24,61 @@ static LRESULT CALLBACK KeyBoardProc(int code, WPARAM wParam, LPARAM lParam)
 		case WM_KEYUP:
 		case WM_SYSKEYUP:
 			p = (PKBDLLHOOKSTRUCT)lParam;
+
+			{
+				//! log
+				p->flags;
+				p->vkCode;
+				p->scanCode;
+				p->dwExtraInfo;
+				cout << "flags: " << p->flags << " vkCode: " << p->vkCode
+					<< "scanCode: " << p->scanCode << " dwExtraInfo: " << p->dwExtraInfo << endl;
+				cout << endl;
+			}
+
+			//! alt + tab
 			if ((p->vkCode == VK_TAB) && ((p->flags & LLKHF_ALTDOWN) != 0))
 			{
+				nativeVirtualKeyBefore = 0;
 				cout << __func__ << " catch alt+tab" << endl;
-				CMDTYPE cmdType = CMDTYPE::CMD_UNKNOWN;
+				CMDTYPE cmdType = CMDTYPE::CMD_KEY_SP_ALTL_TAB;
 				CKeyAssistantWin::Notify(static_cast<int>(cmdType));
-
 				return 1;
 			}
+#if 0
+			//! win + l, L key value = 0x4C
+			else if ((p->vkCode == VK_LWIN) && ((p->flags & 0x4C) != 0))
+			{
+				cout << __func__ << " catch win+L" << endl;
+				CMDTYPE cmdType = CMDTYPE::CMD_KEY_SP_WIN_L;
+				CKeyAssistantWin::Notify(static_cast<int>(cmdType));
+				return 1;
+
+			}
+#endif // 0
+			//! left win + l, L key value = 0x4C
+			else if ((p->vkCode == 0x4C) && (nativeVirtualKeyBefore == VK_LWIN))
+			{
+				nativeVirtualKeyBefore = 0;
+				cout << __func__ << " catch win+L" << endl;
+				CMDTYPE cmdType = CMDTYPE::CMD_KEY_SP_WIN_L;
+				CKeyAssistantWin::Notify(static_cast<int>(cmdType));
+				return 1;
+
+			}
+			//! right win + l, L key value = 0x4C
+			else if ((p->vkCode == 0x4C) && (nativeVirtualKeyBefore == VK_RWIN))
+			{
+				nativeVirtualKeyBefore = 0;
+				cout << __func__ << " catch win+L" << endl;
+				CMDTYPE cmdType = CMDTYPE::CMD_KEY_SP_WIN_L;
+				CKeyAssistantWin::Notify(static_cast<int>(cmdType));
+				return 1;
+
+			}
+
+			nativeVirtualKeyBefore = static_cast<int>(p->vkCode);
+
 			break;
 		}
 	}

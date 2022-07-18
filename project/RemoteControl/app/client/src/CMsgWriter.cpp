@@ -255,6 +255,50 @@ void CMsgWriter::cmdKeyRelease(int32_t key, int32_t scanCode, int32_t virtualKey
     BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
 
+void CMsgWriter::filterSpMsg(CMDTYPE cmdType)
+{
+    switch (cmdType)
+    {
+    case CMDTYPE::CMD_UNKNOWN:
+        break;
+    case CMDTYPE::CMD_MOUSE_MOVE_TO:
+        break;
+    case CMDTYPE::CMD_MOUSE_LEFT_DOWN:
+        break;
+    case CMDTYPE::CMD_MOUSE_LEFT_UP:
+        break;
+    case CMDTYPE::CMD_MOUSE_RIGHT_DOWN:
+        break;
+    case CMDTYPE::CMD_MOUSE_RIGHT_UP:
+        break;
+    case CMDTYPE::CMD_MOUSE_WHEEL:
+        break;
+    case CMDTYPE::CMD_MOUSE_DOUBLE_CLICK:
+        break;
+    case CMDTYPE::CMD_KEY_PRESS:
+        break;
+    case CMDTYPE::CMD_KEY_RELEASE:
+        break;
+    case CMDTYPE::CMD_GET_SCREEN_SIZE:
+        break;
+    case CMDTYPE::CMD_GET_SCREEN_SIZE_RES:
+        break;
+    case CMDTYPE::CMD_SEND_SERVER_SCREEN_SIZE:
+        break;
+    case CMDTYPE::CMD_KEY_SP_ALTL_TAB:
+        cmdKeySpAltLTab();
+        break;
+    case CMDTYPE::CMD_KEY_SP_ALTR_TAB:
+        cmdKeySpAltRTab();
+        break;
+    case CMDTYPE::CMD_KEY_SP_WIN_L:
+        cmdKeySpWinL();
+        break;
+    default:
+        break;
+    }
+}
+
 void CMsgWriter::cmdKeySpAltLTab()
 {
     char c[msgProtocolLength] = { 0 };
@@ -265,6 +309,34 @@ void CMsgWriter::cmdKeySpAltLTab()
     CmdKeySpAltLTab cksalt;
     cksalt.SetData(tmpCMDData);
     cksalt.GetData(c);
+
+    BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
+}
+
+void CMsgWriter::cmdKeySpAltRTab()
+{
+    char c[msgProtocolLength] = { 0 };
+
+    CMDData tmpCMDData;
+    tmpCMDData.SetCMD(CMDTYPE::CMD_KEY_SP_ALTR_TAB);
+
+    CmdKeySpAltRTab cksart;
+    cksart.SetData(tmpCMDData);
+    cksart.GetData(c);
+
+    BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
+}
+
+void CMsgWriter::cmdKeySpWinL()
+{
+    char c[msgProtocolLength] = { 0 };
+
+    CMDData tmpCMDData;
+    tmpCMDData.SetCMD(CMDTYPE::CMD_KEY_SP_WIN_L);
+
+    CmdKeySpWinL ckswl;
+    ckswl.SetData(tmpCMDData);
+    ckswl.GetData(c);
 
     BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
