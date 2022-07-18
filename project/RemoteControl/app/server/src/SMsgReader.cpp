@@ -96,6 +96,12 @@ void SMsgReader::readClientMsg()
         case CMDTYPE::CMD_KEY_SP_ALTL_TAB:
             cmdKeySpAltLTab();
             break;
+        case CMDTYPE::CMD_KEY_SP_ALTR_TAB:
+            cmdKeySpAltRTab();
+            break;
+        case CMDTYPE::CMD_KEY_SP_WIN_L:
+            cmdKeySpWinL();
+            break;
         default:
             break;
     }
