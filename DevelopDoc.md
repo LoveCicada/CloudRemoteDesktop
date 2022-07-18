@@ -179,6 +179,14 @@ HDR截屏
 
 [网络编程keybd_event 达到远控目的](https://www.cnblogs.com/Mj-NaijAm/p/13615559.html)
 
+[C++ 使用LockWorkStation()的过程遇到的问题](https://www.cnblogs.com/Satu/p/8183081.html)
+
+[C++ 使用system()实现锁定屏幕](https://blog.csdn.net/weixin_34218579/article/details/93448465?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-93448465-blog-52758448.pc_relevant_multi_platform_whitelistv2_ad_hc&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-93448465-blog-52758448.pc_relevant_multi_platform_whitelistv2_ad_hc&utm_relevant_index=1)
+
+[Windows编程中获取Alt+Tab事件](https://blog.csdn.net/Struggling_Jeff/article/details/103164346)
+
+[Windows hook “alt + tab”键](https://blog.csdn.net/c_base_jin/article/details/82832510)
+
 ***
 
 ### VNC vs RDP
