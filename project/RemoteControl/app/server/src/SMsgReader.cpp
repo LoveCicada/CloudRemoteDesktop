@@ -368,23 +368,6 @@ void SMsgReader::cmdKeySpWinL()
 {
     qDebug() << __FUNCTION__;
 
-    //! win press + L/l press, win release, L/l press release
-    //! win
-    int32_t winKey = 91;
-    int32_t winScanCode = 347;
-    int32_t winVirtualKey = 91;
-    int32_t winModifier = 16777224;
-
-    //! l/L
-    int32_t LKey = 76;
-    int32_t LScanCode = 38;
-    int32_t LVirtualKey = 76;
-    int32_t LModifier = 0;
-
-    SMsgHandler::keyPressed(winKey, winScanCode, winVirtualKey, winModifier);
-    SMsgHandler::keyPressed(LKey, LScanCode, LVirtualKey, LModifier);
-
-    SMsgHandler::keyReleased(winKey, winScanCode, winVirtualKey, 0);
-    SMsgHandler::keyReleased(LKey, LScanCode, LVirtualKey, LModifier);
+    SMsgHandler::lockScreen();
 }
 

@@ -187,3 +187,13 @@ void SMsgHandler::keyReleased(int32_t key, int32_t scanCode, int32_t virtualKey,
     qDebug() << __FUNCTION__ << " err: " << error;
 
 }
+
+void SMsgHandler::lockScreen()
+{
+    qDebug() << __FUNCTION__;
+
+    if (!LockWorkStation()) {
+        DWORD err = GetLastError();
+        qDebug() << "lock screen fail" << " err: " << err;
+    }
+}
