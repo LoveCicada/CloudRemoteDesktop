@@ -310,13 +310,8 @@ void SMsgReader::cmdScreenSize()
     BlockWriteSocketData(m_pCmdSocket, c, 8);
 }
 
-/*
-* @brief special process alt left+tab
-*/
-void SMsgReader::cmdKeySpAltLTab()
+void SMsgReader::cmdKeySpAltTab()
 {
-    qDebug() << __FUNCTION__;
-
     //! alt press + tab press, tab release, alt press release
     //! alt
     const int32_t altKey = 18;
@@ -329,7 +324,7 @@ void SMsgReader::cmdKeySpAltLTab()
     const int32_t tabScanCode = 15;
     const int32_t tabVirtualKey = 9;
     const int32_t tabModifier = 0;
-    
+
     /*
     @brief  In the current case, use kbValue of CMDData
             storage tab wether release.
@@ -355,39 +350,23 @@ void SMsgReader::cmdKeySpAltLTab()
 }
 
 /*
+* @brief special process alt left+tab
+*/
+void SMsgReader::cmdKeySpAltLTab()
+{
+    qDebug() << __FUNCTION__;
+
+    cmdKeySpAltTab();
+}
+
+/*
 * @brief special process alt right+tab
 */
 void SMsgReader::cmdKeySpAltRTab()
 {
     qDebug() << __FUNCTION__;
 
-#if 1
-
-    //! alt press + tab press, tab release, alt press release
-    //! alt
-    int32_t altKey = 18;
-    int32_t altScanCode = 56;
-    int32_t altVirtualKey = 18;
-    int32_t altModifier = 134217728;
-
-    //! tab
-    int32_t tabKey = 9;
-    int32_t tabScanCode = 15;
-    int32_t tabVirtualKey = 9;
-    int32_t tabModifier = 0;
-
-    SMsgHandler::keyPressed(altKey, altScanCode, altVirtualKey, altModifier);
-    SMsgHandler::keyPressed(tabKey, tabScanCode, tabVirtualKey, tabModifier);
-
-    SMsgHandler::keyReleased(altKey, altScanCode, altVirtualKey, 0);
-    SMsgHandler::keyReleased(tabKey, tabScanCode, tabVirtualKey, tabModifier);
-
-#else
-
-    SMsgHandler::switchWindow();
-
-#endif // 0
-
+    cmdKeySpAltTab();
 }
 
 void SMsgReader::cmdKeySpWinL()

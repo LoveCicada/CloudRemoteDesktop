@@ -51,6 +51,8 @@ public slots:
     void cmdKeyReleased();
 
 public:
+    //£¡
+    void cmdKeySpAltTab();
     //! special key event, alt left + tab
     void cmdKeySpAltLTab();
     //! special key event, alt right + tab

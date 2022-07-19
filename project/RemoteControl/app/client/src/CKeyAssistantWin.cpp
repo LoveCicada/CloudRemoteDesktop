@@ -40,8 +40,19 @@ static LRESULT CALLBACK KeyBoardProc(int code, WPARAM wParam, LPARAM lParam)
 			if ((p->vkCode == VK_TAB) && ((p->flags & LLKHF_ALTDOWN) != 0))
 			{
 				nativeVirtualKeyBefore = 0;
+
+				//! <0, down; >0, up
+				bool bLAltDown = GetKeyState(VK_LMENU) < 0 ? true : false;
+				bool bRAltDown = GetKeyState(VK_RMENU) < 0 ? true : false;
+
 				CMDData cmdData;
-				cmdData.SetCMD(CMDTYPE::CMD_KEY_SP_ALTL_TAB);
+				if (bLAltDown) {
+					cmdData.SetCMD(CMDTYPE::CMD_KEY_SP_ALTL_TAB);
+				}
+				else if(bRAltDown) {
+					cmdData.SetCMD(CMDTYPE::CMD_KEY_SP_ALTR_TAB);
+				}
+				
 				if (WM_SYSKEYUP == wParam) {
 					//! tab release
 					cmdData.SetKeyValue(static_cast<int32_t>(CMDTYPE::CMD_KEY_RELEASE));
