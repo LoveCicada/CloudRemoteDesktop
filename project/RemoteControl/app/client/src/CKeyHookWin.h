@@ -18,7 +18,7 @@ public:
 /*
 @brief alt + tab
 */
-class CkeyHookWinAltTab
+class CkeyHookWinAltTab : public CKeyHookWin
 {
 public:
 	~CkeyHookWinAltTab();
@@ -31,7 +31,7 @@ public:
 /*
 @brief win + l/L
 */
-class CkeyHookWinWinL
+class CkeyHookWinWinL : public CKeyHookWin
 {
 public:
 	~CkeyHookWinWinL();
