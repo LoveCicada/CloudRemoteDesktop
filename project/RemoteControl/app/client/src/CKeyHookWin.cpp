@@ -66,6 +66,11 @@ int CkeyHookWinWinL::Hook(xuint64 wParam, xint64 lParam)
 	bool bLWinDown = GetKeyState(VK_LWIN) < 0 ? true : false;
 	bool bRWinDown = GetKeyState(VK_RWIN) < 0 ? true : false;
 
+	//! when win key have not press, directly return.
+	if (!bLWinDown && !bRWinDown) {
+		return 0;
+	}
+
 	CMDData cmdData;
 	if (bLWinDown) {
 		cmdData.SetCMD(CMDTYPE::CMD_KEY_SP_WIN_L);

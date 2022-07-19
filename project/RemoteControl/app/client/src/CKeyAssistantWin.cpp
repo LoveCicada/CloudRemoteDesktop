@@ -51,6 +51,14 @@ static LRESULT CALLBACK KeyBoardProc(int code, WPARAM wParam, LPARAM lParam)
 				CkeyHookWinWinL winL;
 				return winL.Hook(wParam, lParam);
 			}
+			//! ctrl + alt + delete
+			else if(p->vkCode == VK_DELETE)
+			{
+				
+			}
+
+
+			//! ctrl + alt + tab
 
 			break;
 		}
