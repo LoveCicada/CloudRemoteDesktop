@@ -66,12 +66,12 @@ public slots:
 
 public:
     //! filter special keyboard event
-    void filterSpMsg(CMDTYPE cmdType);
+    void filterSpMsg(CMDData& cmdData);
 
     //! alt left + tab
-    void cmdKeySpAltLTab();
+    void cmdKeySpAltLTab(const CMDData& cmdData);
     //! alt left + tab
-    void cmdKeySpAltRTab();
+    void cmdKeySpAltRTab(const CMDData& cmdData);
     //! win + L/l
     void cmdKeySpWinL();
 

@@ -5,13 +5,13 @@
 @brief
 */
 
-typedef void (*pfnCb)(void* user, int param);
+typedef void (*pfnCb)(void* user, void* param);
 
 typedef struct CallBack
 {
     pfnCb cb;
     void* user;
-    int param;
+    void* param;
 
     CallBack()
     {

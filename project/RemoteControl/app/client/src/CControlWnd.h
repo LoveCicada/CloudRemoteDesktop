@@ -95,6 +95,6 @@ protected:
     int translateKey(int key);
 
 protected:
-    static void SendKbMsg(void* pOwner, int cmdType);
+    static void SendKbMsg(void* pOwner, void* cmdData);
 };
 

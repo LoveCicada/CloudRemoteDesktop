@@ -255,8 +255,11 @@ void CMsgWriter::cmdKeyRelease(int32_t key, int32_t scanCode, int32_t virtualKey
     BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
 
-void CMsgWriter::filterSpMsg(CMDTYPE cmdType)
+void CMsgWriter::filterSpMsg(CMDData& cmdData)
 {
+    CMDTYPE cmdType = CMDTYPE::CMD_UNKNOWN;
+    cmdData.GetCMD(cmdType);
+
     switch (cmdType)
     {
     case CMDTYPE::CMD_UNKNOWN:
@@ -286,10 +289,10 @@ void CMsgWriter::filterSpMsg(CMDTYPE cmdType)
     case CMDTYPE::CMD_SEND_SERVER_SCREEN_SIZE:
         break;
     case CMDTYPE::CMD_KEY_SP_ALTL_TAB:
-        cmdKeySpAltLTab();
+        cmdKeySpAltLTab(cmdData);
         break;
     case CMDTYPE::CMD_KEY_SP_ALTR_TAB:
-        cmdKeySpAltRTab();
+        cmdKeySpAltRTab(cmdData);
         break;
     case CMDTYPE::CMD_KEY_SP_WIN_L:
         cmdKeySpWinL();
@@ -299,29 +302,21 @@ void CMsgWriter::filterSpMsg(CMDTYPE cmdType)
     }
 }
 
-void CMsgWriter::cmdKeySpAltLTab()
+void CMsgWriter::cmdKeySpAltLTab(const CMDData& cmdData)
 {
     char c[msgProtocolLength] = { 0 };
-
-    CMDData tmpCMDData;
-    tmpCMDData.SetCMD(CMDTYPE::CMD_KEY_SP_ALTL_TAB);
-
     CmdKeySpAltLTab cksalt;
-    cksalt.SetData(tmpCMDData);
+    cksalt.SetData(cmdData);
     cksalt.GetData(c);
 
     BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);
 }
 
-void CMsgWriter::cmdKeySpAltRTab()
+void CMsgWriter::cmdKeySpAltRTab(const CMDData& cmdData)
 {
     char c[msgProtocolLength] = { 0 };
-
-    CMDData tmpCMDData;
-    tmpCMDData.SetCMD(CMDTYPE::CMD_KEY_SP_ALTR_TAB);
-
     CmdKeySpAltRTab cksart;
-    cksart.SetData(tmpCMDData);
+    cksart.SetData(cmdData);
     cksart.GetData(c);
 
     BlockWriteSocketData(m_msgSocket.get(), c, msgProtocolLength);

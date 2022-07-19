@@ -31,18 +31,24 @@ static LRESULT CALLBACK KeyBoardProc(int code, WPARAM wParam, LPARAM lParam)
 				p->vkCode;
 				p->scanCode;
 				p->dwExtraInfo;
-				cout << "flags: " << p->flags << " vkCode: " << p->vkCode
-					<< "scanCode: " << p->scanCode << " dwExtraInfo: " << p->dwExtraInfo << endl;
 				cout << endl;
+				cout << __func__ << " flags: " << p->flags << " vkCode: " << p->vkCode
+					<< " scanCode: " << p->scanCode << " dwExtraInfo: " << p->dwExtraInfo << endl;
 			}
 
 			//! alt + tab
 			if ((p->vkCode == VK_TAB) && ((p->flags & LLKHF_ALTDOWN) != 0))
 			{
 				nativeVirtualKeyBefore = 0;
-				cout << __func__ << " catch alt+tab" << endl;
-				CMDTYPE cmdType = CMDTYPE::CMD_KEY_SP_ALTL_TAB;
-				CKeyAssistantWin::Notify(static_cast<int>(cmdType));
+				CMDData cmdData;
+				cmdData.SetCMD(CMDTYPE::CMD_KEY_SP_ALTL_TAB);
+				if (WM_SYSKEYUP == wParam) {
+					//! tab release
+					cmdData.SetKeyValue(static_cast<int32_t>(CMDTYPE::CMD_KEY_RELEASE));
+				}
+
+				cout << __func__ << " catch alt+tab" << " wParam: " << wParam << endl;
+				CKeyAssistantWin::Notify(cmdData);
 				return 1;
 			}
 			//! left/right win + l, L key value = 0x4C
@@ -52,8 +58,10 @@ static LRESULT CALLBACK KeyBoardProc(int code, WPARAM wParam, LPARAM lParam)
 			{
 				nativeVirtualKeyBefore = 0;
 				cout << __func__ << " catch win+L" << endl;
-				CMDTYPE cmdType = CMDTYPE::CMD_KEY_SP_WIN_L;
-				CKeyAssistantWin::Notify(static_cast<int>(cmdType));
+
+				CMDData cmdData;
+				cmdData.SetCMD(CMDTYPE::CMD_KEY_SP_WIN_L);
+				CKeyAssistantWin::Notify(cmdData);
 				return 1;
 			}
 
@@ -124,20 +132,19 @@ void CKeyAssistantWin::UnSetHook()
 	UnSetHookEx();
 }
 
-void CKeyAssistantWin::SendKeyMsg(int cmdType)
+void CKeyAssistantWin::SendKeyMsg(CMDData& cmdData)
 {
-	static_cast<CMDTYPE>(cmdType);
 	if (m_pCb.cb && m_pCb.user) {
-		m_pCb.param = static_cast<int>(cmdType);
+		m_pCb.param = static_cast<void*>(&cmdData);
 		m_pCb.cb(m_pCb.user, m_pCb.param);
 	}
 }
 
-void CKeyAssistantWin::Notify(int cmdType)
+void CKeyAssistantWin::Notify(CMDData& cmdData)
 {
 	cout << __func__ << endl;
 	if (m_pOwner) {
-		m_pOwner->SendKeyMsg(cmdType);
+		m_pOwner->SendKeyMsg(cmdData);
 	}
 
 }

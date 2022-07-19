@@ -309,7 +309,7 @@ void CControlWnd::keyPressEvent(QKeyEvent *e)
     Qt::KeyboardModifiers kModifier = e->modifiers();
     QString str = e->text();
 
-    qDebug() <<"key: " << str
+    qDebug() << __func__ << " key: " << str
         << "key: " << keyVal
         << "nativeScanCode: " << quNativeScanCode
         << " nativeVirtualKey: " << quNativeVirtualKey
@@ -339,12 +339,13 @@ void CControlWnd::keyReleaseEvent(QKeyEvent *e)
     Qt::KeyboardModifiers kModifier = e->modifiers();
     QString str = e->text();
 
-    qDebug() << "key: " << str
+    qDebug() << __func__ << " key: " << str
         << "key: " << keyVal
         << "nativeScanCode: " << quNativeScanCode
         << " nativeVirtualKey: " << quNativeVirtualKey
         << " nativeModifiers: " << quNativeModifiers
         << " modifiers: " << static_cast<int32_t>(kModifier);
+    qDebug() << "";
 
     int k = translateKey(e->key());
     if(k == 0)
@@ -400,11 +401,12 @@ void CControlWnd::getServerScreenSize(int w, int h)
     m_nServerScreenHeight = h;
 }
 
-void CControlWnd::SendKbMsg(void* pOwner, int cmdType)
+void CControlWnd::SendKbMsg(void* pOwner, void* cmdData)
 {
     CControlWnd* pThis = static_cast<CControlWnd*>(pOwner);
     if (pThis) {
-        qDebug() << __FUNCTION__ << " cmdType: " << cmdType;
-        pThis->m_pCMsgWriter->filterSpMsg(static_cast<CMDTYPE>(cmdType));
+
+        qDebug() << __FUNCTION__ << " cmdType: " ;
+        pThis->m_pCMsgWriter->filterSpMsg( *( static_cast<CMDData*>(cmdData) ) );
     }
 }

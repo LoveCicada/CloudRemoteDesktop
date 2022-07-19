@@ -317,6 +317,8 @@ void SMsgReader::cmdKeySpAltLTab()
 {
     qDebug() << __FUNCTION__;
 
+#if 0
+
     //! alt press + tab press, tab release, alt press release
     //! alt
     int32_t altKey = 18;
@@ -335,6 +337,53 @@ void SMsgReader::cmdKeySpAltLTab()
 
     SMsgHandler::keyReleased(altKey, altScanCode, altVirtualKey, 0);
     SMsgHandler::keyReleased(tabKey, tabScanCode, tabVirtualKey, tabModifier);
+
+#else
+
+    //! alt press + tab press, tab release, alt press release
+    //! alt
+    int32_t altKey = 18;
+    int32_t altScanCode = 56;
+    int32_t altVirtualKey = 18;
+    int32_t altModifier = 134217728;
+
+    //! tab
+    int32_t tabKey = 9;
+    int32_t tabScanCode = 15;
+    int32_t tabVirtualKey = 9;
+    int32_t tabModifier = 0;
+    
+    //!
+    int32_t keyValue = 0;
+    int32_t scanCode = 0;
+    int32_t virtualKey = 0;
+    int32_t modifier = 0;
+
+    CMDData cmdData;
+    cmdData.SetData(m_msgData);
+    cmdData.GetKeyValue(keyValue);
+    cmdData.GetScanCode(scanCode);
+    cmdData.GetVirtualKey(virtualKey);
+    cmdData.GetModifier(modifier);
+
+    //! special process
+    CMDTYPE cmdType = CMDTYPE::CMD_UNKNOWN;
+    cmdType = static_cast<CMDTYPE>(keyValue);
+    if (cmdType == CMDTYPE::CMD_KEY_RELEASE) {
+        //! tab release
+        SMsgHandler::keyReleased(tabKey, tabScanCode, tabVirtualKey, tabModifier);
+    }
+    else
+    {
+        SMsgHandler::keyPressed(altKey, altScanCode, altVirtualKey, altModifier);
+        SMsgHandler::keyPressed(tabKey, tabScanCode, tabVirtualKey, tabModifier);
+
+        SMsgHandler::keyReleased(altKey, altScanCode, altVirtualKey, 0);
+        SMsgHandler::keyReleased(tabKey, tabScanCode, tabVirtualKey, tabModifier);
+    }
+
+#endif // 0
+
 }
 
 /*
