@@ -7,7 +7,6 @@ using std::cout;
 using std::endl;
 
 HHOOK g_hKeyBoard;
-int nativeVirtualKeyBefore = 0;
 
 //! bottom keyboard system caller, filter alt+tab
 static LRESULT CALLBACK KeyBoardProc(int code, WPARAM wParam, LPARAM lParam)
@@ -39,8 +38,6 @@ static LRESULT CALLBACK KeyBoardProc(int code, WPARAM wParam, LPARAM lParam)
 			//! alt + tab
 			if ((p->vkCode == VK_TAB) && ((p->flags & LLKHF_ALTDOWN) != 0))
 			{
-				nativeVirtualKeyBefore = 0;
-
 				//! <0, down; >0, up
 				bool bLAltDown = GetKeyState(VK_LMENU) < 0 ? true : false;
 				bool bRAltDown = GetKeyState(VK_RMENU) < 0 ? true : false;
@@ -63,20 +60,24 @@ static LRESULT CALLBACK KeyBoardProc(int code, WPARAM wParam, LPARAM lParam)
 				return 1;
 			}
 			//! left/right win + l, L key value = 0x4C
-			else if ((p->vkCode == 0x4C) && 
-				(nativeVirtualKeyBefore == VK_LWIN || nativeVirtualKeyBefore == VK_RWIN)
-				)
+			else if ((p->vkCode == 0x4C))
 			{
-				nativeVirtualKeyBefore = 0;
-				cout << __func__ << " catch win+L" << endl;
+				//! <0, down; >0, up
+				bool bLWinDown = GetKeyState(VK_LWIN) < 0 ? true : false;
+				bool bRWinDown = GetKeyState(VK_RWIN) < 0 ? true : false;
 
 				CMDData cmdData;
-				cmdData.SetCMD(CMDTYPE::CMD_KEY_SP_WIN_L);
+				if (bLWinDown) {
+					cmdData.SetCMD(CMDTYPE::CMD_KEY_SP_WIN_L);
+				}
+				else if (bRWinDown) {
+					cmdData.SetCMD(CMDTYPE::CMD_KEY_SP_WIN_L);
+				}
+
+				cout << __func__ << " catch win+L" << endl;
 				CKeyAssistantWin::Notify(cmdData);
 				return 1;
 			}
-
-			nativeVirtualKeyBefore = static_cast<int>(p->vkCode);
 
 			break;
 		}
