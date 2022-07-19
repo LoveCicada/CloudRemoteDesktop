@@ -1,8 +1,5 @@
 #pragma once
 
-#include "windows.h"
-#include "Winuser.h"
-
 #include <QPixmap>
 #include <QApplication>
 #include <QDesktopWidget>
@@ -27,6 +24,7 @@ public:
     static void keyPressed(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier);
     static void keyReleased(int32_t key, int32_t scanCode, int32_t virtualKey, int32_t modifier);
 
+    static void switchWindow();
     static void lockScreen();
 
     static QPoint getCursorPos();

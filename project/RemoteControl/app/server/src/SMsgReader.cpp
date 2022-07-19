@@ -344,6 +344,8 @@ void SMsgReader::cmdKeySpAltRTab()
 {
     qDebug() << __FUNCTION__;
 
+#if 1
+
     //! alt press + tab press, tab release, alt press release
     //! alt
     int32_t altKey = 18;
@@ -362,6 +364,13 @@ void SMsgReader::cmdKeySpAltRTab()
 
     SMsgHandler::keyReleased(altKey, altScanCode, altVirtualKey, 0);
     SMsgHandler::keyReleased(tabKey, tabScanCode, tabVirtualKey, tabModifier);
+
+#else
+
+    SMsgHandler::switchWindow();
+
+#endif // 0
+
 }
 
 void SMsgReader::cmdKeySpWinL()

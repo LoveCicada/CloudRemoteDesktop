@@ -1,3 +1,9 @@
+
+#if _WIN32
+#include "windows.h"
+#include "Winuser.h"
+#endif
+
 #include "SMsgHandler.h"
 #include <QScreen>
 #include <QDebug>
@@ -186,6 +192,34 @@ void SMsgHandler::keyReleased(int32_t key, int32_t scanCode, int32_t virtualKey,
     DWORD error = GetLastError();
     qDebug() << __FUNCTION__ << " err: " << error;
 
+}
+
+/*
+@brief equal to alt+tab
+*/
+void SMsgHandler::switchWindow()
+{
+    HWND hWinMain = ::GetDesktopWindow();
+    HWND hWnd = GetNextWindow(hWinMain, GW_HWNDNEXT);
+    while (IsWindowVisible(hWnd) == FALSE ||
+        GetWindow(hWnd, GW_OWNER) != NULL ||
+        GetParent(hWnd) != NULL)
+    {
+        hWnd = GetNextWindow(hWnd, GW_HWNDNEXT);
+    }
+    long dwExStyle = GetWindowLong(hWinMain, GWL_EXSTYLE);
+    if (dwExStyle & WS_EX_TOPMOST)
+    {
+        SetWindowPos(hWinMain, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+        hWnd = GetNextWindow(hWinMain, GW_HWNDNEXT);
+        while (IsWindowVisible(hWnd) == FALSE ||
+            GetWindow(hWnd, GW_OWNER) != NULL ||
+            GetParent(hWnd) != NULL)
+        {
+            hWnd = GetNextWindow(hWnd, GW_HWNDNEXT);
+        }
+        SetWindowPos(hWinMain, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+    }
 }
 
 void SMsgHandler::lockScreen()
