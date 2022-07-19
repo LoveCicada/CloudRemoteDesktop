@@ -39,22 +39,10 @@ int CkeyHookWinAltTab::Hook(xuint64 wParam, xint64 lParam)
 	}
 
 	//!VK_TAB
-#if 0
-
-	bool bTabUp = GetKeyState(VK_TAB) >0 ? true : false;
-	if (bTabUp) {
-		//! tab release
-		cmdData.SetKeyValue(static_cast<int32_t>(CMDTYPE::CMD_KEY_RELEASE));
-	}
-
-#else
-
 	if (WM_SYSKEYUP == wParam) {
 		//! tab release
 		cmdData.SetKeyValue(static_cast<int32_t>(CMDTYPE::CMD_KEY_RELEASE));
 	}
-
-#endif // 0
 
 	cout << __FUNCTION__ << " catch alt+tab" << " wParam: " << wParam << endl;
 	CKeyAssistantWin::Notify(cmdData);
