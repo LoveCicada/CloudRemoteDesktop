@@ -83,3 +83,29 @@ int CkeyHookWinWinL::Hook(xuint64 wParam, xint64 lParam)
 	CKeyAssistantWin::Notify(cmdData);
 	return 1;
 }
+
+//************************************
+CkeyHookWinCtrlAltDel::~CkeyHookWinCtrlAltDel()
+{
+
+}
+
+int CkeyHookWinCtrlAltDel::Hook(xuint64 wParam, xint64 lParam)
+{
+	static_cast<xuint64>(wParam);
+
+	PKBDLLHOOKSTRUCT p;
+	p = (PKBDLLHOOKSTRUCT)lParam;
+
+	//! <0, down; >0, up
+	bool bCtrlDown = GetKeyState(VK_CONTROL) < 0 ? true : false;
+	bool bAltDown = GetKeyState(VK_MENU) < 0 ? true : false;
+
+	if (!bCtrlDown || !bAltDown) {
+		return 0;
+	}
+
+
+
+	return 1;
+}

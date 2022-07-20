@@ -37,7 +37,10 @@ enum class CMDTYPE
 	CMD_KEY_SP_ALTL_TAB		= 14,
 	CMD_KEY_SP_ALTR_TAB		= 15,
 	//! lock screen, win+l
-	CMD_KEY_SP_WIN_L		= 16,	
+	CMD_KEY_SP_WIN_L		= 16,
+	//! ctrl + alt + delete
+	CMD_KEY_SP_CTRL_ALT_DEL = 17, 
+	//!
 };
 
 /*

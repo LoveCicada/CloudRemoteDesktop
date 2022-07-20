@@ -39,3 +39,15 @@ public:
 public:
 	int Hook(xuint64 wParam, xint64 lParam);
 };
+
+/*
+@brief CTRL + ALT + DEL
+*/
+class CkeyHookWinCtrlAltDel : public CKeyHookWin
+{
+public:
+	~CkeyHookWinCtrlAltDel();
+
+public:
+	int Hook(xuint64 wParam, xint64 lParam);
+};
